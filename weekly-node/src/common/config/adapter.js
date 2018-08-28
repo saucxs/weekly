@@ -51,10 +51,10 @@ exports.model = {
     database: 'weekly',
     prefix: 'week_',
     encoding: 'utf8',
-    host: '120.27.109.67',
+    host: 'localhost',
     port: '3306',
     user: 'root',
-    password: 'dxky500!',
+    password: '123456',
     dateStrings: true
   }
 };
