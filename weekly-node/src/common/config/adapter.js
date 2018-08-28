@@ -11,17 +11,29 @@ const isDev = think.env === 'development';
  * @type {Object}
  */
 exports.cache = {
-  type: 'file',
-  common: {
-    timeout: 24 * 60 * 60 * 1000 // millisecond
-  },
-  file: {
-    handle: fileCache,
-    cachePath: path.join(think.ROOT_PATH, 'runtime/cache'), // absoulte path is necessarily required
-    pathDepth: 1,
-    gcInterval: 24 * 60 * 60 * 1000 // gc interval
-  }
+    type: 'redis',
+    common: {
+        timeout: 24 * 60 * 60 * 1000 // millisecond
+    },
+    redis: {
+        handle: redisCache,
+        host: '127.0.0.1',
+        port: 6379,
+        password: 'a123456'
+    }
 };
+// exports.cache = {
+//   type: 'file',
+//   common: {
+//     timeout: 24 * 60 * 60 * 1000 // millisecond
+//   },
+//   file: {
+//     handle: fileCache,
+//     cachePath: path.join(think.ROOT_PATH, 'runtime/cache'), // absoulte path is necessarily required
+//     pathDepth: 1,
+//     gcInterval: 24 * 60 * 60 * 1000 // gc interval
+//   }
+// };
 
 /**
  * model adapter config
@@ -30,19 +42,19 @@ exports.cache = {
 exports.model = {
   type: 'mysql',
   common: {
-    logConnect: isDev,
-    logSql: isDev,
+    logConnect: true,
+    logSql: true,
     logger: msg => think.logger.info(msg)
   },
   mysql: {
     handle: mysql,
-    database: '',
-    prefix: 'think_',
+    database: 'weekly',
+    prefix: 'week_',
     encoding: 'utf8',
-    host: '127.0.0.1',
-    port: '',
+    host: '120.27.109.67',
+    port: '3306',
     user: 'root',
-    password: 'root',
+    password: 'dxky500!',
     dateStrings: true
   }
 };
@@ -52,18 +64,20 @@ exports.model = {
  * @type {Object}
  */
 exports.session = {
-  type: 'file',
+  type: 'redis',
   common: {
     cookie: {
-      name: 'thinkjs'
-      // keys: ['werwer', 'werwer'],
-      // signed: true
+      name: 'thinkjs',
+      keys: ['werwer', 'werwer'],
+      signed: true
     }
   },
-  file: {
-    handle: fileSession,
-    sessionPath: path.join(think.ROOT_PATH, 'runtime/session')
-  }
+    redis: {
+        handle: redisSession,
+        host: '127.0.0.1',
+        port: 6379,
+        password: '123456'
+    }
 };
 
 /**
