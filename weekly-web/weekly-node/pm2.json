@@ -1,0 +1,15 @@
+{
+  "apps": [{
+    "name": "weekly-node",
+    "script": "production.js",
+    "cwd": "G:\02Github-2\weekly\weekly-web\weekly-node",
+    "exec_mode": "fork",
+    "max_memory_restart": "1G",
+    "autorestart": true,
+    "node_args": [],
+    "args": [],
+    "env": {
+      
+    }
+  }]
+}
