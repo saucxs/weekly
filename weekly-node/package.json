@@ -11,6 +11,8 @@
     "lint-fix": "eslint --fix src/"
   },
   "dependencies": {
+    "think-cache-redis": "^1.0.3",
+    "think-session-redis": "^1.0.3",
     "think-cache": "^1.0.0",
     "think-session": "^1.0.0",
     "think-cache-file": "^1.0.8",

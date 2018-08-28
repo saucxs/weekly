@@ -1,6 +1,6 @@
-const fileCache = require('think-cache-file');
+const redisCache = require('think-cache-redis');
 const nunjucks = require('think-view-nunjucks');
-const fileSession = require('think-session-file');
+const redisSession = require('think-session-redis');
 const mysql = require('think-model-mysql');
 const {Console, File, DateFile} = require('think-logger3');
 const path = require('path');
@@ -76,7 +76,7 @@ exports.session = {
         handle: redisSession,
         host: '127.0.0.1',
         port: 6379,
-        password: '123456'
+        password: 'a123456'
     }
 };
 
