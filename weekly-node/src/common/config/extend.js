@@ -4,8 +4,8 @@ const cache = require('think-cache');
 const session = require('think-session');
 
 module.exports = [
-  view, // make application support view
-  model(think.app),
-  cache,
-  session
+    view, // make application support view
+    model(think.app),
+    cache,
+    session
 ];

@@ -40,23 +40,23 @@ exports.cache = {
  * @type {Object}
  */
 exports.model = {
-  type: 'mysql',
-  common: {
-    logConnect: true,
-    logSql: true,
-    logger: msg => think.logger.info(msg)
-  },
-  mysql: {
-    handle: mysql,
-    database: 'weekly',
-    prefix: 'week_',
-    encoding: 'utf8',
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    password: '123456',
-    dateStrings: true
-  }
+    type: 'mysql',
+    common: {
+        logConnect: true,
+        logSql: true,
+        logger: msg => think.logger.info(msg)
+    },
+    mysql: {
+        handle: mysql,
+        database: 'weekly',
+        prefix: 'week_',
+        encoding: 'utf8',
+        host: '127.0.0.1',
+        port: '3306',
+        user: 'root',
+        password: '123456',
+        dateStrings: true
+    }
 };
 
 /**
@@ -64,14 +64,14 @@ exports.model = {
  * @type {Object}
  */
 exports.session = {
-  type: 'redis',
-  common: {
-    cookie: {
-      name: 'thinkjs',
-      keys: ['werwer', 'werwer'],
-      signed: true
-    }
-  },
+    type: 'redis',
+    common: {
+        cookie: {
+            name: 'thinkjs',
+            keys: ['werwer', 'werwer'],
+            signed: true
+        }
+    },
     redis: {
         handle: redisSession,
         host: '127.0.0.1',
@@ -85,15 +85,15 @@ exports.session = {
  * @type {Object}
  */
 exports.view = {
-  type: 'nunjucks',
-  common: {
-    viewPath: path.join(think.ROOT_PATH, 'view'),
-    sep: '_',
-    extname: '.html'
-  },
-  nunjucks: {
-    handle: nunjucks
-  }
+    type: 'nunjucks',
+    common: {
+        viewPath: path.join(think.ROOT_PATH, 'view'),
+        sep: '_',
+        extname: '.html'
+    },
+    nunjucks: {
+        handle: nunjucks
+    }
 };
 
 /**
@@ -101,23 +101,23 @@ exports.view = {
  * @type {Object}
  */
 exports.logger = {
-  type: isDev ? 'console' : 'dateFile',
-  console: {
-    handle: Console
-  },
-  file: {
-    handle: File,
-    backups: 10, // max chunk number
-    absolute: true,
-    maxLogSize: 50 * 1024, // 50M
-    filename: path.join(think.ROOT_PATH, 'logs/app.log')
-  },
-  dateFile: {
-    handle: DateFile,
-    level: 'ALL',
-    absolute: true,
-    pattern: '-yyyy-MM-dd',
-    alwaysIncludePattern: true,
-    filename: path.join(think.ROOT_PATH, 'logs/app.log')
-  }
+    type: isDev ? 'console' : 'dateFile',
+    console: {
+        handle: Console
+    },
+    file: {
+        handle: File,
+        backups: 10, // max chunk number
+        absolute: true,
+        maxLogSize: 50 * 1024, // 50M
+        filename: path.join(think.ROOT_PATH, 'logs/app.log')
+    },
+    dateFile: {
+        handle: DateFile,
+        level: 'ALL',
+        absolute: true,
+        pattern: '-yyyy-MM-dd',
+        alwaysIncludePattern: true,
+        filename: path.join(think.ROOT_PATH, 'logs/app.log')
+    }
 };
