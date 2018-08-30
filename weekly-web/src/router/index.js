@@ -1,40 +1,39 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// 概览页
-const home = () => import("@/views/home/home");
-// a模块
-const aManage = () => import("@/views/aManage/index");
-// b模块
-const bManage = () => import("@/views/bManage/index");
+// 登陆
+const login = () => import("@/views/login/index")
+
+// 布局
+const home = () => import("@/views/home");
+
+// 写当前周
+const writeWeekly = () => import("@/views/writeWeekly/index");
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: '/login',
+      name: 'login',
       meta: {
         key: '0'
       },
-      component: home
+      component: login
     },
     {
-      path: '/aManage',
-      name: 'aManage',
-      meta: {
-        key: '1'
-      },
-      component: aManage
-    },
-    {
-      path: '/bManage',
-      name: 'bManage',
-      meta: {
-        key: '2'
-      },
-      component: bManage
+      path: '/',
+      name: 'home',
+      component: home,
+      children: [{
+        path: '/writeWeekly',
+        name: 'writeWeekly',
+        meta: {
+          key: '2'
+        },
+        component: writeWeekly
+      }]
     }
   ]
 })

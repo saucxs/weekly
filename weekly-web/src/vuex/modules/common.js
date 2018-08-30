@@ -3,18 +3,19 @@ import {
 } from "../mutation-types.js";
 
 const state = {
-    userInfo:{
-        
-    }
+  systemName: '周报系统',
+  userInfo:{
+
+  }
 };
 
 const mutations = {
-    [USER_INFO](state,newData){
-        state.userInfo = newData;
-    }
+  [USER_INFO](state,newData){
+    state.userInfo = newData;
+  }
 }
 
 export default {
-    state,
-    mutations
+  state,
+  mutations
 }

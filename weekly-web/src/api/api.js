@@ -2,6 +2,7 @@
 // 引入vue和axios
 import Vue from "vue";
 import axios from "axios";
+import router from '../router'
 
 import {
     serveUrl,
@@ -10,42 +11,50 @@ import {
   } from "./config";
 
 // 继承vue的原型方法
-Vue.prototype.axios = axios;  
+Vue.prototype.axios = axios;
 
 // 开发环境调试用户信息
-axios.interceptors.request.use(config => {
-    if (process.env.NODE_ENV === 'development') {
-      config.headers["cust_num"] = "7000374810";
-    }
-    return config;
-});
-
+// axios.interceptors.request.use(config => {
+//     if (process.env.NODE_ENV === 'development') {
+//       config.headers["cust_num"] = "7000374810";
+//     }
+//     return config;
+// });
 
 axios.interceptors.response.use(
-    response => {
-      let data = response.data;
-      if (data.idsIntercepted) {
-        //   登陆成功的回调地址
-        location.href = "";
-      } else {
-        return data;
-      }
-    },
-    error => ({
-      code: -1,
-      msg: "网络异常"
-    })
+  response => {
+    let data = response.data;
+    console.log(data,'data');
+    if (!data.data) {
+      // //   登陆成功的回调地址
+      // router.replace({
+      //   path: '/login',
+      //   query: {redirect: router.currentRoute.fullPath}
+      // })
+      return data;
+    } else {
+      return data;
+    }
+  },
+  error => ({
+    code: -1,
+    msg: "网络异常"
+  })
 );
 
 export default {
-    // API请求example
-    getUserInfo: params => {
-        return axios.post("/member/info/query.htm", params, postConfig);
-    },
+  // API请求example
+  getUserInfo: params => {
+    return axios.post("/home/user/queryuser", params);
+  },
+  login: params => {
+    return axios.post("/home/user/login", params)
+  },
+  addWeekly: params => {
+    return axios.post("/home/weekly/addWeekly", params)
+  }
 
-
-
-      /**
+  /**
    * API demo
    *
    * getAPI: (params) => {
@@ -57,4 +66,5 @@ export default {
    *     return axios.post('xxxx.do', params, postConfig)
    * }
    */
+
 }
