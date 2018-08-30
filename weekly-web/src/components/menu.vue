@@ -8,8 +8,8 @@
       text-color="#fff"
       router = router
       active-text-color="#ffd04b">
-      <el-menu-item index="/">
-        <i class="el-icon-menu"></i>概览
+      <el-menu-item index="/writeWeekly">
+        <i class="el-icon-menu"></i>写周报
       </el-menu-item>
       <el-submenu index="/aManage">
         <template slot="title">
@@ -20,10 +20,6 @@
           <template slot="title">XXX管理</template>
         </el-menu-item>
       </el-submenu>
-      <el-menu-item index="/bManage">
-        <i class="el-icon-setting"></i>
-        <span slot="title">模块管理二</span>
-      </el-menu-item>
     </el-menu>
   </div>
 </template>
