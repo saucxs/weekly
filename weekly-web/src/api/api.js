@@ -14,12 +14,12 @@ import {
 Vue.prototype.axios = axios;
 
 // 开发环境调试用户信息
-// axios.interceptors.request.use(config => {
-//     if (process.env.NODE_ENV === 'development') {
-//       config.headers["cust_num"] = "7000374810";
-//     }
-//     return config;
-// });
+axios.interceptors.request.use(config => {
+    if (process.env.NODE_ENV === 'development') {
+      config.headers["username"] = "189090909";
+    }
+    return config;
+});
 
 axios.interceptors.response.use(
   response => {
@@ -51,6 +51,9 @@ export default {
   },
   addWeekly: params => {
     return axios.post("/home/weekly/addWeekly", params);
+  },
+  getCurrentWeekly: params => {
+    return axios.post("/home/weekly/getCurrentWeekly", params);
   }
 
   /**

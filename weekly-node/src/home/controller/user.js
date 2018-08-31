@@ -11,7 +11,7 @@ module.exports = class extends Base {
             }).find();
             if(user.password && user.password == password) {
                 // login success
-                await this.session('userInfo',{username, userId:user.id});
+                await this.session('userInfo',user);
                 return this.success("登陆成功");
             } else {
                 return this.fail("用户名或密码错误")

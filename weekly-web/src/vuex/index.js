@@ -5,13 +5,15 @@ import * as getters from './getters';
 
 // 引入业务逻辑模块
 import common from './modules/common'
+import weekly from './modules/weekly'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    actions,
-    getters,
-    modules:{
-        common,
-    }
+  actions,
+  getters,
+  modules:{
+    common,
+    weekly
+  }
 })

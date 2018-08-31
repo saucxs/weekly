@@ -26,3 +26,10 @@ export const addWeekly = ({ commit }, params) => {
     return response;
   })
 }
+// get current weekly
+export const getCurrentWeekly = ({ commit }, params) => {
+  return Api.getCurrentWeekly(params).then(response => {
+    commit(types.CURRENT_WEEKLY,response.data);
+    return response;
+  })
+}
