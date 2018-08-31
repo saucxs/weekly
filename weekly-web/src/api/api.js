@@ -24,13 +24,9 @@ Vue.prototype.axios = axios;
 axios.interceptors.response.use(
   response => {
     let data = response.data;
-    console.log(data,'data');
+    console.log(data, 'data');
     if (!data.data) {
-      // //   登陆成功的回调地址
-      // router.replace({
-      //   path: '/login',
-      //   query: {redirect: router.currentRoute.fullPath}
-      // })
+      //   登陆成功的回调地址
       return data;
     } else {
       return data;
@@ -48,10 +44,13 @@ export default {
     return axios.post("/home/user/queryuser", params);
   },
   login: params => {
-    return axios.post("/home/user/login", params)
+    return axios.post("/home/user/login", params);
+  },
+  logout: params => {
+    return axios.post("/home/user/logout", params);
   },
   addWeekly: params => {
-    return axios.post("/home/weekly/addWeekly", params)
+    return axios.post("/home/weekly/addWeekly", params);
   }
 
   /**

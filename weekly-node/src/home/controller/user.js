@@ -24,8 +24,8 @@ module.exports = class extends Base {
     }
     async queryuserAction() {
         try {
-            let user = await this.session('userInfo');
-            return this.success(user)
+           console.log(this.user,'22222222222222222222222222');
+            return this.success(this.user);
         } catch(e) {
             console.log(e);
             return this.fail(e);

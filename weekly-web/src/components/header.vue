@@ -10,10 +10,10 @@
         <el-col :span="11">
           <el-row type="flex" justify="end">
             <el-dropdown>
-              <div class="header-user-name">saucxs<i class="el-icon-caret-bottom el-icon--right"></i></div>
+              <div class="header-user-name">{{userInfo.username}}<i class="el-icon-caret-bottom el-icon--right"></i></div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                  <a href="/logout.htm">退出</a>
+                  <a @click="signOut()">退出</a>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -25,16 +25,38 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
    export default {
     name: 'Header',
     data() {
       return {
-       
+
       }
     },
+     // beforeRouteEnter: (to, from, next) => {
+     //   next(vm => {
+     //     vm.getUserInfo();
+     //   });
+     // },
     computed: {
-
-    }
+      ...mapGetters([
+        "userInfo"
+      ])
+    },
+     methods: {
+       ...mapActions([
+         "getUserInfo",
+         "logout"
+       ]),
+       signOut() {
+         this.logout().then(res => {
+           if(res.errno == 0){
+             this.$router.push({ path: '/login' });
+             this.$store.commit("USER_INFO", {});
+           }
+         })
+       }
+     }
   }
 
 </script>

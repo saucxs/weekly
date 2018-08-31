@@ -3,7 +3,7 @@ import * as types from "./mutation-types";
 
 // example
 export const getUserInfo = ({commit},params) => {
-  return Api.getUserInfo(parmas).then(response => {
+  return Api.getUserInfo(params).then(response => {
     commit(types.USER_INFO,response.data);
     return response;
   })
@@ -11,6 +11,12 @@ export const getUserInfo = ({commit},params) => {
 // login
 export const login = ({ commit }, params) => {
   return Api.login(params).then(response => {
+    return response;
+  })
+}
+// logout
+export const logout = ({ commit }, params) => {
+  return Api.logout(params).then(response => {
     return response;
   })
 }
