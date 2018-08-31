@@ -40,23 +40,23 @@ exports.cache = {
  * @type {Object}
  */
 exports.model = {
-    type: 'mysql',
-    common: {
-        logConnect: true,
-        logSql: true,
-        logger: msg => think.logger.info(msg)
-    },
-    mysql: {
-        handle: mysql,
-        database: 'weekly',
-        prefix: 'week_',
-        encoding: 'utf8',
-        host: '120.27.109.67',
-        port: '3306',
-        user: 'root',
-        password: 'dxky500!',
-        dateStrings: true
-    }
+  type: 'mysql',
+  common: {
+    logConnect: true,
+    logSql: true,
+    logger: msg => think.logger.info(msg)
+  },
+  mysql: {
+    handle: mysql,
+    database: 'weekly',
+    prefix: 'week_',
+    encoding: 'utf8',
+    host: '127.0.0.1',
+    port: '3306',
+    user: 'root',
+    password: 'a123456',
+    dateStrings: true
+  }
 };
 
 /**
