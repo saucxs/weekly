@@ -33,10 +33,13 @@
       //计算一周时间
       var startWeekDate = currentDate - this.day  + 1;
       var endWeekDate =  currentDate + 7 - this.day;
-      var startWeek = currentYear + '/' +  currentMonth + '/' +  startWeekDate + '00:00:00';
-      var endWeek = currentYear + '/' +  currentMonth + '/' +  endWeekDate + '23:59:59';
+      var startWeek = currentYear + '/' +  currentMonth + '/' +  startWeekDate + ' 00:00:00';
+      var endWeek = currentYear + '/' +  currentMonth + '/' +  endWeekDate + ' 23:59:59';
+      console.log(startWeek,endWeek,'日期');
       var startWeekStamp = new Date(startWeek);
-
+      var endWeektamp = new Date(endWeek);
+      console.log(startWeekStamp,endWeektamp,'时间戳');
+      console.log(endWeektamp>startWeekStamp,'时间戳比较')
       this.getCurrentWeekly().then(res => {
         if(res.errno == 0){
           this.weeklyContent = res.data.content;
