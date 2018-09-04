@@ -28,6 +28,7 @@ export default new Router({
       path: '/',
       name: 'home',
       component: home,
+      redirect: '/writeWeekly',
       children: [{
         path: '/writeWeekly',
         name: 'writeWeekly',

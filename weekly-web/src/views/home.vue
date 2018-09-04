@@ -90,16 +90,34 @@
       overflow: auto;
       border-right: 1px solid #e6e6e6;
     }
-  & .right-box{
-      height: 100%;
-      width: calc(100% - 180px);
-      margin-left: 10px;
-      overflow: auto;
-  & .content{
-      min-height: calc(100% - 110px);
-      padding: 20px 40px;
-      background-color: #fff;
-    }
-  }
+    & .right-box{
+        height: 100%;
+        width: calc(100% - 180px);
+        margin-left: 10px;
+        overflow: auto;
+      & .content{
+          min-height: calc(100% - 110px);
+          padding: 20px 40px;
+          background-color: #fff;
+          & .title {
+              position: relative;
+              margin-left: 12px;
+              margin-bottom: 14px;
+              font-size: 18px;
+              color: #333333;
+              text-align: left;
+              line-height: 24px;
+          &::before {
+             position: absolute;
+             left: -12px;
+             content: "";
+             width: 2px;
+             height: 20px;
+             margin-top: 2px;
+             background-color: #3a79ff;
+           }
+          }
+        }
+      }
   }
 </style>

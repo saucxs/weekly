@@ -7,10 +7,28 @@ module.exports = class extends Base {
     let role = this.user.role;
     let username = this.user.username;
     let time = new Date().getTime();
+    /*计算一周时间戳*/
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+    let currentDay = new Date().getDate();
+    let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
+    let currentDayNum = new Date().getDay();
+    let startWeekNum = currentDayNum - 1;
+    let endWeekNum =  7 - currentDayNum + 1;
+    let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
+    let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
-      let row = await this.model('week').add({usernum, username, content, role, date, time});
-      console.log(row, 'row')
-      return this.success(row);
+      let weekly = await this.model('week').where({
+        usernum: usernum, username: username, time: {'>': startWeekStamp, '<': endWeekStamp}
+      }).find();
+      console.log(weekly,'hhhhhh');
+      if(weekly){
+        let uodateRow = await this.model('week').update({id: weekly.id, usernum, username, content, role, date, time});
+        return this.success(uodateRow);
+      }else{
+        let addRow = await this.model('week').add({usernum, username, content, role, date, time});
+        return this.success(addRow);
+      }
     } catch(e) {
       return this.fail('服务器开小差');
     }
@@ -19,25 +37,19 @@ module.exports = class extends Base {
   async getCurrentWeeklyAction() {
     let usernum = this.user.usernum;
     let username = this.user.username;
-    // let currentDate = new Date().toLocaleDateString();
-    let currentDayNum = new Date().getDay();
+    /*计算一周时间戳*/
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
-    let currentDate = new Date().getDate();
-      //计算一周时间
-    let startWeekDate = currentDate - currentDayNum  + 1;
-    let endWeekDate =  currentDate + 7 - currentDayNum;
-    let startWeek = currentYear + '/' +  currentMonth + '/' +  startWeekDate + ' 00:00:00';
-    let endWeek = currentYear + '/' +  currentMonth + '/' +  endWeekDate + ' 23:59:59';
-    console.log(startWeek,endWeek,'日期');
-    let startWeekStamp = new Date(startWeek);
-    let endWeektamp = new Date(endWeek);
-    console.log(startWeekStamp,endWeektamp,'时间戳');
-    console.log(endWeektamp<startWeekStamp,'时间戳比较')
-
+    let currentDay = new Date().getDate();
+    let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
+    let currentDayNum = new Date().getDay();
+    let startWeekNum = currentDayNum - 1;
+    let endWeekNum =  7 - currentDayNum + 1;
+    let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
+    let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
       let weekly = await this.model('week').where({
-        usernum,username
+        usernum: usernum, username: username, time: {'>': startWeekStamp, '<': endWeekStamp}
       }).find();
       return this.success(weekly);
     }catch(e){

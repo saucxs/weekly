@@ -1,5 +1,6 @@
 <template>
   <div class="write-weekly">
+    <div class="title">写周报</div>
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
     <el-input
       type="textarea"
@@ -27,19 +28,20 @@
     },
     created(){
       this.currentWeek = this.weekDay[this.day];
-      var currentYear = new Date().getFullYear();
-      var currentMonth = new Date().getMonth();
-      var currentDate = new Date().getDate();
+
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+      let currentDay = new Date().getDate();
+      let currentTimeStamp = new Date(currentYear, currentMonth, currentDay,0,0,0).getTime();
       //计算一周时间
-      var startWeekDate = currentDate - this.day  + 1;
-      var endWeekDate =  currentDate + 7 - this.day;
-      var startWeek = currentYear + '/' +  currentMonth + '/' +  startWeekDate + ' 00:00:00';
-      var endWeek = currentYear + '/' +  currentMonth + '/' +  endWeekDate + ' 23:59:59';
-      console.log(startWeek,endWeek,'日期');
-      var startWeekStamp = new Date(startWeek);
-      var endWeektamp = new Date(endWeek);
-      console.log(startWeekStamp,endWeektamp,'时间戳');
-      console.log(endWeektamp>startWeekStamp,'时间戳比较')
+      let currentDayNum = new Date().getDay();
+      let startWeekNum = currentDayNum - 1;
+      let endWeekNum =  7 - currentDayNum + 1;
+      let startWeekStamp = currentTimeStamp - 1000*3600*24*startWeekNum;
+      let endWeekStamp = currentTimeStamp + 1000*(3600*24*endWeekNum - 1);
+      let startWeekDate = this.formatDateTime(startWeekStamp);
+      let endWeekDate = this.formatDateTime(endWeekStamp);
+
       this.getCurrentWeekly().then(res => {
         if(res.errno == 0){
           this.weeklyContent = res.data.content;
@@ -56,6 +58,21 @@
         "getCurrentWeekly",
         "addWeekly",
       ]),
+      formatDateTime(item){
+        var date = new Date(parseInt(item));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h=h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second=date.getSeconds();
+        second=second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+      },
       submitWeekly(){
         var params = {
           content: this.weeklyContent,
