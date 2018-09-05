@@ -22,7 +22,7 @@
     methods:{
       ...mapActions([
         "getUserInfo",
-      ])
+      ]),
     }
   }
 </script>

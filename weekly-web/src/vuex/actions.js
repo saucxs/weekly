@@ -33,3 +33,11 @@ export const getCurrentWeekly = ({ commit }, params) => {
     return response;
   })
 }
+
+// get eeklylist
+export const getWeeklyList = ({ commit }, params) => {
+  return Api.getWeeklyList(params).then(response => {
+    commit(types.WEEKLY_LIST,response.data);
+    return response;
+  })
+}

@@ -23,16 +23,17 @@ module.exports = class extends Base {
       }).find();
       console.log(weekly,'hhhhhh');
       if(weekly){
-        let uodateRow = await this.model('week').update({id: weekly.id, usernum, username, content, role, date, time});
-        return this.success(uodateRow);
+        let updateRow = await this.model('week').update({id: weekly.id, usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp});
+        return this.success(updateRow);
       }else{
-        let addRow = await this.model('week').add({usernum, username, content, role, date, time});
+        let addRow = await this.model('week').add({usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp});
         return this.success(addRow);
       }
     } catch(e) {
       return this.fail('服务器开小差');
     }
   }
+
   /*获取当前周的周报*/
   async getCurrentWeeklyAction() {
     let usernum = this.user.usernum;
@@ -56,4 +57,19 @@ module.exports = class extends Base {
       return this.fail('服务器开小差');
     }
   }
+
+    /*获取周报列表*/
+    async getWeeklyListAction() {
+        let usernum = this.user.usernum;
+        let username = this.user.username;
+        try {
+            let weeklyList = await this.model('week').where({
+                usernum: usernum, username: username
+            }).select();
+            return this.success(weeklyList);
+        }catch(e){
+            return this.fail('服务器开小差');
+        }
+    }
+
 }

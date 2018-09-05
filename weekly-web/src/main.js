@@ -11,6 +11,12 @@ import store from './vuex'
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 
+/*全局fliter*/
+import * as commonFliter from './common/filters'
+Object.keys(commonFliter).forEach(key => {
+  Vue.filter(key, commonFliter[key])
+})
+
 Vue.config.productionTip = false
 
 // use
