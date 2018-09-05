@@ -23,7 +23,8 @@
         currentDate: new Date().toLocaleDateString(),
         day: new Date().getDay(),
         weekDay:  ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-        currentWeek: ''
+        currentWeek: '',
+        weeklyId: ''
       }
     },
     created(){
@@ -45,6 +46,7 @@
       this.getCurrentWeekly().then(res => {
         if(res.errno == 0){
           this.weeklyContent = res.data.content;
+          this.weeklyId = res.data.id;
         }
       })
     },
@@ -76,7 +78,8 @@
       submitWeekly(){
         var params = {
           content: this.weeklyContent,
-          date: this.currentDate
+          date: this.currentDate,
+          id:  this.weeklyId
         }
         this.addWeekly(params).then(res => {
           if(res.errno == 0){

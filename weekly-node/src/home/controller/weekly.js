@@ -2,7 +2,7 @@
 const Base = require('./base');
 module.exports = class extends Base {
   async addWeeklyAction() {
-    let { content, date } = this.post();
+    let { content, date, id } = this.post();
     let usernum = this.user.usernum;
     let role = this.user.role;
     let username = this.user.username;
@@ -18,12 +18,12 @@ module.exports = class extends Base {
     let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
     let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
-      let weekly = await this.model('week').where({
-        usernum: usernum, username: username, time: {'>': startWeekStamp, '<': endWeekStamp}
-      }).find();
-      console.log(weekly,'hhhhhh');
-      if(weekly){
-        let updateRow = await this.model('week').update({id: weekly.id, usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp});
+      // let weekly = await this.model('week').where({
+      //   usernum: usernum, username: username, time: {'>': startWeekStamp, '<': endWeekStamp}
+      // }).find();
+      // console.log(weekly,'hhhhhh');
+      if(id){
+        let updateRow = await this.model('week').update({id, usernum, username, content, time});
         return this.success(updateRow);
       }else{
         let addRow = await this.model('week').add({usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp});
