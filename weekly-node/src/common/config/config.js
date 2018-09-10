@@ -1,6 +1,6 @@
 // default config
 module.exports = {
-    workers: 4,
+    workers: 2,
     host: '127.0.0.1',
     port: '8362',
     redis: {

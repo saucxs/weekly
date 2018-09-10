@@ -11,6 +11,7 @@
     "lint-fix": "eslint --fix src/"
   },
   "dependencies": {
+    "babel-runtime": "6.x.x",
     "think-cache-redis": "^1.0.3",
     "think-session-redis": "^1.0.3",
     "think-cache": "^1.0.0",
@@ -22,10 +23,15 @@
     "think-view-nunjucks": "^1.0.1",
     "think-model-mysql": "^1.0.0",
     "think-logger3": "^1.0.0",
-    "thinkjs": "^3.0.0"
+    "thinkjs": "^3.0.0",
+    "transfer-webpack-plugin": "^0.1.4"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
+    "babel-cli": "6.x.x",
+    "babel-core": "6.x.x",
+    "babel-plugin-transform-runtime": "6.x.x",
+    "babel-preset-es2015-loose": "6.x.x",
+    "babel-preset-stage-1": "6.x.x",
     "babel-preset-think-node": "^1.0.0",
     "node-notifier": "^5.0.2",
     "think-inspect": "0.0.2",
