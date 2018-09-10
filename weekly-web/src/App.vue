@@ -47,4 +47,11 @@
   a:visit {
     color:darkslategray;
   }
+  .menu a{
+    padding: 19px 70px 19px 0px;
+    color: #fff;
+  }
+  .menu .el-icon-menu i{
+    color: none;
+  }
 </style>

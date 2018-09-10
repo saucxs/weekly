@@ -1,11 +1,13 @@
 import {
   CURRENT_WEEKLY,
-  WEEKLY_LIST
+  WEEKLY_LIST,
+  DEPARTMENT_WEEKLY_LIST
 } from "../mutation-types.js";
 
 const state = {
   currentWeekly: '',
-  weeklyList: []
+  weeklyList: [],
+  departmentWeeklyList: []
 };
 
 const mutations = {
@@ -14,6 +16,9 @@ const mutations = {
   },
   [WEEKLY_LIST](state, newData){
     state.weeklyList = newData;
+  },
+  [DEPARTMENT_WEEKLY_LIST](state, newData){
+    state.departmentWeeklyList = newData;
   }
 }
 

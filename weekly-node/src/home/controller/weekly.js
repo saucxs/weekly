@@ -72,4 +72,31 @@ module.exports = class extends Base {
         }
     }
 
+    getList() {
+      return this.join({
+        table: 'user',
+        join: 'inner',
+        as: 'c',
+        on: ['usernum', 'usernum']
+      }).select();
+    }
+  /*获取部门周报列表*/
+  async getDepartmentWeeklyListAction() {
+    let params = {
+      company_id: this.user.company_id,
+      department_id: this.user.department_id
+    }
+    try {
+      // select * from weekly.week_week inner join weekly.week_user on week_user.usernum = week_week.usernum where week_user.comapny_id = 'eastmoney' and week_user.department_id='dataCenter'
+      let departmentWeeklyList = this.getList();
+      // let userList = await this.model('user').where(params).select();
+      // console.log(userList, 'oooooooooooooooooooooooooo')
+      // let departmentWeeklyList = await this.model('week').where({usernum: ['in', userList]});
+      console.log(departmentWeeklyList, '000000000000000000000000000000000')
+      return this.success(departmentWeeklyList);
+    }catch(e){
+      return this.fail('服务器开小差');
+    }
+  }
+
 }

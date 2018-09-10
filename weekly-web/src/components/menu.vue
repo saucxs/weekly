@@ -1,30 +1,32 @@
 <template>
-  <div class="menu">
+  <div class="menu" id="menu">
      <el-menu
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
       background-color="#545c64"
       text-color="#fff"
-      router = router
+      :router = "false"
+      :default-active="$route.path"
       active-text-color="#ffd04b">
-      <el-menu-item index="/writeWeekly">
-        <i class="el-icon-menu"></i>
-        <span slot="title">写周报</span>
-      </el-menu-item>
-       <el-menu-item index="/weeklyList">
-         <i class="el-icon-location"></i>
-         <span slot="title">历史周报</span>
-       </el-menu-item>
-      <!--<el-submenu index="/aManage">-->
-        <!--<template slot="title">-->
-          <!--<i class="el-icon-location"></i>-->
-          <!--<span slot="title">模块管理一</span>-->
-        <!--</template>-->
-        <!--<el-menu-item index="/aManage">-->
-          <!--<template slot="title">XXX管理</template>-->
-        <!--</el-menu-item>-->
-      <!--</el-submenu>-->
+       <template v-for="item in menuList[1].children">
+         <el-submenu v-if="item.isNest" :key="item.meta.zhName" :index="item.meta.zhName">
+           <router-link :to="item.path">
+             <i :class="item.icon"></i>{{item.meta.zhName}}
+           </router-link>
+           <template v-for="child in item.children">
+           <el-menu-item v-if="false" :key="child.meta.path" :index="child.meta.path" >
+             <router-link :to="child.meta.path">
+               <i :class="child.icon"></i>
+                 <span slot="title">{{child.meta.zhName}}</span>
+             </router-link>
+           </el-menu-item>
+           </template>
+         </el-submenu>
+         <el-menu-item v-else :key="item.meta.path" :index="item.meta.path">
+           <router-link :to="item.path">
+             <i :class="item.icon"></i>{{item.meta.zhName}}
+           </router-link>
+         </el-menu-item>
+       </template>
     </el-menu>
   </div>
 </template>
@@ -37,12 +39,16 @@
         router: true
       }
     },
+    computed: {
+      menuList(){
+        return this.$router.options.routes.filter(
+          item => item.meta
+        );
+      }
+    },
     methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
+      allowUse(id) {
+        return this.userInfo.menuId.split(',').indexOf(id) > -1;
       }
     }
   };

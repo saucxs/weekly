@@ -41,3 +41,11 @@ export const getWeeklyList = ({ commit }, params) => {
     return response;
   })
 }
+
+// get getDepartmentWeeklyList
+export const getDepartmentWeeklyList = ({ commit }, params) => {
+  return Api.getDepartmentWeeklyList(params).then(response => {
+    commit(types.DEPARTMENT_WEEKLY_LIST,response.data);
+    return response;
+  })
+}
