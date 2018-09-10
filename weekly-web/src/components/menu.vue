@@ -21,7 +21,7 @@
            </el-menu-item>
            </template>
          </el-submenu>
-         <el-menu-item v-else :key="item.meta.path" :index="item.meta.path">
+         <el-menu-item v-if="!item.isNest" :key="item.meta.path" :index="item.meta.path">
            <router-link :to="item.path">
              <i :class="item.icon"></i>{{item.meta.zhName}}
            </router-link>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
   export default {
     name: "asideItem",
     data(){
@@ -40,6 +41,9 @@
       }
     },
     computed: {
+      ...mapGetters([
+        "userInfo",
+      ]),
       menuList(){
         return this.$router.options.routes.filter(
           item => item.meta

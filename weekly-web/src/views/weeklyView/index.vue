@@ -4,28 +4,40 @@
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
     <p>部门：<span>{{userInfo.department_name}}</span></p>
     <p>
-      <label>未填写周报的：</label>
-      <span>分别为：{{}}</span>
+      <label>部门人员：<span v-for="(item, index) in departmentMember">{{item.username}}({{item.usernum}})，</span></label>
     </p>
+    <p>
+      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人</span>)：<span v-for="(item, index) in unWeeklyData">{{item.username}}({{item.usernum}})，</span></label>
+    </p>
+    <p><label>已填周报(<span class="data-style">{{weeklyTableData.length}}人</span>)如下所示：</label></p>
     <el-table
       :data="weeklyTableData"
       border
       style="width: 100%">
       <el-table-column
         label="周报日期"
-        width="200">
+        width="180">
         <template slot-scope="scope">
           <span>{{scope.row.startDate | dateFormat}}</span>--<span>{{scope.row.endDate | dateFormat}}</span>
         </template>
       </el-table-column>
       <el-table-column
+        prop="username"
+        label="姓名"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="usernum"
+        label="工号"
+        width="80">
+      </el-table-column>
+      <el-table-column
         prop="content"
-        label="周报内容"
-      >
+        label="周报内容">
       </el-table-column>
       <el-table-column
         label="最新一次提交日期"
-        width="200">
+        width="160">
         <template slot-scope="scope">
           {{scope.row.time | dateTimeFormat}}
         </template>
@@ -53,35 +65,49 @@
         weekDay:  ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
         currentWeek: '',
         weeklyId: '',
-        weeklyTableData: []
+        weeklyTableData: [],
+        departmentMember: [],
+        unWeeklyData: []
       }
     },
     created(){
       this.currentWeek = this.weekDay[this.day];
-
-      let currentYear = new Date().getFullYear();
-      let currentMonth = new Date().getMonth();
-      let currentDay = new Date().getDate();
-      let currentTimeStamp = new Date(currentYear, currentMonth, currentDay,0,0,0).getTime();
-      //计算一周时间
-      let currentDayNum = new Date().getDay();
-      let startWeekNum = currentDayNum - 1;
-      let endWeekNum =  7 - currentDayNum + 1;
-      let startWeekStamp = currentTimeStamp - 1000*3600*24*startWeekNum;
-      let endWeekStamp = currentTimeStamp + 1000*(3600*24*endWeekNum - 1);
-      let startWeekDate = this.formatDateTime(startWeekStamp);
-      let endWeekDate = this.formatDateTime(endWeekStamp);
-
       this.getCurrentWeekly().then(res => {
         if(res.errno == 0){
           this.weeklyContent = res.data.content;
           this.weeklyId = res.data.id;
         }
       })
-
+      /*获取已写周报列表*/
       this.getDepartmentWeeklyList().then(res => {
         if(res.errno == 0){
           this.weeklyTableData = res.data;
+          var usernumList = this.weeklyTableData.map( item => {
+            return {
+              usernum: item.usernum
+            }
+          })
+          /*获取未写周报列表*/
+          var params = {
+            usernumList: usernumList
+          }
+          console.log(params,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+          this.getUnWeeklyList(params).then(res => {
+            if(res.errno == 0){
+              this.unWeeklyData = res.data;
+            }
+          })
+        }
+      })
+      /*获取已写周报人员列表*/
+      this.getDepartmentMemberList().then(res => {
+        if(res.errno == 0){
+          this.departmentMember = res.data.map( item => {
+            return {
+              username: item.username,
+              usernum: item.usernum
+            }
+          });
         }
       })
     },
@@ -94,7 +120,9 @@
       ...mapActions([
         "getCurrentWeekly",
         "addWeekly",
-        "getDepartmentWeeklyList"
+        "getDepartmentWeeklyList",
+        "getDepartmentMemberList",
+        "getUnWeeklyList"
       ]),
       formatDateTime(item){
         var date = new Date(parseInt(item));
@@ -130,7 +158,7 @@
 </script>
 
 <style lang="postcss" scoped>
-.write-weekly{
-
+.write-weekly  .data-style{
+  color: #5579ee;
 }
 </style>

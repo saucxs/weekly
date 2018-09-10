@@ -30,7 +30,6 @@ export default new Router({
     }, {
       path: '/',
       name: 'home',
-      isNest: false,
       component: home,
       redirect: '/writeWeekly',
       meta: {
@@ -40,28 +39,34 @@ export default new Router({
       children: [{
         path: '/weeklyView',
         name: 'weeklyView',
+        isNest: false,
         icon: 'el-icon-menu',
         meta: {
           zhName: '周报概览',
-          key: '1-0'
+          key: '1-0',
+          role: '3'
         },
         component: weeklyView
-      },{
+      }, {
         path: '/writeWeekly',
         name: 'writeWeekly',
+        isNest: false,
         icon: 'el-icon-menu',
         meta: {
           zhName: '写周报',
-          key: '1-1'
+          key: '1-1',
+          role: '4'
         },
         component: writeWeekly
       }, {
         path: '/weeklyList',
         name: 'weeklyList',
+        isNest: false,
         icon: 'el-icon-menu',
         meta: {
           zhName: '历史周报',
-          key: '1-2'
+          key: '1-2',
+          role: '4'
         },
         component: weeklyList
       }]

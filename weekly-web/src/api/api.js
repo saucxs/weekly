@@ -60,7 +60,13 @@ export default {
   },
   getDepartmentWeeklyList: params => {
     return axios.post("/home/weekly/getDepartmentWeeklyList", params);
-}
+  },
+  getDepartmentMemberList: params => {
+    return axios.post("/home/weekly/getDepartmentMemberList", params);
+  },
+  getUnWeeklyList: params => {
+    return axios.post("/home/weekly/getUnWeeklyList", params);
+  }
 
   /**
    * API demo

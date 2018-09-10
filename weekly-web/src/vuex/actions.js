@@ -49,3 +49,17 @@ export const getDepartmentWeeklyList = ({ commit }, params) => {
     return response;
   })
 }
+
+//获取部门人员列表
+export const getDepartmentMemberList = ({ commit }, params) => {
+  return Api.getDepartmentMemberList(params).then(response => {
+    return response;
+  })
+}
+
+//获取未写周报人员列表
+export const getUnWeeklyList = ({ commit }, params) => {
+  return Api.getUnWeeklyList(params).then(response => {
+    return response;
+  })
+}
