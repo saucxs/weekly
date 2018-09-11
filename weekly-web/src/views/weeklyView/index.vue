@@ -1,10 +1,12 @@
 <template>
   <div class="write-weekly">
-    <div class="title">部门周报概览</div>
+    <div class="title"><span v-if="userInfo.role == '2'">公司</span><span v-else>部门</span>周报概览</div>
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
-    <p>部门：<span>{{userInfo.department_name}}</span></p>
+    <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>
     <p>
-      <label>部门人员：<span v-for="(item, index) in departmentMember">{{item.username}}({{item.usernum}})，</span></label>
+      <label>
+        <span v-if="userInfo.role == '2'">公司人员({{departmentMember.length}}人)：</span>
+        <span v-else>部门人员({{departmentMember.length}}人)：</span><span v-for="(item, index) in departmentMember">{{item.username}}({{item.usernum}})，</span></label>
     </p>
     <p>
       <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人</span>)：<span v-for="(item, index) in unWeeklyData">{{item.username}}({{item.usernum}})，</span></label>
@@ -64,12 +66,8 @@
     },
     created(){
       this.currentWeek = this.weekDay[this.day];
-      this.getCurrentWeekly().then(res => {
-        if(res.errno == 0){
-          this.weeklyContent = res.data.content;
-          this.weeklyId = res.data.id;
-        }
-      })
+      /*获取部门人员列表*/
+      this.departmentMemberList();
       /*获取已写周报列表*/
       this.getDepartmentWeeklyList().then(res => {
         if(res.errno == 0){
@@ -79,27 +77,16 @@
               usernum: item.usernum
             }
           })
-          /*获取未写周报列表*/
-          var params = {
-            usernumList: usernumList
-          }
-          console.log(params,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-          this.getUnWeeklyList(params).then(res => {
-            if(res.errno == 0){
-              this.unWeeklyData = res.data;
+            /*获取未写周报列表*/
+            var params = {
+              usernumList: usernumList
             }
-          })
-        }
-      })
-      /*获取已写周报人员列表*/
-      this.getDepartmentMemberList().then(res => {
-        if(res.errno == 0){
-          this.departmentMember = res.data.map( item => {
-            return {
-              username: item.username,
-              usernum: item.usernum
-            }
-          });
+            console.log(params,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+            this.getUnWeeklyList(params).then(res => {
+              if(res.errno == 0){
+                this.unWeeklyData = res.data;
+              }
+            })
         }
       })
     },
@@ -116,6 +103,18 @@
         "getDepartmentMemberList",
         "getUnWeeklyList"
       ]),
+      departmentMemberList(){
+        this.getDepartmentMemberList().then(res => {
+          if(res.errno == 0){
+            this.departmentMember = res.data.map( item => {
+              return {
+                username: item.username,
+                usernum: item.usernum
+              }
+            });
+          }
+        })
+      },
       formatDateTime(item){
         var date = new Date(parseInt(item));
         var y = date.getFullYear();

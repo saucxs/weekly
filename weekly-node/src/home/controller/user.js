@@ -1,13 +1,13 @@
 const Base = require('./base');
 module.exports = class extends Base {
     async loginAction() {
-        let {username, password} = this.post();
+        let {usernum, password} = this.post();
         const salt = 'weekly';
         password = think.md5(salt + password);
         console.log(password,'111111111111111111111111111111111111111111111111');
         try {
             let user = await this.model('user').where({
-                username,
+              usernum,
             }).find();
             if(user.password && user.password == password) {
                 // login success

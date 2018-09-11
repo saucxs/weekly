@@ -86,13 +86,21 @@ module.exports = class extends Base {
       let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
       // select * from weekly.week_week inner join weekly.week_user on week_user.usernum = week_week.usernum where week_user.comapny_id = 'eastmoney' and week_user.department_id='dataCenter'
-      let departmentWeeklyList = await this.model('week').where({
+      let departmentWeeklyList;
+      if(this.user.role == '2'){
+        departmentWeeklyList = await this.model('week').where({
+          company_id: this.user.company_id,
+          time: {'>': startWeekStamp, '<': endWeekStamp},
+          role: {'>=': this.user.role}
+        }).select();
+      }else{
+        departmentWeeklyList = await this.model('week').where({
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-      }).select();
-      console.log(departmentWeeklyList, '000000000000000000000000000000000')
+        }).select();
+      }
       return this.success(departmentWeeklyList);
     }catch(e){
       return this.fail('服务器开小差');
@@ -101,16 +109,24 @@ module.exports = class extends Base {
 
     /*获取部门人员列表*/
     async getDepartmentMemberListAction() {
-        try {
-            let departmentMemberList = await this.model('user').where({
-                company_id: this.user.company_id,
-                department_id: this.user.department_id,
-                role: {'>=': this.user.role}
-            }).select();
-            return this.success(departmentMemberList);
-        }catch(e){
-            return this.fail('服务器开小差');
+      try {
+        let departmentMemberList;
+        if(this.user.role == '2'){
+          departmentMemberList = await this.model('user').where({
+            company_id: this.user.company_id,
+            role: {'>=': this.user.role}
+          }).select();
+        }else{
+          departmentMemberList = await this.model('user').where({
+            company_id: this.user.company_id,
+            department_id: this.user.department_id,
+            role: {'>=': this.user.role}
+          }).select();
         }
+        return this.success(departmentMemberList);
+      }catch(e){
+        return this.fail('服务器开小差');
+      }
     }
 
     /*获取未写周报部门人员列表*/
@@ -119,19 +135,48 @@ module.exports = class extends Base {
       console.log(list.usernumList, 'pppppppppppppppppppppppp');
       let usernumList = [];
       for(let i = 0; i < list.usernumList.length; i++) {
-          usernumList[i] = list.usernumList[i].usernum;
+        usernumList[i] = list.usernumList[i].usernum;
       }
+      if(list.usernumList.length > 0){
         try {
-            let unWeeklyList = await this.model('user').where({
-                usernum: ['not in', usernumList],
-                company_id: this.user.company_id,
-                department_id: this.user.department_id,
-                role: {'>=': this.user.role}
+          let unWeeklyList;
+          if(this.user.role == '2'){
+            unWeeklyList = await this.model('user').where({
+              usernum: ['not in', usernumList],
+              company_id: this.user.company_id,
+              role: {'>=': this.user.role}
             }).select();
-            return this.success(unWeeklyList);
+          }else{
+            unWeeklyList = await this.model('user').where({
+              usernum: ['not in', usernumList],
+              company_id: this.user.company_id,
+              department_id: this.user.department_id,
+              role: {'>=': this.user.role}
+            }).select();
+          }
+          return this.success(unWeeklyList);
         }catch(e){
-            return this.fail('服务器开小差');
+          return this.fail('服务器开小差');
         }
+      }else{
+        try {
+          let departmentMemberList;
+          if(this.user.role == '2'){
+            departmentMemberList = await this.model('user').where({
+              company_id: this.user.company_id,
+              role: {'>=': this.user.role}
+            }).select();
+          }else{
+            departmentMemberList = await this.model('user').where({
+              company_id: this.user.company_id,
+              department_id: this.user.department_id,
+              role: {'>=': this.user.role}
+            }).select();
+          }
+          return this.success(departmentMemberList);
+        }catch(e){
+          return this.fail('服务器开小差');
+        }
+      }
     }
-
 }
