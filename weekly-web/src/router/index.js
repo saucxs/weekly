@@ -51,7 +51,7 @@ export default new Router({
         path: '/writeWeekly',
         name: 'writeWeekly',
         isNest: false,
-        icon: 'el-icon-menu',
+        icon: 'el-icon-edit',
         meta: {
           zhName: '写周报',
           key: '1-1',
@@ -62,7 +62,7 @@ export default new Router({
         path: '/weeklyList',
         name: 'weeklyList',
         isNest: false,
-        icon: 'el-icon-menu',
+        icon: 'el-icon-search',
         meta: {
           zhName: '历史周报',
           key: '1-2',
