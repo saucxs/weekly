@@ -4,7 +4,7 @@
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
     <el-input
       type="textarea"
-      :autosize="{ minRows: 2, maxRows: 4}"
+      :autosize="{ minRows: 4, maxRows: 6}"
       placeholder="请输入内容"
       v-model="weeklyContent">
     </el-input>
@@ -81,13 +81,17 @@
           date: this.currentDate,
           id:  this.weeklyId
         }
-        this.addWeekly(params).then(res => {
-          if(res.errno == 0){
-            this.$message.success(res.errmsg|| '提交成功');
-          }else{
-            this.$message.error(res.errmsg|| '服务器开小差');
-          }
-        })
+        if(this.weeklyContent){
+          this.addWeekly(params).then(res => {
+            if(res.errno == 0){
+              this.$message.success(res.errmsg|| '提交成功');
+            }else{
+              this.$message.error(res.errmsg|| '服务器开小差');
+            }
+          })
+        }else{
+          this.$message.warning( '输入周报才能提交');
+        }
       }
     }
   }

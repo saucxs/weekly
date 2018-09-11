@@ -44,7 +44,7 @@ export default new Router({
         meta: {
           zhName: '周报概览',
           key: '1-0',
-          role: '3'
+          role: 3
         },
         component: weeklyView
       }, {
@@ -55,7 +55,7 @@ export default new Router({
         meta: {
           zhName: '写周报',
           key: '1-1',
-          role: '4'
+          role: 4
         },
         component: writeWeekly
       }, {
@@ -66,7 +66,7 @@ export default new Router({
         meta: {
           zhName: '历史周报',
           key: '1-2',
-          role: '4'
+          role: 4
         },
         component: weeklyList
       }]

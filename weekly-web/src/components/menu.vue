@@ -4,16 +4,16 @@
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"
+      active-text-color="#ffd04b"
       :router = "false"
-      :default-active="$route.path"
-      active-text-color="#ffd04b">
+      :default-active="$route.path">
        <template v-for="item in menuList[1].children">
-         <el-submenu v-if="item.isNest" :key="item.meta.zhName" :index="item.meta.zhName">
+         <el-submenu v-if="item.isNest" :key="item.meta.zhName" :index="item.path">
            <router-link :to="item.path">
              <i :class="item.icon"></i>{{item.meta.zhName}}
            </router-link>
            <template v-for="child in item.children">
-           <el-menu-item v-if="false" :key="child.meta.path" :index="child.meta.path" >
+           <el-menu-item v-if="false" :key="child.meta.path" :index="child.meta.path">
              <router-link :to="child.meta.path">
                <i :class="child.icon"></i>
                  <span slot="title">{{child.meta.zhName}}</span>
@@ -21,7 +21,7 @@
            </el-menu-item>
            </template>
          </el-submenu>
-         <el-menu-item v-if="!item.isNest" :key="item.meta.path" :index="item.meta.path">
+         <el-menu-item v-if="!item.isNest && item.meta.role >= userInfo.role" :key="item.meta.path" :index="item.path">
            <router-link :to="item.path">
              <i :class="item.icon"></i>{{item.meta.zhName}}
            </router-link>

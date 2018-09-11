@@ -36,18 +36,10 @@
         label="周报内容">
       </el-table-column>
       <el-table-column
-        label="最新一次提交日期"
+        label="最近一次提交日期"
         width="160">
         <template slot-scope="scope">
           {{scope.row.time | dateTimeFormat}}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="100">
-        <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>

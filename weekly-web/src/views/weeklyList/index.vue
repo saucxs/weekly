@@ -18,7 +18,7 @@
           >
         </el-table-column>
         <el-table-column
-          label="最新一次提交日期"
+          label="最近一次提交日期"
           width="200">
           <template slot-scope="scope">
             {{scope.row.time | dateTimeFormat}}
@@ -26,13 +26,30 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="100">
+          width="90">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
             <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!--dialog-->
+      <el-dialog
+        :title="dialogTitle"
+        :visible.sync="confirmSubmitVisiable"
+        width="500px"
+        center>
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 4, maxRows: 6}"
+          placeholder="请输入内容"
+          v-model="editWeeklyContent">
+        </el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="confirmSubmitVisiable = false">取 消</el-button>
+          <el-button type="primary" @click="successConfirm()">确 定</el-button>
+        </span>
+
+      </el-dialog>
     </div>
 </template>
 
@@ -41,21 +58,17 @@
   export default {
     data(){
       return {
-        weeklyTableData: []
+        weeklyTableData: [],
+        dialogTitle: '',
+        confirmSubmitVisiable: false,
+        confirmTipMessage: '',
+        editWeeklyContentRow: '',
+        editWeeklyContent: '',
+        currentDate: new Date().toLocaleDateString(),
       }
     },
     created(){
-      this.getWeeklyList().then(res => {
-        if(res.errno == 0){
-          this.weeklyTableData = res.data;
-//          if(this.weeklyTableData.length>0){
-//            for(var i=0;i<this.weeklyTableData.length;i++){
-//              this.weeklyTableData[i].startDate = formatDateTime(this.weeklyTableData[i].startDate);
-//              this.weeklyTableData[i].endDate = formatDateTime(this.weeklyTableData[i].endDate);
-//            }
-//          }
-        }
-      })
+     this.weeklyList();
     },
     computed: {
       ...mapGetters([])
@@ -63,13 +76,44 @@
     methods: {
       ...mapActions([
         "getWeeklyList",
+        "addWeekly"
       ]),
-      handleClick(row) {
-        console.log(row);
+      weeklyList(){
+        this.getWeeklyList().then(res => {
+          if(res.errno == 0){
+            this.weeklyTableData = res.data;
+          }else{
+            this.$message.warning('服务器出了小差');
+          }
+        })
       },
       editClick(row){
         console.log(row,'row');
-
+        this.editWeeklyContentRow = row;
+        this.confirmSubmitVisiable = true;
+        this.dialogTitle = '修改周报'
+        this.editWeeklyContent = this.editWeeklyContentRow.content;
+      },
+      successConfirm(){
+        var params = {
+          content: this.editWeeklyContent,
+          date: this.currentDate,
+          id:  this.editWeeklyContentRow.id
+        }
+        if(this.editWeeklyContent){
+          this.addWeekly(params).then(res => {
+            if(res.errno == 0){
+              this.$message.success(res.errmsg|| '提交成功');
+              this.confirmSubmitVisiable = false;
+              this.editWeeklyContentRow = '';
+              this.weeklyList();
+            }else{
+              this.$message.error(res.errmsg|| '服务器开小差');
+            }
+          })
+        }else{
+          this.$message.warning( '输入周报才能提交');
+        }
       }
     }
   }
