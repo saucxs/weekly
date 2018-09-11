@@ -7,6 +7,8 @@ module.exports = class extends Base {
     let role = this.user.role;
     let username = this.user.username;
     let time = new Date().getTime();
+    let department_id = this.user.department_id;
+    let company_id = this.user.company_id;
     /*计算一周时间戳*/
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
@@ -23,10 +25,10 @@ module.exports = class extends Base {
       // }).find();
       // console.log(weekly,'hhhhhh');
       if(id){
-        let updateRow = await this.model('week').update({id, usernum, username, content, time: {'>': startWeekStamp, '<': endWeekStamp}});
+        let updateRow = await this.model('week').update({id, usernum, username, content, time});
         return this.success(updateRow);
       }else{
-        let addRow = await this.model('week').add({usernum, username, content, role, date, time: {'>': startWeekStamp, '<': endWeekStamp}, startDate: startWeekStamp, endDate: endWeekStamp});
+        let addRow = await this.model('week').add({usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp, department_id, company_id });
         return this.success(addRow);
       }
     } catch(e) {
@@ -87,13 +89,14 @@ module.exports = class extends Base {
     try {
       // select * from weekly.week_week inner join weekly.week_user on week_user.usernum = week_week.usernum where week_user.comapny_id = 'eastmoney' and week_user.department_id='dataCenter'
       let departmentWeeklyList;
-      if(this.user.role == '2'){
+      if(this.user.role == 2){
         departmentWeeklyList = await this.model('week').where({
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
         }).select();
       }else{
+          console.log('ooooooooooooooooooooooooooooooooooooo')
         departmentWeeklyList = await this.model('week').where({
           company_id: this.user.company_id,
           department_id: this.user.department_id,
@@ -111,7 +114,7 @@ module.exports = class extends Base {
     async getDepartmentMemberListAction() {
       try {
         let departmentMemberList;
-        if(this.user.role == '2'){
+        if(this.user.role == 2){
           departmentMemberList = await this.model('user').where({
             company_id: this.user.company_id,
             role: {'>=': this.user.role}
@@ -140,7 +143,7 @@ module.exports = class extends Base {
       if(list.usernumList.length > 0){
         try {
           let unWeeklyList;
-          if(this.user.role == '2'){
+          if(this.user.role == 2){
             unWeeklyList = await this.model('user').where({
               usernum: ['not in', usernumList],
               company_id: this.user.company_id,
@@ -161,7 +164,7 @@ module.exports = class extends Base {
       }else{
         try {
           let departmentMemberList;
-          if(this.user.role == '2'){
+          if(this.user.role == 2 ){
             departmentMemberList = await this.model('user').where({
               company_id: this.user.company_id,
               role: {'>=': this.user.role}

@@ -26,7 +26,7 @@
       <el-table-column
         prop="username"
         label="姓名"
-        width="80">
+        width="120">
       </el-table-column>
       <el-table-column
         prop="usernum"
