@@ -23,10 +23,10 @@ module.exports = class extends Base {
       // }).find();
       // console.log(weekly,'hhhhhh');
       if(id){
-        let updateRow = await this.model('week').update({id, usernum, username, content, time});
+        let updateRow = await this.model('week').update({id, usernum, username, content, time: {'>': startWeekStamp, '<': endWeekStamp}});
         return this.success(updateRow);
       }else{
-        let addRow = await this.model('week').add({usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp});
+        let addRow = await this.model('week').add({usernum, username, content, role, date, time: {'>': startWeekStamp, '<': endWeekStamp}, startDate: startWeekStamp, endDate: endWeekStamp});
         return this.success(addRow);
       }
     } catch(e) {

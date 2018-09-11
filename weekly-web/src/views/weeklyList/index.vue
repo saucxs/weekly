@@ -26,9 +26,10 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="90">
+          width="100">
           <template slot-scope="scope">
-            <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+            <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+            <span v-else>不支持修改</span>
           </template>
         </el-table-column>
       </el-table>
@@ -36,8 +37,9 @@
       <el-dialog
         :title="dialogTitle"
         :visible.sync="confirmSubmitVisiable"
-        width="500px"
+        width="600px"
         center>
+        <p>周报日期：<span>{{editWeeklyDate}}</span></p>
         <el-input
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 6}"
@@ -64,6 +66,7 @@
         confirmTipMessage: '',
         editWeeklyContentRow: '',
         editWeeklyContent: '',
+        editWeeklyDate: '',
         currentDate: new Date().toLocaleDateString(),
       }
     },
@@ -78,6 +81,22 @@
         "getWeeklyList",
         "addWeekly"
       ]),
+      dateFormatSpe(item){
+        if(!item) return '--';
+        var date = new Date(parseInt(item));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h=h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second=date.getSeconds();
+        second=second < 10 ? ('0' + second) : second;
+        return y + '.' + m + '.' + d;
+      },
       weeklyList(){
         this.getWeeklyList().then(res => {
           if(res.errno == 0){
@@ -93,6 +112,7 @@
         this.confirmSubmitVisiable = true;
         this.dialogTitle = '修改周报'
         this.editWeeklyContent = this.editWeeklyContentRow.content;
+        this.editWeeklyDate = this.dateFormatSpe(this.editWeeklyContentRow.startDate) + '--' + this.dateFormatSpe(this.editWeeklyContentRow.endDate);
       },
       successConfirm(){
         var params = {

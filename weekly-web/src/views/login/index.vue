@@ -27,7 +27,7 @@
     name: 'login',
     data() {
       return {
-        username: "",
+        usernum: "",
         password: "",
       };
     },
