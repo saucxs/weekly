@@ -42,6 +42,7 @@
         <p>周报日期：<span>{{editWeeklyDate}}</span></p>
         <el-input
           type="textarea"
+          maxlength="500"
           :autosize="{ minRows: 4, maxRows: 6}"
           placeholder="请输入内容"
           v-model="editWeeklyContent">

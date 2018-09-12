@@ -78,6 +78,25 @@
     opacity: 0;
     transition: transform .15s cubic-bezier(.215,.61,.355,1),opacity .15s cubic-bezier(.215,.61,.355,1);
   }
+  /*重写弹窗样式*/
+  .el-dialog {
+    & .el-dialog__header{
+      padding: 9px 20px;
+      border-bottom: 2px solid #3a79ff;
+      text-align: left;
+      line-height: 0;
+    }
+    & .el-dialog__body{
+      padding: 20px;
+    }
+    & .el-dialog__footer{
+      padding: 0 20px 20px;
+      border-top: 0;
+    }
+    & .el-dialog__headerbtn{
+      top: 14px;
+    }
+  }
   /*滚动条*/
   *::-webkit-scrollbar {
     width: 5px;
@@ -99,25 +118,7 @@
     font-size: 12px;
   }
 
-  /*重写弹窗样式*/
-  .el-dialog {
-    & .el-dialog__header{
-      padding: 9px 20px;
-      border-bottom: 2px solid #3a79ff;
-      text-align: left;
-      line-height: 0;
-    }
-    & .el-dialog__body{
-      padding: 20px;
-    }
-    & .el-dialog__footer{
-      padding: 0 20px 20px;
-      border-top: 0;
-    }
-    & .el-dialog__headerbtn{
-        top: 14px;
-    }
-  }
+
 
 
 </style>
