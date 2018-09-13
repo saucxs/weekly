@@ -1,10 +1,12 @@
-<script src="../../router/index.js"></script>
 <template>
   <div id="login">
-    <div class="loginHeader">
-      <h1>{{systemName}}</h1>
+    <div class="login-header">
+      <div class="box-wrapper">
+        <h1>{{systemName}}</h1>
+      </div>
     </div>
     <div class="login_contenter">
+      <img class="login_contenter_bg" src="../../assets/suningcloud.jpg">
       <div class="content_box">
         <div class="content_box_form">
           <h1>登&nbsp;&nbsp;录</h1>
@@ -48,13 +50,15 @@
           usernum : usernum,
           password : password
         }
-        console.log(param,'param');
         if(usernum && password){
           this.login(param).then(res => {
-            console.log(res,'res');
             if(res.errno == 0 ){
               this.$message.success(res.errmsg|| '登陆成功');
-              this.$router.push({ path: '/writeWeekly' });
+              if(res.data.role == '3'){
+                this.$router.push({ path: '/weeklyView' });
+              }else if(res.data.role == '4'){
+                this.$router.push({ path: '/writeWeekly' });
+              }
             }else{
               this.$message.error(res.errmsg|| '服务开小差');
             }
@@ -65,10 +69,16 @@
   }
 </script>
 
-<style scoped>
-  .loginHeader {
-    height: 60px;
-    padding: 14px 0 14px 10%;
+<style lang="postcss" scoped>
+  .login-header {
+    min-width: 1190px;
+    height: 100px;
+    line-height: 100px;
+    background: #efefef;
+    & .box-wrapper{
+      width: 1190px;
+      margin: 0 auto;
+    }
   }
 
   .login_icon {
@@ -81,16 +91,18 @@
   .login_contenter {
     width: 100%;
     background-position: 100% 100%;
+    height: 665px;
   }
   .login_contenter_bg{
     position:absolute;
     z-index: -100;
     width: 100%;
-    height: 490px;
+    min-width: 1190px;
+    height: 665px;
   }
   .content_box {
-    width: 805px;
-    height: 480px;
+    width: 1190px;
+    height: 100%;
     padding: 50px 0px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -102,7 +114,7 @@
   .content_box_form {
     box-sizing: border-box;
     display: inline-block;
-    width: 320px;
+    width: 380px;
     height: 380px;
     vertical-align: top;
     text-align: center;
@@ -117,8 +129,8 @@
   h1 {
     list-style-type: none;
     font-family: PingFangSC-Regular;
-    font-size: 20px;
     color: #000000;
+    margin: 0px;
     letter-spacing: 10px;
   }
   .form_content {

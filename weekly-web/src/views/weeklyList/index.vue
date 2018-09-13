@@ -49,9 +49,8 @@
         </el-input>
         <span slot="footer" class="dialog-footer">
           <el-button @click="confirmSubmitVisiable = false">取 消</el-button>
-          <el-button type="primary" @click="successConfirm()">确 定</el-button>
+          <el-button type="primary" :loading="loadingFlag" @click="successConfirm()">确 定</el-button>
         </span>
-
       </el-dialog>
     </div>
 </template>
@@ -69,6 +68,7 @@
         editWeeklyContent: '',
         editWeeklyDate: '',
         currentDate: new Date().toLocaleDateString(),
+        loadingFlag: false
       }
     },
     created(){
@@ -108,7 +108,6 @@
         })
       },
       editClick(row){
-        console.log(row,'row');
         this.editWeeklyContentRow = row;
         this.confirmSubmitVisiable = true;
         this.dialogTitle = '修改周报'
@@ -122,6 +121,7 @@
           id:  this.editWeeklyContentRow.id
         }
         if(this.editWeeklyContent){
+          this.loadingFlag = true;
           this.addWeekly(params).then(res => {
             if(res.errno == 0){
               this.$message.success(res.errmsg|| '提交成功');
@@ -131,6 +131,7 @@
             }else{
               this.$message.error(res.errmsg|| '服务器开小差');
             }
+            this.loadingFlag = false;
           })
         }else{
           this.$message.warning( '输入周报才能提交');

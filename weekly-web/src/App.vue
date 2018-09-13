@@ -38,8 +38,11 @@
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
   }
+  .el-dialog .el-dialog__body{
+    padding-bottom: 0px !important;
+  }
   /*menu*/
-  .el-menu-item{
+  .el-menu-item {
     margin-bottom: 8px;
     margin-top: 4px;
     height: 42px;

@@ -10,7 +10,7 @@
       v-model="weeklyContent">
     </el-input>
     <p>
-      <el-button type="primary" plain @click="submitWeekly">提交周报</el-button>
+      <el-button type="primary" :loading="loadingFlag" plain @click="submitWeekly">提交周报</el-button>
     </p>
   </div>
 </template>
@@ -25,7 +25,8 @@
         day: new Date().getDay(),
         weekDay:  ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
         currentWeek: '',
-        weeklyId: ''
+        weeklyId: '',
+        loadingFlag: false
       }
     },
     created(){
@@ -83,12 +84,14 @@
           id:  this.weeklyId
         }
         if(this.weeklyContent){
+          this.loadingFlag = true;
           this.addWeekly(params).then(res => {
             if(res.errno == 0){
               this.$message.success(res.errmsg|| '提交成功');
             }else{
               this.$message.error(res.errmsg|| '服务器开小差');
             }
+            this.loadingFlag = false;
           })
         }else{
           this.$message.warning( '输入周报才能提交');

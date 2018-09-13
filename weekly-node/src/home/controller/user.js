@@ -12,7 +12,7 @@ module.exports = class extends Base {
             if(user.password && user.password == password) {
                 // login success
                 await this.session('userInfo',user);
-                return this.success("登陆成功");
+                return this.success(user);
             } else {
                 return this.fail("用户名或密码错误")
             }
@@ -42,22 +42,25 @@ module.exports = class extends Base {
 
     async changepassAction () {
         let {
-            username,
+            usernum,
             oldpassword,
             newpassword
         } = this.post()
         try {
             let user = await this.model('user').where({
-                username,
+              usernum,
             }).find();
+            const salt = 'weekly';
+            oldpassword = think.md5(salt + oldpassword);
+            console.log(usernum, user.password, oldpassword, 'dsaaaaaaaaaaaaaaaaaaaaaaa')
             if(user.password && user.password == oldpassword) {
                 // login success
-                const salt = 'gshl';
+                const salt = 'weekly';
                 newpassword = think.md5(salt + newpassword);
                 await this.model('user').where({
-                    username
+                  usernum
                 }).update({
-                    username,
+                  usernum,
                     password: newpassword
                 })
                 return this.success("修改成功");

@@ -31,8 +31,6 @@ router.beforeEach((to, from, next) => {
   let key = to.meta.key;
   if (key) {
     store.dispatch("getUserInfo", {}).then(response => {
-      console.log(response, 'response');
-      console.log(from.name,to.name,'hhhhhhhhhhhhhh');
       if(!response.data){
         if (to.path !== '/login') {
           return next('/login');
@@ -40,7 +38,11 @@ router.beforeEach((to, from, next) => {
         next();
       }else{
         if (to.path == '/login') {
-          return next('/writeWeekly');
+         if(response.data.role == 3){
+           return next('/weeklyView');
+         }else if(response.data.role == 4){
+           return next('/writeWeekly');
+         }
         }
         store.commit("USER_INFO", response.data);
         next();

@@ -81,7 +81,6 @@
             var params = {
               usernumList: usernumList
             }
-            console.log(params,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
             this.getUnWeeklyList(params).then(res => {
               if(res.errno == 0){
                 this.unWeeklyData = res.data;
@@ -112,6 +111,8 @@
                 usernum: item.usernum
               }
             });
+          }else{
+            this.$message.error(res.errmsg|| '服务器开小差');
           }
         })
       },

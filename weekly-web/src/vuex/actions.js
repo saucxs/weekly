@@ -14,6 +14,12 @@ export const login = ({ commit }, params) => {
     return response;
   })
 }
+// change password
+export const changePassword = ({ commit }, params) => {
+  return Api.changePassword(params).then(response => {
+    return response;
+  })
+}
 // logout
 export const logout = ({ commit }, params) => {
   return Api.logout(params).then(response => {

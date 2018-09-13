@@ -24,7 +24,6 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(
   response => {
     let data = response.data;
-    console.log(data, 'data');
     if (!data.data) {
       //   登陆成功的回调地址
       return data;
@@ -48,6 +47,9 @@ export default {
   },
   logout: params => {
     return axios.post("/home/user/logout", params);
+  },
+  changePassword: params => {
+    return axios.post("/home/user/changepass", params);
   },
   addWeekly: params => {
     return axios.post("/home/weekly/addWeekly", params);
