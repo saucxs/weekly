@@ -2,6 +2,7 @@
   <div id="login">
     <div class="login-header">
       <div class="box-wrapper">
+        <i class="el-icon-edit-outline icon-style"></i>&nbsp;&nbsp;
         <h1>{{systemName}}</h1>
       </div>
     </div>
@@ -58,6 +59,8 @@
                 this.$router.push({ path: '/weeklyView' });
               }else if(res.data.role == '4'){
                 this.$router.push({ path: '/writeWeekly' });
+              }else if(res.data.role == '1'){
+
               }
             }else{
               this.$message.error(res.errmsg|| '服务开小差');
@@ -78,6 +81,12 @@
     & .box-wrapper{
       width: 1190px;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      & .icon-style{
+        font-size: 26px;
+        color: #5579ee;
+      }
     }
   }
 
@@ -103,7 +112,7 @@
   .content_box {
     width: 1190px;
     height: 100%;
-    padding: 50px 0px;
+    padding: 160px 0px;
     margin: 0 auto;
     box-sizing: border-box;
   }
@@ -129,7 +138,8 @@
   h1 {
     list-style-type: none;
     font-family: PingFangSC-Regular;
-    color: #000000;
+    color: #5579ee;
+    font-size: 24px;
     margin: 0px;
     letter-spacing: 10px;
   }

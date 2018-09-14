@@ -58,7 +58,7 @@ export default {
     return axios.post("/home/weekly/getCurrentWeekly", params);
   },
   getWeeklyList: params => {
-    return axios.post("/home/weekly/getWeeklyList", params);
+    return axios.get("/home/weekly/getWeeklyList", params);
   },
   getDepartmentWeeklyList: params => {
     return axios.post("/home/weekly/getDepartmentWeeklyList", params);

@@ -33,6 +33,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination-box">
+        <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          layout="total, prev, pager, next"
+          :total="weeklyListTotal">
+        </el-pagination>
+      </div>
       <!--dialog-->
       <el-dialog
         :title="dialogTitle"
@@ -68,7 +77,9 @@
         editWeeklyContent: '',
         editWeeklyDate: '',
         currentDate: new Date().toLocaleDateString(),
-        loadingFlag: false
+        loadingFlag: false,
+        weeklyListTotal: 0,
+        currentPage: 1
       }
     },
     created(){
@@ -98,10 +109,18 @@
         second=second < 10 ? ('0' + second) : second;
         return y + '.' + m + '.' + d;
       },
+      handleCurrentChange(currentPage) {
+        this.queryWeeklyList(currentPage,10)
+      },
       weeklyList(){
-        this.getWeeklyList().then(res => {
+        this.queryWeeklyList(1,10)
+      },
+      queryWeeklyList(currentPage, pageSize){
+        this.getWeeklyList({pageNum: currentPage, pageSize: pageSize}).then(res => {
+          console.log(res, 'res');
           if(res.errno == 0){
-            this.weeklyTableData = res.data;
+            this.weeklyTableData = res.data.data;
+            this.weeklyListTotal = res.data.totalPages;
           }else{
             this.$message.warning('服务器出了小差');
           }
@@ -143,6 +162,9 @@
 
 <style lang="postcss" scoped>
 .weekly-list{
-
+  & .pagination-box{
+      text-align: right;
+      margin: 10px 0px;
+    }
 }
 </style>

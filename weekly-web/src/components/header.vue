@@ -4,7 +4,7 @@
       <el-row type="flex" justify="center">
         <el-col :span="12">
           <a class="header-logo" href="/">
-            <i class="el-icon-edit-outline"></i>
+            <i class="el-icon-edit-outline icon-white-style"></i>
             <h1>&nbsp;|&nbsp;{{systemName}}</h1>
           </a>
         </el-col>
@@ -161,10 +161,15 @@
     margin: 0 auto;
     background: #3a79ff;
     & .header-logo{
-      color: #fff;
-      &>h1 {
+        color: #fff;
+        display: flex;
+        align-items: center;
+      & .icon-white-style{
+        font-size: 20px;
+      }
+      & > h1 {
          display: inline-block;
-         font-size: 16px;
+         font-size: 18px;
          margin: 0;
        }
     }

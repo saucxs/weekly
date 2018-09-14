@@ -1,5 +1,5 @@
 <template>
-  <div class="write-weekly">
+  <div class="view-weekly">
     <div class="title"><span v-if="userInfo.role == '2'">公司</span><span v-else>部门</span>周报概览</div>
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
     <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>
@@ -45,6 +45,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination-box">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        layout="total, prev, pager, next"
+        :total="weeklyListTotal">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -61,7 +70,9 @@
         weeklyId: '',
         weeklyTableData: [],
         departmentMember: [],
-        unWeeklyData: []
+        unWeeklyData: [],
+        weeklyListTotal: 0,
+        currentPage: 1
       }
     },
     created(){
@@ -69,25 +80,7 @@
       /*获取部门人员列表*/
       this.departmentMemberList();
       /*获取已写周报列表*/
-      this.getDepartmentWeeklyList().then(res => {
-        if(res.errno == 0){
-          this.weeklyTableData = res.data;
-          var usernumList = this.weeklyTableData.map( item => {
-            return {
-              usernum: item.usernum
-            }
-          })
-            /*获取未写周报列表*/
-            var params = {
-              usernumList: usernumList
-            }
-            this.getUnWeeklyList(params).then(res => {
-              if(res.errno == 0){
-                this.unWeeklyData = res.data;
-              }
-            })
-        }
-      })
+      this.departmrntWeeklyList();
     },
     computed: {
       ...mapGetters([
@@ -102,20 +95,6 @@
         "getDepartmentMemberList",
         "getUnWeeklyList"
       ]),
-      departmentMemberList(){
-        this.getDepartmentMemberList().then(res => {
-          if(res.errno == 0){
-            this.departmentMember = res.data.map( item => {
-              return {
-                username: item.username,
-                usernum: item.usernum
-              }
-            });
-          }else{
-            this.$message.error(res.errmsg|| '服务器开小差');
-          }
-        })
-      },
       formatDateTime(item){
         var date = new Date(parseInt(item));
         var y = date.getFullYear();
@@ -130,6 +109,53 @@
         var second=date.getSeconds();
         second=second < 10 ? ('0' + second) : second;
         return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+      },
+      handleCurrentChange(currentPage) {
+        this.queryDepartmentWeeklyList(currentPage,10)
+      },
+      departmrntWeeklyList(){
+        this.queryDepartmentWeeklyList(1,10)
+      },
+      queryDepartmentWeeklyList(currentPage, pageSize){
+        /*获取已写周报列表*/
+        this.getDepartmentWeeklyList({currentPage, pageSize}).then(res => {
+          if(res.errno == 0){
+            this.weeklyTableData = res.data.data;
+            this.weeklyListTotal = res.data.totalPages
+            var usernumList = this.weeklyTableData.map( item => {
+              return {
+                usernum: item.usernum
+              }
+            })
+            /*获取未写周报人员列表*/
+            var params = {
+              usernumList: usernumList
+            }
+            this.getUnWeeklyList(params).then(res => {
+              if(res.errno == 0){
+                this.unWeeklyData = res.data;
+              }else{
+                this.$message.warning('服务器出了小差');
+              }
+            })
+          }else{
+            this.$message.warning('服务器出了小差');
+          }
+        })
+      },
+      departmentMemberList(){
+        this.getDepartmentMemberList().then(res => {
+          if(res.errno == 0){
+            this.departmentMember = res.data.map( item => {
+              return {
+                username: item.username,
+                usernum: item.usernum
+              }
+            });
+          }else{
+            this.$message.error(res.errmsg|| '服务器开小差');
+          }
+        })
       },
       submitWeekly(){
         var params = {
@@ -150,7 +176,14 @@
 </script>
 
 <style lang="postcss" scoped>
-.write-weekly  .data-style{
-  color: #5579ee;
+.view-weekly{
+  & .data-style{
+      color: #5579ee;
+    }
+  & .pagination-box{
+      text-align: right;
+      margin: 10px 0px;
+    }
 }
+
 </style>

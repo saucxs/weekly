@@ -64,11 +64,14 @@ module.exports = class extends Base {
     async getWeeklyListAction() {
         let usernum = this.user.usernum;
         let username = this.user.username;
+        let page = this.get('pageNum');
+        let pagesize = this.get('pageSize');
+        if(!page){ page = '1' }
+        if(!pagesize){ pagesize = '10' }
         try {
-            let weeklyList = await this.model('week').where({
-                usernum: usernum, username: username
-            }).select();
-            return this.success(weeklyList);
+          let model = this.model('week');
+          let weeklyList = await model.where({ usernum, username }).order("time DESC").page(page, pagesize).countSelect();
+          return this.success(weeklyList);
         }catch(e){
             return this.fail('服务器开小差');
         }
@@ -76,6 +79,10 @@ module.exports = class extends Base {
 
   /*获取部门周报列表*/
   async getDepartmentWeeklyListAction() {
+      let page = this.get('pageNum');
+      let pagesize = this.get('pageSize');
+      if(!page){ page = '1' }
+      if(!pagesize){ pagesize = '10' }
       /*计算一周时间戳*/
       let currentYear = new Date().getFullYear();
       let currentMonth = new Date().getMonth();
@@ -94,22 +101,70 @@ module.exports = class extends Base {
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-        }).select();
+        }).order("time DESC").page(page, pagesize).countSelect();
       }else{
-          console.log('ooooooooooooooooooooooooooooooooooooo')
         departmentWeeklyList = await this.model('week').where({
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-        }).select();
+        }).order("time DESC").page(page, pagesize).countSelect();
       }
       return this.success(departmentWeeklyList);
     }catch(e){
       return this.fail('服务器开小差');
     }
   }
-
+  /*获取未写周报部门人员列表*/
+  async getUnWeeklyListAction() {
+    let list = this.post();
+    console.log(list.usernumList, 'pppppppppppppppppppppppp');
+    let usernumList = [];
+    for(let i = 0; i < list.usernumList.length; i++) {
+      usernumList[i] = list.usernumList[i].usernum;
+    }
+    if(list.usernumList.length > 0){
+      try {
+        let unWeeklyList;
+        if(this.user.role == 2){
+          unWeeklyList = await this.model('user').where({
+            usernum: ['not in', usernumList],
+            company_id: this.user.company_id,
+            role: {'>=': this.user.role}
+          }).select();
+        }else{
+          unWeeklyList = await this.model('user').where({
+            usernum: ['not in', usernumList],
+            company_id: this.user.company_id,
+            department_id: this.user.department_id,
+            role: {'>=': this.user.role}
+          }).select();
+        }
+        return this.success(unWeeklyList);
+      }catch(e){
+        return this.fail('服务器开小差');
+      }
+    }else{
+      try {
+        let departmentMemberList;
+        if(this.user.role == 2 ){
+          departmentMemberList = await this.model('user').where({
+            company_id: this.user.company_id,
+            role: {'>=': this.user.role}
+          }).select();
+        }else{
+          departmentMemberList = await this.model('user').where({
+            company_id: this.user.company_id,
+            department_id: this.user.department_id,
+            role: {'>=': this.user.role}
+          }).select();
+        }
+        return this.success(departmentMemberList);
+      }catch(e){
+        return this.fail('服务器开小差');
+      }
+    }
+  }
     /*获取部门人员列表*/
     async getDepartmentMemberListAction() {
       try {
@@ -132,54 +187,4 @@ module.exports = class extends Base {
       }
     }
 
-    /*获取未写周报部门人员列表*/
-    async getUnWeeklyListAction() {
-      let list = this.post();
-      console.log(list.usernumList, 'pppppppppppppppppppppppp');
-      let usernumList = [];
-      for(let i = 0; i < list.usernumList.length; i++) {
-        usernumList[i] = list.usernumList[i].usernum;
-      }
-      if(list.usernumList.length > 0){
-        try {
-          let unWeeklyList;
-          if(this.user.role == 2){
-            unWeeklyList = await this.model('user').where({
-              usernum: ['not in', usernumList],
-              company_id: this.user.company_id,
-              role: {'>=': this.user.role}
-            }).select();
-          }else{
-            unWeeklyList = await this.model('user').where({
-              usernum: ['not in', usernumList],
-              company_id: this.user.company_id,
-              department_id: this.user.department_id,
-              role: {'>=': this.user.role}
-            }).select();
-          }
-          return this.success(unWeeklyList);
-        }catch(e){
-          return this.fail('服务器开小差');
-        }
-      }else{
-        try {
-          let departmentMemberList;
-          if(this.user.role == 2 ){
-            departmentMemberList = await this.model('user').where({
-              company_id: this.user.company_id,
-              role: {'>=': this.user.role}
-            }).select();
-          }else{
-            departmentMemberList = await this.model('user').where({
-              company_id: this.user.company_id,
-              department_id: this.user.department_id,
-              role: {'>=': this.user.role}
-            }).select();
-          }
-          return this.success(departmentMemberList);
-        }catch(e){
-          return this.fail('服务器开小差');
-        }
-      }
-    }
 }
