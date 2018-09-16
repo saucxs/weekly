@@ -43,8 +43,7 @@
   }
   /*menu*/
   .el-menu-item {
-    margin-bottom: 8px;
-    margin-top: 4px;
+    padding-bottom: 8px;
     height: 42px;
     line-height: 42px;
   }

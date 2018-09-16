@@ -120,7 +120,7 @@
           console.log(res, 'res');
           if(res.errno == 0){
             this.weeklyTableData = res.data.data;
-            this.weeklyListTotal = res.data.totalPages;
+            this.weeklyListTotal = res.data.count;
           }else{
             this.$message.warning('服务器出了小差');
           }

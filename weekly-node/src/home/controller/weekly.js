@@ -15,6 +15,7 @@ module.exports = class extends Base {
     let currentDay = new Date().getDate();
     let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
     let currentDayNum = new Date().getDay();
+    if(currentDayNum == 0) currentDayNum = 7;
     let startWeekNum = currentDayNum - 1;
     let endWeekNum =  7 - currentDayNum + 1;
     let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
@@ -45,8 +46,9 @@ module.exports = class extends Base {
     let currentMonth = new Date().getMonth();
     let currentDay = new Date().getDate();
     let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
-    let currentDayNum = new Date().getDay();
-    let startWeekNum = currentDayNum - 1;
+    let currentDayNum =  new Date().getDay();
+    if(currentDayNum == 0) currentDayNum = 7;
+    let startWeekNum = currentDayNum - 1 ;
     let endWeekNum =  7 - currentDayNum + 1;
     let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
     let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
@@ -89,6 +91,7 @@ module.exports = class extends Base {
       let currentDay = new Date().getDate();
       let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
       let currentDayNum = new Date().getDay();
+      if(currentDayNum == 0) currentDayNum = 7;
       let startWeekNum = currentDayNum - 1;
       let endWeekNum =  7 - currentDayNum + 1;
       let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;

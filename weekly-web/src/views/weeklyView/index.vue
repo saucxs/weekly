@@ -121,7 +121,7 @@
         this.getDepartmentWeeklyList({currentPage, pageSize}).then(res => {
           if(res.errno == 0){
             this.weeklyTableData = res.data.data;
-            this.weeklyListTotal = res.data.totalPages
+            this.weeklyListTotal = res.data.count
             var usernumList = this.weeklyTableData.map( item => {
               return {
                 usernum: item.usernum

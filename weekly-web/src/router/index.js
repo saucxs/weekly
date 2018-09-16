@@ -7,7 +7,8 @@ const login = () => import("@/views/login/index")
 // 布局
 const home = () => import("@/views/home");
 
-// 写当前周
+// 周报管理
+const weeklyTemplate = () => import("@/views/weeklyView/template");
 const weeklyView = () => import("@/views/weeklyView/index");
 // 写当前周
 const writeWeekly = () => import("@/views/writeWeekly/index");
@@ -37,16 +38,25 @@ export default new Router({
         key: '1'
       },
       children: [{
-        path: '/weeklyView',
-        name: 'weeklyView',
-        isNest: false,
+        path: '/weeklyManage',
+        name: 'weeklyManage',
+        isNest: true,
         icon: 'el-icon-menu',
+        component: weeklyTemplate,
         meta: {
-          zhName: '周报概览',
+          zhName: '周报管理',
           key: '1-0',
           role: 3
         },
-        component: weeklyView
+        children: [{
+          path: '/weeklyManage/weeklyView',
+          name: 'weeklyView',
+          isNest: false,
+          component: weeklyView,
+          meta: {
+            zhName: '周报预览'
+          }
+        }]
       }, {
         path: '/writeWeekly',
         name: 'writeWeekly',
