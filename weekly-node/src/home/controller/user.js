@@ -104,4 +104,18 @@ module.exports = class extends Base {
             return this.fail("添加失败", e);
         }
     }
+
+  async deleteUserAction() {
+    let company_id = this.user.company_id;
+    let department_id = this.user.department_id;
+    try {
+      let {usernum} = this.post();
+      await this.model('user').delete({
+        usernum, company_id, department_id
+      });
+      return this.success("删除成功");
+    } catch(e) {
+      return this.fail(`删除失败${e}`)
+    }
+  }
 }

@@ -75,4 +75,9 @@ export const addUser = ({ commit }, params) => {
     return response;
   })
 }
-
+//删除人员
+export const deleteUser = ({ commit }, params) => {
+  return Api.deleteUser(params).then(response => {
+    return response;
+  })
+}

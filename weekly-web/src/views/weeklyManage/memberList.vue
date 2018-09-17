@@ -99,6 +99,19 @@
           <el-button type="primary" :loading="loadingFlag" @click="successConfirm()">确 定</el-button>
         </span>
       </el-dialog>
+      <!--dialog small-->
+      <el-dialog
+        :title="dialogTitle"
+        :visible.sync="confirmDeleteVisiable"
+        :before-close="handleClose"
+        width="400px"
+        center>
+        <p>{{dialogBody}}</p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="handleClose()">取 消</el-button>
+          <el-button type="primary" :loading="loadingFlag" @click="confirmDelete()">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -120,7 +133,10 @@
         },
         confirmCreateVisiable: false,
         loadingFlag: false,
-        departmentListOptions: []
+        departmentListOptions: [],
+        selectedItem: '',
+        confirmDeleteVisiable: false,
+        dialogBody: ''
       }
     },
     created(){
@@ -134,7 +150,8 @@
     methods: {
       ...mapActions([
         "getDepartmentMemberList",
-        "addUser"
+        "addUser",
+        "deleteUser"
       ]),
       handleCurrentChange(currentPage){
         this.queryMemberList(currentPage,10)
@@ -157,6 +174,7 @@
       handleClose(){
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
+        this.confirmDeleteVisiable = false;
       },
       successConfirm(){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}
@@ -178,7 +196,24 @@
         }
       },
       deleteMember(item){
-
+        console.log(item,'item');
+        this.selectedItem = item;
+        this.confirmDeleteVisiable = true;
+        this.dialogTitle = '确认移除'
+        this.dialogBody = '确认移除' + this.selectedItem.username + '(' + this.selectedItem.usernum + ')吗？'
+      },
+      confirmDelete(){
+        this.loadingFlag = true;
+        this.deleteUser({usernum: this.selectedItem.usernum}).then( res => {
+          if(res.errno == 0){
+            this.$message.success('删除成功');
+            this.confirmDeleteVisiable = false;
+            this.queryMemberList(1, 10);
+          }else{
+            this.$message.error('服务器出了小差');
+          }
+          this.loadingFlag = false;
+        })
       }
     }
   }

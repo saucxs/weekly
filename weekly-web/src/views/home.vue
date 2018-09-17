@@ -57,6 +57,7 @@
 
   .el-submenu .el-menu-item{
     min-width: 169px;
+    padding-left: 50px !important;
   }
 
   .container {

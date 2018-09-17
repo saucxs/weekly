@@ -71,6 +71,9 @@ export default {
   },
   addUser: params => {
     return axios.post("/home/user/register", params);
+  },
+  deleteUser: params => {
+    return axios.post("/home/user/deleteUser", params);
   }
 
   /**

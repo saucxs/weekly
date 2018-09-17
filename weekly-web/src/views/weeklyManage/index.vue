@@ -133,7 +133,7 @@
             }
             this.getUnDepartmentMemberList(params).then(res => {
               if(res.errno == 0){
-                this.unWeeklyData = res.data;
+                this.unWeeklyData = res.data.data;
               }else{
                 this.$message.warning('服务器出了小差');
               }
