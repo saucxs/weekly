@@ -21,11 +21,13 @@
         </div>
       </div>
     </div>
+    <footer-bar></footer-bar>
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import footerBar from "../../components/footer";
   export default {
     name: 'login',
     data() {
@@ -33,6 +35,9 @@
         usernum: "",
         password: "",
       };
+    },
+    components: {
+      footerBar
     },
     computed: {
       ...mapGetters([

@@ -64,10 +64,13 @@ export default {
     return axios.post("/home/weekly/getDepartmentWeeklyList", params);
   },
   getDepartmentMemberList: params => {
-    return axios.post("/home/weekly/getDepartmentMemberList", params);
+    return axios.post("/home/department/getDepartmentMemberList", params);
   },
-  getUnWeeklyList: params => {
-    return axios.post("/home/weekly/getUnWeeklyList", params);
+  getUnDepartmentMemberList: params => {
+    return axios.post("/home/department/getUnDepartmentMemberList", params);
+  },
+  addUser: params => {
+    return axios.post("/home/user/register", params);
   }
 
   /**

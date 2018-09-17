@@ -45,7 +45,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="pagination-box">
+    <div class="pagination-box" v-if="weeklyTableData.length>0">
       <el-pagination
         background
         @current-change="handleCurrentChange"
@@ -93,7 +93,7 @@
         "addWeekly",
         "getDepartmentWeeklyList",
         "getDepartmentMemberList",
-        "getUnWeeklyList"
+        "getUnDepartmentMemberList"
       ]),
       formatDateTime(item){
         var date = new Date(parseInt(item));
@@ -121,7 +121,7 @@
         this.getDepartmentWeeklyList({currentPage, pageSize}).then(res => {
           if(res.errno == 0){
             this.weeklyTableData = res.data.data;
-            this.weeklyListTotal = res.data.count
+            this.weeklyListTotal = res.data.count;
             var usernumList = this.weeklyTableData.map( item => {
               return {
                 usernum: item.usernum
@@ -131,7 +131,7 @@
             var params = {
               usernumList: usernumList
             }
-            this.getUnWeeklyList(params).then(res => {
+            this.getUnDepartmentMemberList(params).then(res => {
               if(res.errno == 0){
                 this.unWeeklyData = res.data;
               }else{
@@ -139,14 +139,14 @@
               }
             })
           }else{
-            this.$message.warning('服务器出了小差');
+            this.$message.error('服务器出了小差');
           }
         })
       },
       departmentMemberList(){
         this.getDepartmentMemberList().then(res => {
           if(res.errno == 0){
-            this.departmentMember = res.data.map( item => {
+            this.departmentMember = res.data.data.map( item => {
               return {
                 username: item.username,
                 usernum: item.usernum

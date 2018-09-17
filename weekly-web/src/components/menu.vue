@@ -7,8 +7,8 @@
       active-text-color="#ffd04b"
       :router = "false"
       :default-active="$route.path">
-       <template v-for="item in menuList[1].children">
-         <el-submenu v-if="item.isNest && item.meta.role >= userInfo.role" :key="item.path" :index="item.path">
+       <template v-for="item in menuList">
+         <el-submenu v-if="item.isNest && item.meta.role >= userInfo.role" :index="item.path">
            <template slot="title">
              <i :class="item.icon"></i>
              <span>{{item.meta.zhName}}</span>
@@ -22,20 +22,9 @@
            </template>
          </el-submenu>
 
-         <!--<el-submenu v-if="item.isNest" :key="item.meta.zhName" :index="item.path">-->
-           <!--<router-link :to="item.path">-->
-           <!--</router-link>-->
-           <!--<template v-for="child in item.children">-->
-             <!--<el-menu-item :key="child.path" :index="child.path">-->
-               <!--<router-link :to="child.path">-->
-                   <!--<span slot="title">{{child.meta.zhName}}</span>-->
-               <!--</router-link>-->
-             <!--</el-menu-item>-->
-           <!--</template>-->
-         <!--</el-submenu>-->
-         <el-menu-item v-if="!item.isNest && item.meta.role >= userInfo.role" :key="item.meta.path" :index="item.path">
-           <router-link :to="item.path">
-             <i :class="item.icon"></i>{{item.meta.zhName}}
+         <el-menu-item v-if="!item.isNest && item.meta.role >= userInfo.role" :key="item.children[0].path" :index="item.children[0].path">
+           <router-link :to="item.children[0].path">
+             <i :class="item.children[0].icon"></i>{{item.children[0].meta.zhName}}
            </router-link>
          </el-menu-item>
        </template>
@@ -58,9 +47,14 @@
       ]),
       menuList(){
         return this.$router.options.routes.filter(
-          item => item.meta
+          item => item.meta.key
         );
       }
+    },
+    created() {
+      console.log(this.$router.options.routes, 'this.$router.options.routes');
+      console.log(this.menuList, 'this.menuListmenuListmenuListmenuListmenuListmenuList');
+      console.log(this.$route.path);
     },
     methods: {
       allowUse(id) {

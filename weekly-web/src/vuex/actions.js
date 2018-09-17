@@ -64,8 +64,15 @@ export const getDepartmentMemberList = ({ commit }, params) => {
 }
 
 //获取未写周报人员列表
-export const getUnWeeklyList = ({ commit }, params) => {
-  return Api.getUnWeeklyList(params).then(response => {
+export const getUnDepartmentMemberList = ({ commit }, params) => {
+  return Api.getUnDepartmentMemberList(params).then(response => {
     return response;
   })
 }
+//新增人员
+export const addUser = ({ commit }, params) => {
+  return Api.addUser(params).then(response => {
+    return response;
+  })
+}
+

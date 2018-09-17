@@ -29,11 +29,11 @@
           width="100">
           <template slot-scope="scope">
             <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
-            <span v-else>不支持修改</span>
+            <span v-else>--</span>
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination-box">
+      <div class="pagination-box" v-if="weeklyTableData.length>0">
         <el-pagination
           background
           @current-change="handleCurrentChange"
@@ -46,6 +46,7 @@
       <el-dialog
         :title="dialogTitle"
         :visible.sync="confirmSubmitVisiable"
+        :before-close="handleClose"
         width="600px"
         center>
         <p>周报日期：<span>{{editWeeklyDate}}</span></p>
@@ -57,7 +58,7 @@
           v-model="editWeeklyContent">
         </el-input>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="confirmSubmitVisiable = false">取 消</el-button>
+          <el-button @click="handleClose()">取 消</el-button>
           <el-button type="primary" :loading="loadingFlag" @click="successConfirm()">确 定</el-button>
         </span>
       </el-dialog>
@@ -117,7 +118,6 @@
       },
       queryWeeklyList(currentPage, pageSize){
         this.getWeeklyList({pageNum: currentPage, pageSize: pageSize}).then(res => {
-          console.log(res, 'res');
           if(res.errno == 0){
             this.weeklyTableData = res.data.data;
             this.weeklyListTotal = res.data.count;
@@ -155,6 +155,10 @@
         }else{
           this.$message.warning( '输入周报才能提交');
         }
+      },
+      handleClose(){
+        this.confirmSubmitVisiable = false;
+        this.editWeeklyContentRow = '';
       }
     }
   }

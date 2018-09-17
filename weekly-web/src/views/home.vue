@@ -76,7 +76,7 @@
         margin-left: 10px;
         overflow: auto;
       & .content{
-          min-height: calc(100% - 110px);
+          min-height: calc(100% - 122px);
           padding: 20px 40px;
           background-color: #fff;
           & .title {
