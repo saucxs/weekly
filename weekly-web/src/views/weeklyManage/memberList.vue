@@ -186,6 +186,7 @@
           this.addUser(this.formUser).then(res => {
             if(res.errno == 0){
               this.$message.success('添加人员成功');
+              this.queryMemberList(1, 10);
               this.confirmCreateVisiable = false;
               this.formUser = {};
             }else{

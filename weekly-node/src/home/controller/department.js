@@ -39,13 +39,13 @@ module.exports = class extends Base {
           departmentMemberList = await this.model('user').where({
             company_id: this.user.company_id,
             role: {'>=': this.user.role}
-          }).select();
+          }).order("role DESC").page(list.page, list.pagesize).countSelect();
         }else{
           departmentMemberList = await this.model('user').where({
             company_id: this.user.company_id,
             department_id: this.user.department_id,
             role: {'>=': this.user.role}
-          }).select();
+          }).order("role DESC").page(list.page, list.pagesize).countSelect();
         }
         return this.success(departmentMemberList);
       }catch(e){

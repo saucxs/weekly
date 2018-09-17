@@ -59,7 +59,7 @@ export default new Router({
         name: 'memberList',
         component: memberList,
         meta: {
-          zhName: '添加成员',
+          zhName: '成员管理',
           key: '1-2',
           role: 3
         }
