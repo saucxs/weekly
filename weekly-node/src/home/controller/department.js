@@ -65,13 +65,13 @@ module.exports = class extends Base {
         departmentMemberList = await this.model('user').where({
           company_id: this.user.company_id,
           role: {'>=': this.user.role}
-        }).order("role ASC").page(page, pagesize).countSelect();
+        }).order("department_id asc , role asc").page(page, pagesize).countSelect();
       }else{
         departmentMemberList = await this.model('user').field('company_name, department_name, email, role, role_name, username, usernum,telephone').where({
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           role: {'>=': this.user.role}
-        }).order("role ASC").page(page, pagesize).countSelect();
+        }).order("department_id asc , role asc").page(page, pagesize).countSelect();
       }
       return this.success(departmentMemberList);
     }catch(e){

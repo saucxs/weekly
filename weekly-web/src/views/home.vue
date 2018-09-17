@@ -55,11 +55,6 @@
     /*color: #000;*/
   /*}*/
 
-  .el-submenu .el-menu-item{
-    min-width: 169px;
-    padding-left: 50px !important;
-  }
-
   .container {
     height: calc(100% - 46px);
     width: 1366px;

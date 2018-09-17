@@ -78,10 +78,14 @@
 </script>
 
 <style lang="postcss" scoped>
+  #login{
+    overflow-y: auto;
+    height: 100%;
+  }
   .login-header {
     min-width: 1190px;
-    height: 100px;
-    line-height: 100px;
+    height: 70px;
+    line-height: 70px;
     background: #efefef;
     & .box-wrapper{
       width: 1190px;
@@ -106,6 +110,7 @@
     width: 100%;
     background-position: 100% 100%;
     height: 665px;
+    background-image: url("../../assets/suningcloud.jpg");
   }
   .login_contenter_bg{
     position:absolute;

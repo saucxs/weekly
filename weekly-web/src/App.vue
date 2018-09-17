@@ -55,6 +55,11 @@
     height: 42px;
     line-height: 42px;
   }
+  .el-submenu .el-menu-item{
+    min-width: 146px !important;
+    padding-left: 50px !important;
+  }
+
   .el-menu-item > a{
     display: block;
     color: #ccc;
