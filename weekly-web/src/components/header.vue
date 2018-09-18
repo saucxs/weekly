@@ -14,10 +14,10 @@
               <div class="header-user-name">{{userInfo.username}}<i class="el-icon-caret-bottom el-icon--right"></i></div>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                  <a @click="changPassword()">修改密码</a>
+                  <a class="a-style" @click="changPassword()">修改密码</a>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <a @click="signOut()">退出</a>
+                  <a class="a-style" @click="signOut()">退出</a>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>

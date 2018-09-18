@@ -46,6 +46,9 @@
     text-decoration: none;
     color: #000;
   }
+  .a-style{
+      padding: 0px 30px;
+    }
   .el-dialog .el-dialog__body{
     padding-bottom: 0px !important;
   }

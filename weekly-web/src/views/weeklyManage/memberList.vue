@@ -88,7 +88,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="部门职务"  v-if="userInfo.role == 2">
-            <el-select v-model="formUser.role" filterable placeholder="请选择">
+            <el-select v-model="formUser.role" placeholder="请选择">
               <el-option
                 v-for="item in roleListOptions"
                 :key="item.role"
