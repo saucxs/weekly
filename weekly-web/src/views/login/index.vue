@@ -109,6 +109,14 @@
   .login_contenter {
     position: relative;
     width: 100%;
+    background-position: 100% 100%;
+    height: 665px;
+    background-image: url("../../assets/suningcloud.jpg") 100% 100%  no-repeat ;
+  }
+  .login_contenter_bg{
+    position:absolute;
+    z-index: -100;
+    width: 100%;
     min-width: 1190px;
     height: 665px;
     background: #00000e url("../../assets/suningcloud.jpg") no-repeat center 0;
