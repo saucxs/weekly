@@ -74,6 +74,19 @@ export default {
   },
   deleteUser: params => {
     return axios.post("/home/user/deleteUser", params);
+  },
+  getAllDepartmentList: params => {
+    return axios.get("/home/department/getAllDepartmentList", params);
+  },
+  getRole: params => {
+    return axios.post("/home/role/getRole", params);
+  },
+  /*设置*/
+  addDepartment: params => {
+    return axios.post("/home/company/addDepartment", params);
+  },
+  deleteDepartment: params => {
+    return axios.post("/home/company/deleteDepartment", params);
   }
 
   /**

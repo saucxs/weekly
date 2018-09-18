@@ -49,6 +49,10 @@
   .el-dialog .el-dialog__body{
     padding-bottom: 0px !important;
   }
+  /*header*/
+  .el-dropdown-menu__item{
+      width: 120px !important;
+    }
   /*menu*/
   .el-menu-item {
     padding-bottom: 8px;

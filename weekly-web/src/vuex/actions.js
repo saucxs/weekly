@@ -81,3 +81,28 @@ export const deleteUser = ({ commit }, params) => {
     return response;
   })
 }
+//获取公司下所有部门
+export const getAllDepartmentList = ({ commit }, params) => {
+  return Api.getAllDepartmentList(params).then(response => {
+    return response;
+  })
+}
+//获取角色
+export const getRole = ({ commit }, params) => {
+  return Api.getRole(params).then(response => {
+    return response;
+  })
+}
+
+//新增部门
+export const addDepartment = ({ commit }, params) => {
+  return Api.addDepartment(params).then(response => {
+    return response;
+  })
+}
+//删除部门
+export const deleteDepartment = ({ commit }, params) => {
+  return Api.deleteDepartment(params).then(response => {
+    return response;
+  })
+}

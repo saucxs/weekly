@@ -1,8 +1,8 @@
 <template>
   <div class="member-list">
-    <div class="title"><span v-if="userInfo.role == '2'">公司经理</span><span v-else>部门成员</span>管理</div>
+    <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门成员</span>管理</div>
     <div class="button-style">
-      <el-button type="primary" @click="addMember()">添加成员</el-button>
+      <el-button type="primary" @click="addMember('add')">添加成员</el-button>
     </div>
     <div class="member-box">
       <el-table
@@ -47,6 +47,7 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
+            <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="addMember('edit',scope.row)" type="text" size="small">编辑</el-button>
             <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="deleteMember(scope.row)" type="text" size="small">移除</el-button>
             <span v-else>--</span>
           </template>
@@ -68,7 +69,7 @@
         :before-close="handleClose"
         width="600px"
         center>
-      ` <div>
+       <div>
         <el-form label-position="right" label-width="80px" :model="formUser">
           <el-form-item label="姓名">
             <el-input v-model="formUser.username" maxlength="10"></el-input>
@@ -76,27 +77,38 @@
           <el-form-item label="工号">
             <el-input v-model="formUser.usernum" maxlength="10"></el-input>
           </el-form-item>
+          <el-form-item label="部门名称"  v-if="userInfo.role == 2">
+            <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
+              <el-option
+                v-for="item in departmentListOptions"
+                :key="item.department_id"
+                :label="item.department_name"
+                :value="item.department_id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="部门职务"  v-if="userInfo.role == 2">
+            <el-select v-model="formUser.role" filterable placeholder="请选择">
+              <el-option
+                v-for="item in roleListOptions"
+                :key="item.role"
+                :label="item.role_name"
+                :value="item.role">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="邮箱">
             <el-input v-model="formUser.email" maxlength="30"></el-input>
           </el-form-item>
           <el-form-item label="联系方式">
             <el-input v-model="formUser.telephone" maxlength="11"></el-input>
           </el-form-item>
-          <!--<el-form-item label="部门名称">-->
-            <!--<el-select v-model="formUser.department_id" filterable placeholder="请选择">-->
-              <!--<el-option-->
-                <!--v-for="item in departmentListOptions"-->
-                <!--:key="item.department_id"-->
-                <!--:label="item.department_name"-->
-                <!--:value="item.department_id">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
         </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="handleClose()">取 消</el-button>
-          <el-button type="primary" :loading="loadingFlag" @click="successConfirm()">确 定</el-button>
+          <el-button v-if="dialogTitle == '添加人员信息'" type="primary" :loading="loadingFlag" @click="successConfirm('add')">确 定</el-button>
+          <el-button v-if="dialogTitle == '修改人员信息'" type="primary" :loading="loadingFlag" @click="successConfirm('edit')">确 定</el-button>
         </span>
       </el-dialog>
       <!--dialog small-->
@@ -129,6 +141,10 @@
           username: '',
           usernum: '',
           email: '',
+          department_id: '',
+          department_name: '',
+          role: '',
+          role_name: '',
           telephone: ''
         },
         confirmCreateVisiable: false,
@@ -136,7 +152,10 @@
         departmentListOptions: [],
         selectedItem: '',
         confirmDeleteVisiable: false,
-        dialogBody: ''
+        dialogBody: '',
+        departmentListMap: [],
+        roleListOptions: [],
+        roleListMap: []
       }
     },
     created(){
@@ -151,67 +170,123 @@
       ...mapActions([
         "getDepartmentMemberList",
         "addUser",
-        "deleteUser"
+        "deleteUser",
+        "getAllDepartmentList",
+        "getRole"
       ]),
       handleCurrentChange(currentPage){
         this.queryMemberList(currentPage,10)
       },
+      changeDepartment(){
+        this.queryRole();
+      },
       queryMemberList(pageNum, pageSize){
         this.getDepartmentMemberList({pageNum, pageSize}).then( res => {
           if(res.errno == 0){
-            console.log(res,'res')
             this.memberList = res.data.data;
             this.memberListTotal = res.data.count;
           }else{
-            this.$message.error('服务器出了小差');
+            this.$message.error(res.errmsg || '服务器出了小差');
           }
         })
       },
-      addMember(){
+      queryDepartment(){
+        this.getAllDepartmentList().then( res => {
+          if(res.errno == 0){
+            if(res.data.length>0){
+              this.departmentListOptions = res.data.map(item => {
+                this.departmentListMap[item.department_id] = item.department_name;
+                return {
+                  department_id: item.department_id,
+                  department_name: item.department_name
+                }
+              })
+            }
+          }else{
+            this.$message.error(res.errmsg || '服务器出了小差');
+          }
+        })
+      },
+      queryRole(){
+        if(this.formUser.department_id){
+          this.getRole({department_id: this.formUser.department_id}).then( res => {
+            if(res.errno == 0){
+              if(res.data.length>0){
+                this.roleListOptions = res.data.map(item => {
+                  this.roleListMap[item.role] = item.role_name;
+                  return {
+                    role: item.role,
+                    role_name: item.role_name
+                  }
+                })
+                this.formUser.role = this.roleListOptions[0].role;
+              }
+            }else{
+              this.$message.error(res.errmsg || '服务器出了小差');
+            }
+          })
+        }
+      },
+      addMember(type,item){
         this.confirmCreateVisiable = true;
-        this.dialogTitle = '添加人员'
+        if(type == 'add'){
+          this.dialogTitle = '添加人员信息';
+        }else if(type == 'edit'){
+          this.dialogTitle = '修改人员信息';
+          this.formUser = item;
+        }
+        if(this.userInfo.role == 2){
+          this.queryDepartment();
+          this.queryRole();
+        }
       },
       handleClose(){
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
         this.confirmDeleteVisiable = false;
+        this.formUser = '';
       },
-      successConfirm(){
+      successConfirm(type){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}
         else if(!this.formUser.usernum){ this.$message.warning('请输入工号');}
+        else if(this.userInfo.role == 2 && !this.formUser.department_id){ this.$message.warning('请选择部门名称');}
+        else if(this.userInfo.role == 2 && !this.formUser.role){ this.$message.warning('请选择角色');}
         else if(!this.formUser.email){ this.$message.warning('请输入邮箱');}
         else if(!this.formUser.telephone){ this.$message.warning('请输入手机号');}
         else{
+          this.formUser.department_name = this.departmentListMap[this.formUser.department_id];
+          this.formUser.role_name = this.roleListMap[this.formUser.role];
+          this.formUser.type = type;
           this.loadingFlag = true;
           this.addUser(this.formUser).then(res => {
             if(res.errno == 0){
-              this.$message.success('添加人员成功');
+              this.$message.success(res.data || '添加人员成功');
               this.queryMemberList(1, 10);
               this.confirmCreateVisiable = false;
               this.formUser = {};
             }else{
-              this.$message.error('服务器出了小差');
+              this.$message.error(res.errmsg || '服务器出了小差');
             }
             this.loadingFlag = false;
           })
         }
       },
       deleteMember(item){
-        console.log(item,'item');
         this.selectedItem = item;
         this.confirmDeleteVisiable = true;
         this.dialogTitle = '确认移除'
-        this.dialogBody = '确认移除' + this.selectedItem.username + '(' + this.selectedItem.usernum + ')吗？'
+        this.dialogBody = '确认移除，' + this.selectedItem.username + '(' + this.selectedItem.usernum + ')吗？'
       },
+
       confirmDelete(){
         this.loadingFlag = true;
-        this.deleteUser({usernum: this.selectedItem.usernum}).then( res => {
+        this.deleteUser({usernum: this.selectedItem.usernum, department_id: this.selectedItem.department_id}).then( res => {
           if(res.errno == 0){
             this.$message.success('删除成功');
             this.confirmDeleteVisiable = false;
             this.queryMemberList(1, 10);
           }else{
-            this.$message.error('服务器出了小差');
+            this.$message.error(res.errmsg || '服务器出了小差');
           }
           this.loadingFlag = false;
         })

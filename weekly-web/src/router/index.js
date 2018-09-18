@@ -10,6 +10,7 @@ const home = () => import("@/views/home");
 // 周报管理
 const weeklyView = () => import("@/views/weeklyManage/index");
 const memberList = () => import("@/views/weeklyManage/memberList");
+const departmentManage = () => import("@/views/setting/departmentManage")
 // 写当前周
 const writeWeekly = () => import("@/views/writeWeekly/index");
 //历史周报
@@ -23,7 +24,8 @@ export default new Router({
       path: '/login',
       name: 'login',
       meta: {
-        zhName: '登陆'
+        zhName: '登陆',
+        key: '0'
       },
       component: login
     }, {
@@ -31,7 +33,8 @@ export default new Router({
       name: 'home',
       redirect: '/writeWeekly',
       meta: {
-        zhName: '主页'
+        zhName: '主页',
+        key: '1'
       },
       component: home
     }, {
@@ -61,7 +64,7 @@ export default new Router({
         meta: {
           zhName: '成员管理',
           key: '1-2',
-          role: 3
+          role: 2
         }
       }]
     }, {
@@ -108,6 +111,27 @@ export default new Router({
           role: 4
         },
         component: weeklyList
+      }]
+    }, {
+      path: '/setting',
+      name: 'setting',
+      isNest: true,
+      icon: 'el-icon-setting',
+      component: home,
+      meta: {
+        zhName: '设置',
+        key: '4',
+        role: 2
+      },
+      children: [{
+        path: '/departmentManage',
+        name: 'departmentManage',
+        component: departmentManage,
+        meta: {
+          zhName: '部门管理',
+          key: '4-1',
+          role: 2
+        }
       }]
     }
   ]

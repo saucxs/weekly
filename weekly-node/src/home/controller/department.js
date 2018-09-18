@@ -62,12 +62,12 @@ module.exports = class extends Base {
     try {
       let departmentMemberList;
       if(this.user.role == 2){
-        departmentMemberList = await this.model('user').where({
+        departmentMemberList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
           company_id: this.user.company_id,
           role: {'>=': this.user.role}
         }).order("department_id asc , role asc").page(page, pagesize).countSelect();
       }else{
-        departmentMemberList = await this.model('user').field('company_name, department_name, email, role, role_name, username, usernum,telephone').where({
+        departmentMemberList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           role: {'>=': this.user.role}
@@ -81,8 +81,9 @@ module.exports = class extends Base {
   /*获取公司下所有部门*/
   async getAllDepartmentListAction() {
     let company_id = this.user.company_id;
+    console.log(company_id, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     try {
-      let department = await this.model('department').where(company_id).select();
+      let department = await this.model('department').where({company_id: company_id}).select();
       return this.success(department);
     } catch(e) {
       return this.fail(e);

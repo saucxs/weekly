@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="login_contenter">
-      <img class="login_contenter_bg" src="../../assets/suningcloud.jpg">
+      <!--<img class="login_contenter_bg" src="../../assets/suningcloud.jpg">-->
       <div class="content_box">
         <div class="content_box_form">
           <h1>登&nbsp;&nbsp;录</h1>
@@ -107,18 +107,13 @@
   }
 
   .login_contenter {
-    width: 100%;
-    background-position: 100% 100%;
-    height: 665px;
-    background-image: url("../../assets/suningcloud.jpg");
-  }
-  .login_contenter_bg{
-    position:absolute;
-    z-index: -100;
+    position: relative;
     width: 100%;
     min-width: 1190px;
     height: 665px;
+    background: #00000e url("../../assets/suningcloud.jpg") no-repeat center 0;
   }
+
   .content_box {
     width: 1190px;
     height: 100%;
@@ -127,9 +122,6 @@
     box-sizing: border-box;
   }
 
-  .content_box_img_bg{
-    position:absolute;
-  }
   .content_box_form {
     box-sizing: border-box;
     display: inline-block;
