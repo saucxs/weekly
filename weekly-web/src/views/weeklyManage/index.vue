@@ -1,5 +1,5 @@
 <template>
-  <div class="view-weekly">
+  <div class="view-weekly" v-if="userInfo.role == 2 || userInfo.role == 3">
     <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门</span>周报概览</div>
     <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
     <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>

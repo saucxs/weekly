@@ -1,5 +1,5 @@
 <template>
-  <div class="member-list">
+  <div class="member-list" v-if="userInfo.role == 2">
     <div class="title">部门管理</div>
     <div class="button-style">
       <el-button type="primary" @click="addDepartmentDialog()">添加部门</el-button>

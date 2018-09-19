@@ -1,5 +1,5 @@
 <template>
-  <div class="member-list">
+  <div class="member-list"  v-if="userInfo.role == 2 || userInfo.role == 3">
     <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门成员</span>管理</div>
     <div class="button-style">
       <el-button type="primary" @click="addMember('add')">添加成员</el-button>
