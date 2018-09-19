@@ -139,6 +139,7 @@
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
         this.confirmDeleteVisiable = false;
+        this.formUser = {};
       },
       successConfirm(type){
         if(!this.formUser.department_id){ this.$message.warning('请输入部门id');}

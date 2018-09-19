@@ -75,7 +75,7 @@
             <el-input v-model="formUser.username" maxlength="10"></el-input>
           </el-form-item>
           <el-form-item label="工号">
-            <el-input v-model="formUser.usernum" maxlength="10"></el-input>
+            <el-input v-model="formUser.usernum" maxlength="13"></el-input>
           </el-form-item>
           <el-form-item label="部门名称"  v-if="userInfo.role == 2">
             <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
@@ -98,10 +98,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input v-model="formUser.email" maxlength="30"></el-input>
+            <el-input v-model="formUser.email" maxlength="60"></el-input>
           </el-form-item>
-          <el-form-item label="联系方式">
-            <el-input v-model="formUser.telephone" maxlength="11"></el-input>
+          <el-form-item label="手机号">
+            <el-input v-model="formUser.telephone" maxlength="11" oninput="this.value=this.value.replace(/[^\d]/g,'')" ></el-input>
           </el-form-item>
         </el-form>
         </div>
@@ -244,7 +244,7 @@
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
         this.confirmDeleteVisiable = false;
-        this.formUser = '';
+        this.formUser = {};
       },
       successConfirm(type){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}
@@ -252,7 +252,9 @@
         else if(this.userInfo.role == 2 && !this.formUser.department_id){ this.$message.warning('请选择部门名称');}
         else if(this.userInfo.role == 2 && !this.formUser.role){ this.$message.warning('请选择角色');}
         else if(!this.formUser.email){ this.$message.warning('请输入邮箱');}
+        else if(this.formUser.email && !(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(this.formUser.email))){ this.$message.warning('请输入正确邮箱');}
         else if(!this.formUser.telephone){ this.$message.warning('请输入手机号');}
+        else if(this.formUser.telephone && !(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.formUser.telephone))){ this.$message.warning('请输入正确手机号');}
         else{
           this.formUser.department_name = this.departmentListMap[this.formUser.department_id];
           this.formUser.role_name = this.roleListMap[this.formUser.role];

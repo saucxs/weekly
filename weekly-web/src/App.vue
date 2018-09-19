@@ -4,6 +4,8 @@
   </div>
 </template>
 
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 <script>
   import { mapGetters, mapActions } from "vuex";
   export default {
@@ -59,8 +61,8 @@
   /*menu*/
   .el-menu-item {
     padding-bottom: 8px;
-    height: 42px;
-    line-height: 42px;
+    height: 50px;
+    line-height: 50px;
   }
   .el-submenu .el-menu-item{
     min-width: 146px !important;
@@ -80,11 +82,11 @@
   }
   .el-menu .is-active:before {
     position: absolute;
-    top: 0px;
     bottom: 0px;
     left: 0;
     display: block;
     width: 4px;
+    height: 50px;
     background-color: #3a79ff;
     transition: all .3s cubic-bezier(.645,.045,.355,1);
     content: "";

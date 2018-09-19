@@ -9,6 +9,8 @@
         </div>
         <div class="footer-link-wrap">Copyright© 2018，mwcxs.top版权所有
           <a href="http://www.miitbeian.gov.cn" target="_blank">辽ICP备16015497号-2</a>
+          <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv" style="color:#e40202"></span>次</span>
+          <span id="busuanzi_container_site_uv">总访客数<span id="busuanzi_value_site_uv" style="color:#e40202"></span>人次</span>
         </div>
       </div>
     </footer>

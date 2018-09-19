@@ -87,16 +87,16 @@
     height: 70px;
     line-height: 70px;
     background: #efefef;
-    & .box-wrapper{
+  & .box-wrapper{
       width: 1190px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      & .icon-style{
-        font-size: 26px;
-        color: #5579ee;
-      }
+  & .icon-style{
+      font-size: 26px;
+      color: #5579ee;
     }
+  }
   }
 
   .login_icon {
@@ -108,14 +108,6 @@
 
   .login_contenter {
     position: relative;
-    width: 100%;
-    background-position: 100% 100%;
-    height: 665px;
-    background-image: url("../../assets/suningcloud.jpg") 100% 100%  no-repeat ;
-  }
-  .login_contenter_bg{
-    position:absolute;
-    z-index: -100;
     width: 100%;
     min-width: 1190px;
     height: 665px;
