@@ -53,7 +53,7 @@ export default new Router({
       children: [{
         path: '/dashBoard',
         name: 'dashBoard',
-        icon: 'el-icon-edit',
+        icon: 'el-icon-view',
         meta: {
           zhName: '首页',
           key: '0-1',

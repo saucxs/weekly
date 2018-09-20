@@ -1,48 +1,48 @@
 <template>
-    <div class="dash-board">
+    <div class="dash-board" v-if="userInfo.role == 2 || userInfo.role == 3">
       <div class="title">首页</div>
       <el-row :gutter="40" class="panel-group">
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
             <div class="card-panel-icon-wrapper icon-people">
-              <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+              <i class="el-icon-edit"></i>
             </div>
             <div class="card-panel-description">
-              <div class="card-panel-text">New Visits</div>
-              <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num"/>
+              <div class="card-panel-text">部门人数</div>
+              <count-to :start-val="0" :end-val="departmentMember.length" :duration="1000" class="card-panel-num"/>
             </div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('messages')">
             <div class="card-panel-icon-wrapper icon-message">
-              <svg-icon icon-class="message" class-name="card-panel-icon" />
+              <i class="el-icon-edit"></i>
             </div>
             <div class="card-panel-description">
-              <div class="card-panel-text">Messages</div>
-              <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num"/>
+              <div class="card-panel-text">未写周报</div>
+              <count-to :start-val="0" :end-val="departmentMember.length-weeklyListTotal" :duration="1000" class="card-panel-num"/>
             </div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('purchases')">
             <div class="card-panel-icon-wrapper icon-money">
-              <svg-icon icon-class="money" class-name="card-panel-icon" />
+              <i class="el-icon-edit"></i>
             </div>
             <div class="card-panel-description">
-              <div class="card-panel-text">Purchases</div>
-              <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num"/>
+              <div class="card-panel-text">已写周报</div>
+              <count-to :start-val="0" :end-val="weeklyListTotal" :duration="1000" class="card-panel-num"/>
             </div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('shoppings')">
             <div class="card-panel-icon-wrapper icon-shopping">
-              <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+              <i class="el-icon-edit"></i>
             </div>
             <div class="card-panel-description">
-              <div class="card-panel-text">Shoppings</div>
-              <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num"/>
+              <div class="card-panel-text">历史周报</div>
+              <count-to :start-val="0" :end-val="myHistoryTotal" :duration="1000" class="card-panel-num"/>
             </div>
           </div>
         </el-col>
@@ -59,23 +59,78 @@
     },
     data(){
       return {
-
+        departmentMember: [],
+        weeklyTableData: [],
+        weeklyListTotal: 0,
+        myHistoryData: [],
+        myHistoryTotal: 0
       }
     },
     created(){
-
+      /*获取部门人员列表*/
+      this.departmentMemberList();
+      /*获取已写周报列表*/
+      this.departmrntWeeklyList();
+      /*历史周报*/
+      this.weeklyList()
     },
     computed: {
-      ...mapGetters([])
+      ...mapGetters([
+        "userInfo",
+      ])
     },
     methods: {
       ...mapActions([
+        "getDepartmentWeeklyList",
+        "getDepartmentMemberList",
         "getWeeklyList",
-        "addWeekly"
       ]),
       handleSetLineChartData(type) {
         this.$emit('handleSetLineChartData', type)
-      }
+      },
+      departmentMemberList(){
+        this.getDepartmentMemberList().then(res => {
+          if(res.errno == 0){
+            this.departmentMember = res.data.data.map( item => {
+              return {
+                username: item.username,
+                usernum: item.usernum
+              }
+            });
+          }else{
+            this.$message.error(res.errmsg|| '服务器开小差');
+          }
+        })
+      },
+      departmrntWeeklyList(){
+        this.queryDepartmentWeeklyList(1,10)
+      },
+      queryDepartmentWeeklyList(currentPage, pageSize){
+        /*获取已写周报列表*/
+        this.getDepartmentWeeklyList({currentPage, pageSize}).then(res => {
+          if(res.errno == 0){
+            this.weeklyTableData = res.data.data;
+            this.weeklyListTotal = res.data.count;
+          }else{
+            this.$message.error('服务器出了小差');
+          }
+        })
+      },
+
+//      history
+      weeklyList(){
+        this.queryWeeklyList(1,10)
+      },
+      queryWeeklyList(currentPage, pageSize){
+        this.getWeeklyList({pageNum: currentPage, pageSize: pageSize}).then(res => {
+          if(res.errno == 0){
+            this.myHistoryData = res.data.data;
+            this.myHistoryTotal = res.data.count;
+          }else{
+            this.$message.warning('服务器出了小差');
+          }
+        })
+      },
 
     }
   }
@@ -83,6 +138,9 @@
 
 <style lang="postcss" scoped>
 .dash-board{
+    & i{
+        font-size: 46px;
+      }
     margin-top: 18px;
     & .card-panel-col{
       margin-bottom: 32px;
