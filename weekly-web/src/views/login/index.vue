@@ -12,7 +12,7 @@
         <div class="content_box_form">
           <h1>登&nbsp;&nbsp;录</h1>
           <p class="form_content" >
-            <input minlength="6" maxlength="30" type="text" name="userNumber" placeholder="工号" v-model="usernum" />
+            <input minlength="6" maxlength="30" type="text" name="userNumber" placeholder="工号" @keyup.enter="submit" v-model="usernum" />
           </p>
           <p class="form_content" >
             <input minlength="6" maxlength="16" type="password" placeholder="密码" @keyup.enter="submit"  v-model="password" />

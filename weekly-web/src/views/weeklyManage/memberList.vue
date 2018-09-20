@@ -1,9 +1,20 @@
 <template>
   <div class="member-list"  v-if="userInfo.role == 2 || userInfo.role == 3">
     <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门成员</span>管理</div>
-    <div class="button-style">
-      <el-button type="primary" @click="addMember('add')">添加成员</el-button>
-    </div>
+    <el-row>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+        <el-col :span="12">
+          <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+          </el-input>
+        </el-col>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+        <div class="button-style">
+          <el-button type="primary" @click="addMember('add')">添加成员</el-button>
+        </div>
+      </el-col>
+    </el-row>
     <div class="member-box">
       <el-table
         :data="memberList"
@@ -155,7 +166,8 @@
         dialogBody: '',
         departmentListMap: [],
         roleListOptions: [],
-        roleListMap: []
+        roleListMap: [],
+        searchContent: ''
       }
     },
     created(){
@@ -172,7 +184,7 @@
         "addUser",
         "deleteUser",
         "getAllDepartmentList",
-        "getRole"
+        "getRole",
       ]),
       handleCurrentChange(currentPage){
         this.queryMemberList(currentPage,10)
@@ -181,7 +193,7 @@
         this.queryRole();
       },
       queryMemberList(pageNum, pageSize){
-        this.getDepartmentMemberList({pageNum, pageSize}).then( res => {
+        this.getDepartmentMemberList({pageNum, pageSize,searchContent: this.searchContent}).then( res => {
           if(res.errno == 0){
             this.memberList = res.data.data;
             this.memberListTotal = res.data.count;
@@ -292,6 +304,9 @@
           }
           this.loadingFlag = false;
         })
+      },
+      search(){
+        this.queryMemberList(1, 10);
       }
     }
   }

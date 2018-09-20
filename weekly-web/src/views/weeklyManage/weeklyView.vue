@@ -6,10 +6,13 @@
     <p>
       <label>
         <span v-if="userInfo.role == 2">公司人员({{departmentMember.length}}人)：</span>
-        <span v-else>部门人员({{departmentMember.length}}人)：</span><span v-for="(item, index) in departmentMember">{{item.username}}({{item.usernum}})，</span></label>
+        <span v-else>部门人员({{departmentMember.length}}人)：</span>
+        <el-tag v-for="(item, index) in departmentMember" :key="index">{{item.username}}({{item.usernum}})</el-tag>
+      </label>
     </p>
     <p>
-      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人</span>)：<span v-for="(item, index) in unWeeklyData">{{item.username}}({{item.usernum}})，</span></label>
+      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人：</span>)
+        <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag></label>
     </p>
     <p><label>已填周报(<span class="data-style">{{weeklyTableData.length}}人</span>)如下所示：</label></p>
     <el-table

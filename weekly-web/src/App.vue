@@ -56,6 +56,9 @@
   .el-dropdown-menu__item{
       width: 120px !important;
     }
+  .el-tag{
+    margin: 0px 5px;
+  }
   /*menu*/
   .el-menu-item {
     padding-bottom: 8px;

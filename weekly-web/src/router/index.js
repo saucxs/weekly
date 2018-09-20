@@ -6,9 +6,11 @@ const login = () => import("@/views/login/index")
 
 // 布局
 const home = () => import("@/views/home");
+//首页
+const dashBoard = () => import("@/views/dashBoard/dashBoard");
 
 // 周报管理
-const weeklyView = () => import("@/views/weeklyManage/index");
+const weeklyView = () => import("@/views/weeklyManage/weeklyView");
 const memberList = () => import("@/views/weeklyManage/memberList");
 const departmentManage = () => import("@/views/setting/departmentManage")
 // 写当前周
@@ -37,6 +39,28 @@ export default new Router({
         key: '1'
       },
       component: home
+    }, {
+      path: '/index',
+      name: 'index',
+      component: home,
+      isNest: false,
+      redirect: '/dashBoard',
+      meta: {
+        zhName: '首页',
+        key: '0',
+        role: 3
+      },
+      children: [{
+        path: '/dashBoard',
+        name: 'dashBoard',
+        icon: 'el-icon-edit',
+        meta: {
+          zhName: '首页',
+          key: '0-1',
+          role: 3
+        },
+        component: dashBoard
+      }]
     }, {
       path: '/weeklyManage',
       name: 'weeklyManage',
