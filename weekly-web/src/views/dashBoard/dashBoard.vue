@@ -2,7 +2,7 @@
     <div class="dash-board" v-if="userInfo.role == 2 || userInfo.role == 3">
       <div class="title">首页</div>
       <el-row :gutter="40" class="panel-group">
-        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
             <div class="card-panel-icon-wrapper icon-people">
               <i class="el-icon-edit"></i>
@@ -13,7 +13,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('messages')">
             <div class="card-panel-icon-wrapper icon-message">
               <i class="el-icon-edit"></i>
@@ -24,7 +24,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('purchases')">
             <div class="card-panel-icon-wrapper icon-money">
               <i class="el-icon-edit"></i>
@@ -35,7 +35,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
           <div class="card-panel" @click="handleSetLineChartData('shoppings')">
             <div class="card-panel-icon-wrapper icon-shopping">
               <i class="el-icon-edit"></i>
