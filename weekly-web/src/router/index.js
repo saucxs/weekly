@@ -10,9 +10,10 @@ const home = () => import("@/views/home");
 const dashBoard = () => import("@/views/dashBoard/dashBoard");
 
 // 周报管理
-const weeklyView = () => import("@/views/weeklyManage/weeklyView");
-const memberList = () => import("@/views/weeklyManage/memberList");
-const departmentManage = () => import("@/views/setting/departmentManage")
+const weeklyView = () => import("@/views/departmentManage/weeklyView");
+const memberList = () => import("@/views/departmentManage/memberList");
+//公司管理
+const departmentManage = () => import("@/views/companyManagement/departmentManage")
 // 写当前周
 const writeWeekly = () => import("@/views/writeWeekly/index");
 //历史周报
@@ -46,7 +47,7 @@ export default new Router({
       isNest: false,
       redirect: '/dashBoard',
       meta: {
-        zhName: '首页',
+        zhName: '概览',
         key: '0',
         role: 3
       },
@@ -55,20 +56,20 @@ export default new Router({
         name: 'dashBoard',
         icon: 'el-icon-view',
         meta: {
-          zhName: '首页',
+          zhName: '概览',
           key: '0-1',
           role: 3
         },
         component: dashBoard
       }]
     }, {
-      path: '/weeklyManage',
-      name: 'weeklyManage',
+      path: '/departmentManage',
+      name: 'departmentManage',
       isNest: true,
       icon: 'el-icon-menu',
       component: home,
       meta: {
-        zhName: '周报管理',
+        zhName: '部门管理',
         key: '1',
         role: 3
       },
@@ -77,13 +78,13 @@ export default new Router({
         name: 'weeklyView',
         component: weeklyView,
         meta: {
-          zhName: '周报概览',
+          zhName: '周报管理',
           key: '1-1',
           role: 3
         }
       }, {
-        path: '/memberList',
-        name: 'memberList',
+        path: '/memberManagement',
+        name: 'memberManagement',
         component: memberList,
         meta: {
           zhName: '成员管理',
@@ -143,7 +144,7 @@ export default new Router({
       icon: 'el-icon-setting',
       component: home,
       meta: {
-        zhName: '设置',
+        zhName: '公司管理',
         key: '4',
         role: 2
       },

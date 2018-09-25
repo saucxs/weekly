@@ -21,12 +21,8 @@ module.exports = class extends Base {
     let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
     let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
-      // let weekly = await this.model('week').where({
-      //   usernum: usernum, username: username, time: {'>': startWeekStamp, '<': endWeekStamp}
-      // }).find();
-      // console.log(weekly,'hhhhhh');
       if(id){
-        let updateRow = await this.model('week').update({id, usernum, username, content, time});
+        let updateRow = await this.model('week').update({id, content, time});
         return this.success(updateRow);
       }else{
         let addRow = await this.model('week').add({usernum, username, content, role, date, time, startDate: startWeekStamp, endDate: endWeekStamp, department_id, company_id });
@@ -81,8 +77,9 @@ module.exports = class extends Base {
 
   /*获取部门周报列表*/
   async getDepartmentWeeklyListAction() {
-      let page = this.get('pageNum');
-      let pagesize = this.get('pageSize');
+      let page = this.post('pageNum');
+      let pagesize = this.post('pageSize');
+    let searchContent = this.post('searchContent');
       if(!page){ page = '1' }
       if(!pagesize){ pagesize = '10' }
       /*计算一周时间戳*/
@@ -101,12 +98,14 @@ module.exports = class extends Base {
       let departmentWeeklyList;
       if(this.user.role == 2){
         departmentWeeklyList = await this.model('week').where({
+          'username|usernum|content': ["like", "%"+searchContent+"%"],
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
         }).order("time DESC").page(page, pagesize).countSelect();
       }else{
         departmentWeeklyList = await this.model('week').where({
+          'username|usernum|content': ["like", "%"+searchContent+"%"],
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},

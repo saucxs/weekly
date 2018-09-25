@@ -60,7 +60,7 @@
           <template slot-scope="scope">
             <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="addMember('edit',scope.row)" type="text" size="small">编辑</el-button>
             <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="deleteMember(scope.row)" type="text" size="small">移除</el-button>
-            <span v-else>--</span>
+            <el-button v-if="scope.row.usernum == userInfo.usernum" @click="addMember('edit',scope.row)" type="text" size="small">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
