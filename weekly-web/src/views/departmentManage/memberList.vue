@@ -3,7 +3,7 @@
     <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门成员</span>管理</div>
     <el-row>
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-        <el-col :span="12">
+        <el-col :span="16">
           <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
             <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
           </el-input>

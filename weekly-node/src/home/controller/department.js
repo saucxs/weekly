@@ -96,16 +96,90 @@ module.exports = class extends Base {
       return this.fail('服务器开小差');
     }
   }
-
   /*获取公司下所有部门*/
   async getAllDepartmentListAction() {
     let company_id = this.user.company_id;
-    console.log(company_id, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    let searchContent = this.post('searchContent')
     try {
-      let department = await this.model('department').where({company_id: company_id}).select();
+      let department = await this.model('department').where({
+          company_id: company_id,
+          'company_id|company_name|department_id|department_name': ["like", "%"+searchContent+"%"],
+      }).select();
       return this.success(department);
     } catch(e) {
       return this.fail(e);
     }
+  }
+  /*部门概览页-部门人数，未写周报人数，已写周报人数，历史周报人数*/
+  async getDepartmentBoardAction() {
+     let departmentNumber;
+     let alreadyWeeklyNumber;
+     let companyNumber;
+     let totalUserNumber;
+     let totalWeeklyNumber;
+      //时间戳
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
+      let currentDay = new Date().getDate();
+      let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
+      let currentDayNum = new Date().getDay();
+      if(currentDayNum == 0) currentDayNum = 7;
+      let startWeekNum = currentDayNum - 1;
+      let endWeekNum =  7 - currentDayNum + 1;
+      let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
+      let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
+
+      try {
+          if(this.user.role == 3){
+              departmentNumber = await this.model('user').where({
+                  company_id: this.user.company_id,
+                  department_id: this.user.department_id
+              }).count('usernum');
+              alreadyWeeklyNumber = await this.model('week').where({
+                  company_id: this.user.company_id,
+                  department_id: this.user.department_id,
+                  time: {'>': startWeekStamp, '<': endWeekStamp},
+                  role: {'>=': this.user.role}
+              }).count('usernum');
+          }else if(this.user.role == 2){
+              departmentNumber = await this.model('user').where({
+                  company_id: this.user.company_id,
+              }).count('usernum');
+              alreadyWeeklyNumber = await this.model('week').where({
+                  company_id: this.user.company_id,
+                  time: {'>': startWeekStamp, '<': endWeekStamp},
+                  role: {'>=': this.user.role}
+              }).count('usernum');
+          }else if(this.user.role == 1){
+              companyNumber = await this.model('user').group('company_id').count('company_id');
+              totalUserNumber = await this.model('user').count('usernum');
+              totalWeeklyNumber = await this.model('week').count('id');
+          }
+
+          //自己历史周报
+          let myWeeklyNumber = await this.model('week').where({
+              usernum: this.user.usernum,
+              username: this.user.username
+          }).count('usernum');
+          let data = {
+              departmentNumber: departmentNumber,
+              alreadyWeeklyNumber: alreadyWeeklyNumber,
+              unWeeklyNumber: departmentNumber - alreadyWeeklyNumber,
+              myWeeklyNumber: myWeeklyNumber
+          }
+          let adminData = {
+              companyNumber: companyNumber,
+              totalUserNumber: totalUserNumber,
+              totalWeeklyNumber: totalWeeklyNumber,
+              myWeeklyNumber: myWeeklyNumber
+          }
+          if(this.user.role == 2 || this.user.role == 3){
+              return this.success(data);
+          }else if(this.user.role == 1){
+              return this.success(adminData);
+          }
+      } catch(e) {
+          return this.fail(e);
+      }
   }
 }

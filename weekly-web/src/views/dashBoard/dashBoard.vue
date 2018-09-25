@@ -1,53 +1,105 @@
 <template>
-    <div class="dash-board" v-if="userInfo.role == 2 || userInfo.role == 3">
-      <div class="title">首页</div>
-      <el-row :gutter="40" class="panel-group">
-        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-          <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
-            <div class="card-panel-icon-wrapper icon-people">
-              <i class="el-icon-edit"></i>
+    <div class="dash-board">
+      <el-row v-if="userInfo.role == 2 || userInfo.role == 3">
+        <div class="title">首页</div>
+        <el-row :gutter="40" class="panel-group">
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+              <div class="card-panel-icon-wrapper icon-people">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">部门人数</div>
+                <count-to :start-val="0" :end-val="departmentNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">部门人数</div>
-              <count-to :start-val="0" :end-val="departmentMember.length" :duration="1000" class="card-panel-num"/>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('messages')">
+              <div class="card-panel-icon-wrapper icon-message">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">未写周报</div>
+                <count-to :start-val="0" :end-val="unWeeklyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-          </div>
-        </el-col>
-        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-          <div class="card-panel" @click="handleSetLineChartData('messages')">
-            <div class="card-panel-icon-wrapper icon-message">
-              <i class="el-icon-edit"></i>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('purchases')">
+              <div class="card-panel-icon-wrapper icon-money">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">已写周报</div>
+                <count-to :start-val="0" :end-val="alreadyWeeklyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">未写周报</div>
-              <count-to :start-val="0" :end-val="departmentMember.length-weeklyListTotal" :duration="1000" class="card-panel-num"/>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+              <div class="card-panel-icon-wrapper icon-shopping">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">历史周报</div>
+                <count-to :start-val="0" :end-val="myWeeklyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-          </div>
-        </el-col>
-        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-          <div class="card-panel" @click="handleSetLineChartData('purchases')">
-            <div class="card-panel-icon-wrapper icon-money">
-              <i class="el-icon-edit"></i>
+          </el-col>
+        </el-row>
+      </el-row>
+      <el-row v-if="userInfo.role == 1">
+        <div class="title">首页-公司列表</div>
+        <el-row :gutter="40" class="panel-group">
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+              <div class="card-panel-icon-wrapper icon-people">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">公司个数</div>
+                <count-to :start-val="0" :end-val="companyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">已写周报</div>
-              <count-to :start-val="0" :end-val="weeklyListTotal" :duration="1000" class="card-panel-num"/>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('messages')">
+              <div class="card-panel-icon-wrapper icon-message">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">总人数</div>
+                <count-to :start-val="0" :end-val="totalUserNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-          </div>
-        </el-col>
-        <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-          <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-            <div class="card-panel-icon-wrapper icon-shopping">
-              <i class="el-icon-edit"></i>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('purchases')">
+              <div class="card-panel-icon-wrapper icon-money">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">总周报</div>
+                <count-to :start-val="0" :end-val="totalWeeklyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-            <div class="card-panel-description">
-              <div class="card-panel-text">历史周报</div>
-              <count-to :start-val="0" :end-val="myHistoryTotal" :duration="1000" class="card-panel-num"/>
+          </el-col>
+          <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+            <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+              <div class="card-panel-icon-wrapper icon-shopping">
+                <i class="el-icon-edit"></i>
+              </div>
+              <div class="card-panel-description">
+                <div class="card-panel-text">历史周报</div>
+                <count-to :start-val="0" :end-val="myWeeklyNumber" :duration="1000" class="card-panel-num"/>
+              </div>
             </div>
-          </div>
-        </el-col>
+          </el-col>
+        </el-row>
       </el-row>
     </div>
+  </div>
 </template>
 
 <script>
@@ -59,20 +111,34 @@
     },
     data(){
       return {
-        departmentMember: [],
-        weeklyTableData: [],
-        weeklyListTotal: 0,
-        myHistoryData: [],
-        myHistoryTotal: 0
+        departmentNumber: 0,
+        alreadyWeeklyNumber: 0,
+        unWeeklyNumber: 0,
+        myWeeklyNumber: 0,
+        companyNumber: 0,
+        totalUserNumber: 0,
+        totalWeeklyNumber: 0
       }
     },
     created(){
-      /*获取部门人员列表*/
-      this.departmentMemberList();
-      /*获取已写周报列表*/
-      this.departmrntWeeklyList();
-      /*历史周报*/
-      this.weeklyList()
+      this.getDepartmentBoard().then(res => {
+        console.log(res,'res123456789')
+        if(res.errno == 0){
+          if(this.userInfo.role == 2 || this.userInfo.role == 3){
+            this.departmentNumber = res.data.departmentNumber;
+            this.alreadyWeeklyNumber = res.data.alreadyWeeklyNumber;
+            this.unWeeklyNumber = res.data.unWeeklyNumber;
+            this.myWeeklyNumber = res.data.myWeeklyNumber;
+          }else if(this.userInfo.role == 1){
+            this.companyNumber = res.data.companyNumber;
+            this.totalUserNumber = res.data.totalUserNumber;
+            this.totalWeeklyNumber = res.data.totalWeeklyNumber;
+            this.myWeeklyNumber = res.data.myWeeklyNumber;
+          }
+        }else{
+          this.$message.error(res.errmsg|| '服务器开小差');
+        }
+      })
     },
     computed: {
       ...mapGetters([
@@ -81,56 +147,9 @@
     },
     methods: {
       ...mapActions([
-        "getDepartmentWeeklyList",
-        "getDepartmentMemberList",
-        "getWeeklyList",
+        "getDepartmentBoard",
       ]),
-      handleSetLineChartData(type) {
-        this.$emit('handleSetLineChartData', type)
-      },
-      departmentMemberList(){
-        this.getDepartmentMemberList().then(res => {
-          if(res.errno == 0){
-            this.departmentMember = res.data.data.map( item => {
-              return {
-                username: item.username,
-                usernum: item.usernum
-              }
-            });
-          }else{
-            this.$message.error(res.errmsg|| '服务器开小差');
-          }
-        })
-      },
-      departmrntWeeklyList(){
-        this.queryDepartmentWeeklyList(1,10)
-      },
-      queryDepartmentWeeklyList(currentPage, pageSize){
-        /*获取已写周报列表*/
-        this.getDepartmentWeeklyList({currentPage, pageSize}).then(res => {
-          if(res.errno == 0){
-            this.weeklyTableData = res.data.data;
-            this.weeklyListTotal = res.data.count;
-          }else{
-            this.$message.error('服务器出了小差');
-          }
-        })
-      },
 
-//      history
-      weeklyList(){
-        this.queryWeeklyList(1,10)
-      },
-      queryWeeklyList(currentPage, pageSize){
-        this.getWeeklyList({pageNum: currentPage, pageSize: pageSize}).then(res => {
-          if(res.errno == 0){
-            this.myHistoryData = res.data.data;
-            this.myHistoryTotal = res.data.count;
-          }else{
-            this.$message.warning('服务器出了小差');
-          }
-        })
-      },
 
     }
   }

@@ -38,7 +38,26 @@ let dateFormat = item => {
   return y + '.' + m + '.' + d;
 }
 
+/*
+* 职务
+* */
+let roleFilter = item => {
+  if(!item) return '--';
+  var role_name;
+  if(item == 1){
+    role_name = '管理员'
+  }else if(item == 2){
+    role_name = '总监'
+  }else if(item == 3){
+    role_name = '部门经理'
+  }else if(item == 4){
+    role_name = '成员'
+  }
+  return role_name;
+}
+
 export {
   dateTimeFormat,
-  dateFormat
+  dateFormat,
+  roleFilter
 }

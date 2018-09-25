@@ -12,12 +12,16 @@ const dashBoard = () => import("@/views/dashBoard/dashBoard");
 // 周报管理
 const weeklyView = () => import("@/views/departmentManage/weeklyView");
 const memberList = () => import("@/views/departmentManage/memberList");
-//公司管理
-const departmentManage = () => import("@/views/companyManagement/departmentManage")
+
 // 写当前周
 const writeWeekly = () => import("@/views/writeWeekly/index");
 //历史周报
 const weeklyList = () => import("@/views/weeklyList/index");
+
+//公司管理-管理部门
+const companyManage = () => import("@/views/companyManagement/index");
+//管理员-管理公司
+const adminCompany = () => import("@/views/admin/index");
 
 Vue.use(Router)
 
@@ -83,8 +87,8 @@ export default new Router({
           role: 3
         }
       }, {
-        path: '/memberManagement',
-        name: 'memberManagement',
+        path: '/memberList',
+        name: 'memberList',
         component: memberList,
         meta: {
           zhName: '成员管理',
@@ -149,12 +153,33 @@ export default new Router({
         role: 2
       },
       children: [{
-        path: '/departmentManage',
-        name: 'departmentManage',
-        component: departmentManage,
+        path: '/companyManage',
+        name: 'companyManage',
+        component: companyManage,
         meta: {
-          zhName: '部门管理',
+          zhName: '管理部门',
           key: '4-1',
+          role: 2
+        }
+      }]
+    }, {
+      path: '/admin',
+      name: 'admin',
+      isNest: true,
+      icon: 'el-icon-setting',
+      component: home,
+      meta: {
+        zhName: '管理员管理',
+        key: '5',
+        role: 1
+      },
+      children: [{
+        path: '/adminCompany',
+        name: 'adminCompany',
+        component: adminCompany,
+        meta: {
+          zhName: '管理公司',
+          key: '5-1',
           role: 2
         }
       }]

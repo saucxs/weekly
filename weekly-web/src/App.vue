@@ -60,7 +60,7 @@
       width: 120px !important;
     }
   .el-tag{
-    margin: 0px 5px;
+    margin: 5px;
   }
   /*menu*/
   .el-menu-item {

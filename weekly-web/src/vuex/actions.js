@@ -106,3 +106,10 @@ export const deleteDepartment = ({ commit }, params) => {
     return response;
   })
 }
+
+//dashboard
+export const getDepartmentBoard = ({ commit }, params) => {
+  return Api.getDepartmentBoard(params).then(response => {
+    return response;
+  })
+}

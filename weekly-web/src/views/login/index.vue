@@ -60,7 +60,7 @@
           this.login(param).then(res => {
             if(res.errno == 0 ){
               this.$message.success(res.errmsg|| '登陆成功');
-              if(res.data.role == '2' || res.data.role == '3'){
+              if(res.data.role == '1' || res.data.role == '2' || res.data.role == '3'){
                 this.$router.push({ path: '/weeklyView' });
               }else if(res.data.role == '4'){
                 this.$router.push({ path: '/writeWeekly' });

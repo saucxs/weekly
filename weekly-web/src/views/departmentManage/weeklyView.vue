@@ -11,13 +11,17 @@
       </label>
     </p>
     <p>
-      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人：</span>)
+      <label>未填写周报：<span class="data-style">({{unWeeklyData.length}}人)</span>
         <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag></label>
     </p>
-    <p><label>已填周报(<span class="data-style">{{weeklyTableData.length}}人</span>)如下所示：</label></p>
+    <p>
+      <label>已填周报：</label>
+      <span class="data-style">{{weeklyTableData.length}}人</span>
+    </p>
+    <div class="title">本周已填周报列表</div>
     <div class="search-group">
       <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-        <el-col :span="12">
+        <el-col :span="16">
           <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
             <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
           </el-input>
@@ -29,13 +33,13 @@
       :data="weeklyTableData"
       border
       style="width: 100%">
-      <el-table-column
-        label="周报日期"
-        width="180">
-        <template slot-scope="scope">
-          <span>{{scope.row.startDate | dateFormat}}</span>--<span>{{scope.row.endDate | dateFormat}}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--label="周报日期"-->
+        <!--width="180">-->
+        <!--<template slot-scope="scope">-->
+          <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="username"
         label="姓名"
@@ -44,7 +48,14 @@
       <el-table-column
         prop="usernum"
         label="工号"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        label="职务"
         width="80">
+        <template slot-scope="scope">
+          {{scope.row.role | roleFilter}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="content"
@@ -59,7 +70,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100">
+        width="60">
         <template slot-scope="scope">
           <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
           <span v-else>--</span>
@@ -119,7 +130,8 @@
         editWeeklyContent: '',
         dialogTitle: '',
         loadingFlag: false,
-        searchContent: ''
+        searchContent: '',
+        roleMap: []
       }
     },
     created(){
@@ -238,7 +250,6 @@
         })
       },
       editClick(row){
-        console.log(row,'row')
         this.editWeeklyContentRow = row;
         this.confirmSubmitVisiable = true;
         this.dialogTitle = '修改周报'
