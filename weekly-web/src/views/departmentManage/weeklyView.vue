@@ -1,91 +1,176 @@
 <template>
-  <div class="view-weekly" v-if="userInfo.role == 2 || userInfo.role == 3">
-    <div class="title">本周<span v-if="userInfo.role == 2">公司</span><span v-else>部门</span>周报概览</div>
-    <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
-    <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>
-    <p>
-      <label>
-        <span v-if="userInfo.role == 2">公司人员({{departmentMember.length}}人)：</span>
-        <span v-else>部门人员({{departmentMember.length}}人)：</span>
-        <el-tag v-for="(item, index) in departmentMember" :key="index">{{item.username}}({{item.usernum}})</el-tag>
-      </label>
-    </p>
-    <p>
-      <label>未填写周报：<span class="data-style">({{unWeeklyData.length}}人)</span>
-        <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag></label>
-    </p>
-    <p>
-      <label>已填周报：</label>
-      <span class="data-style">{{weeklyTableData.length}}人</span>
-    </p>
-    <div class="title">本周已填周报列表</div>
-    <div class="search-group">
-      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-        <el-col :span="16">
-          <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
-            <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
-          </el-input>
+  <div class="view-weekly">
+    <el-row  v-if="userInfo.role == 2 || userInfo.role == 3">
+      <div class="title">本周<span v-if="userInfo.role == 2">公司</span><span v-else>部门</span>周报概览</div>
+      <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
+      <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>
+      <p>
+        <label>
+          <span v-if="userInfo.role == 2">公司人员({{departmentMember.length}}人)：</span>
+          <span v-else>部门人员({{departmentMember.length}}人)：</span>
+          <el-tag v-for="(item, index) in departmentMember" :key="index">{{item.username}}({{item.usernum}})</el-tag>
+        </label>
+      </p>
+      <p>
+        <label>未填写周报：<span class="data-style">({{unWeeklyData.length}}人)</span>
+          <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag></label>
+      </p>
+      <p>
+        <label>已填周报：</label>
+        <span class="data-style">{{weeklyTableData.length}}人</span>
+      </p>
+      <div class="title">本周已填周报列表</div>
+      <div class="search-group">
+        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-col :span="16">
+            <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+            </el-input>
+          </el-col>
         </el-col>
-      </el-col>
-    </div>
-
-    <el-table
-      :data="weeklyTableData"
-      border
-      style="width: 100%">
-      <!--<el-table-column-->
+      </div>
+      <el-table
+        :data="weeklyTableData"
+        border
+        style="width: 100%">
+        <!--<el-table-column-->
         <!--label="周报日期"-->
         <!--width="180">-->
         <!--<template slot-scope="scope">-->
-          <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
+        <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
         <!--</template>-->
-      <!--</el-table-column>-->
-      <el-table-column
-        prop="username"
-        label="姓名"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="usernum"
-        label="工号"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        label="职务"
-        width="80">
-        <template slot-scope="scope">
-          {{scope.row.role | roleFilter}}
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="content"
-        label="周报内容">
-      </el-table-column>
-      <el-table-column
-        label="最近一次提交日期"
-        width="160">
-        <template slot-scope="scope">
-          {{scope.row.time | dateTimeFormat}}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="60">
-        <template slot-scope="scope">
-          <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
-          <span v-else>--</span>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="pagination-box" v-if="weeklyTableData.length>0">
-      <el-pagination
-        background
-        @current-change="handleCurrentChange"
-        :current-page.sync="currentPage"
-        layout="total, prev, pager, next"
-        :total="weeklyListTotal">
-      </el-pagination>
-    </div>
+        <!--</el-table-column>-->
+        <el-table-column
+          prop="username"
+          label="姓名"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="usernum"
+          label="工号"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          label="职务"
+          width="80">
+          <template slot-scope="scope">
+            {{scope.row.role | roleFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="content"
+          label="周报内容">
+        </el-table-column>
+        <el-table-column
+          label="最近一次提交日期"
+          width="160">
+          <template slot-scope="scope">
+            {{scope.row.time | dateTimeFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="60">
+          <template slot-scope="scope">
+            <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+            <span v-else>--</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-box" v-if="weeklyTableData.length>0">
+        <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          layout="total, prev, pager, next"
+          :total="weeklyListTotal">
+        </el-pagination>
+      </div>
+    </el-row>
+    <el-row v-if="userInfo.role == 1">
+      <div class="title">所有周报概览</div>
+      <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
+      <p>
+        <label>公司：</label>
+        <el-tag v-for="(item, index) in companyList" :key="index">{{item.company_name}}</el-tag>
+      </p>
+      <p>
+        <label>未填写周报：<span class="data-style">({{unWeeklyData.length}}人)</span>
+          <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag>
+        </label>
+      </p>
+      <p>
+        <label>已填周报：</label>
+        <span class="data-style">{{weeklyTableData.length}}人</span>
+      </p>
+      <div class="title">本周已填周报列表</div>
+      <div class="search-group">
+        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-col :span="16">
+            <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+            </el-input>
+          </el-col>
+        </el-col>
+      </div>
+      <el-table
+        :data="weeklyTableData"
+        border
+        style="width: 100%">
+        <!--<el-table-column-->
+        <!--label="周报日期"-->
+        <!--width="180">-->
+        <!--<template slot-scope="scope">-->
+        <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
+        <!--</template>-->
+        <!--</el-table-column>-->
+        <el-table-column
+          prop="username"
+          label="姓名"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="usernum"
+          label="工号"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          label="职务"
+          width="80">
+          <template slot-scope="scope">
+            {{scope.row.role | roleFilter}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="content"
+          label="周报内容">
+        </el-table-column>
+        <el-table-column
+          label="最近一次提交日期"
+          width="160">
+          <template slot-scope="scope">
+            {{scope.row.time | dateTimeFormat}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="60">
+          <template slot-scope="scope">
+            <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+            <span v-else>--</span>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination-box" v-if="weeklyTableData.length>0">
+        <el-pagination
+          background
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          layout="total, prev, pager, next"
+          :total="weeklyListTotal">
+        </el-pagination>
+      </div>
+    </el-row>
     <!--dialog-->
     <el-dialog
       :title="dialogTitle"
@@ -131,7 +216,8 @@
         dialogTitle: '',
         loadingFlag: false,
         searchContent: '',
-        roleMap: []
+        roleMap: [],
+        companyList: []
       }
     },
     created(){

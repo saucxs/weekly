@@ -151,7 +151,7 @@ module.exports = class extends Base {
                   role: {'>=': this.user.role}
               }).count('usernum');
           }else if(this.user.role == 1){
-              companyNumber = await this.model('user').group('company_id').count('company_id');
+              companyNumber = await this.model('user').group('company_id').select();
               totalUserNumber = await this.model('user').count('usernum');
               totalWeeklyNumber = await this.model('week').count('id');
           }

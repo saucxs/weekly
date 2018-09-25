@@ -122,7 +122,6 @@
     },
     created(){
       this.getDepartmentBoard().then(res => {
-        console.log(res,'res123456789')
         if(res.errno == 0){
           if(this.userInfo.role == 2 || this.userInfo.role == 3){
             this.departmentNumber = res.data.departmentNumber;
@@ -130,8 +129,8 @@
             this.unWeeklyNumber = res.data.unWeeklyNumber;
             this.myWeeklyNumber = res.data.myWeeklyNumber;
           }else if(this.userInfo.role == 1){
-            this.companyNumber = res.data.companyNumber;
-            this.totalUserNumber = res.data.totalUserNumber;
+            this.companyNumber = res.data.companyNumber.length - 1;
+            this.totalUserNumber = res.data.totalUserNumber - 1;
             this.totalWeeklyNumber = res.data.totalWeeklyNumber;
             this.myWeeklyNumber = res.data.myWeeklyNumber;
           }
