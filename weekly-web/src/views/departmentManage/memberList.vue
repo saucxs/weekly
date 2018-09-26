@@ -140,18 +140,13 @@
     </el-row>
     <el-row v-if="userInfo.role == 1">
       <div class="title">所有人员管理</div>
-      <el-row>
+      <el-row class="search-style">
         <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
           <el-col :span="16">
             <el-input placeholder="请输入内容" maxlength="20" v-model="searchContentAdmin" clearable class="input-with-select">
               <el-button slot="append" icon="el-icon-search" @click="searchAdmin()">查询</el-button>
             </el-input>
           </el-col>
-        </el-col>
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-          <div class="button-style">
-            <el-button type="primary" @click="addMemberAdmin('add')">添加成员</el-button>
-          </div>
         </el-col>
       </el-row>
       <div class="member-box">
@@ -192,15 +187,6 @@
             prop="telephone"
             label="联系方式"
             width="160">
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            width="100">
-            <template slot-scope="scope">
-              <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="addMemberAdmin('edit',scope.row)" type="text" size="small">编辑</el-button>
-              <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="deleteMemberAdmin(scope.row)" type="text" size="small">移除</el-button>
-              <el-button v-if="scope.row.usernum == userInfo.usernum" @click="addMemberAdmin('edit',scope.row)" type="text" size="small">编辑</el-button>
-            </template>
           </el-table-column>
         </el-table>
         <div class="pagination-box" v-if="memberListAdmin.length>0">
@@ -583,6 +569,9 @@
         text-align: right;
         margin: 10px 0px;
       }
+      & .search-style{
+          margin-bottom: 10px;
+        }
   }
 
 </style>
