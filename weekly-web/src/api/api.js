@@ -96,6 +96,10 @@ export default {
   getAllCompanyList: params => {
     return axios.post("/home/company/getAllCompanyList", params);
   },
+  /*获取所有的人*/
+  getAllMemberList: params => {
+    return axios.post("/home/company/getAllMemberList", params);
+  },
 
   /**
    * API demo

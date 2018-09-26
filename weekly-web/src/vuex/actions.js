@@ -119,9 +119,9 @@ export const getAllCompanyList = ({ commit }, params) => {
     return response;
   })
 }
-//获取所有公司
-export const getAllCompanyWeekly = ({ commit }, params) => {
-  return Api.getAllCompanyWeekly(params).then(response => {
+//获取所有人
+export const getAllMemberList = ({ commit }, params) => {
+  return Api.getAllMemberList(params).then(response => {
     return response;
   })
 }
