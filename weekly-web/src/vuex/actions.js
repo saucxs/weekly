@@ -108,8 +108,20 @@ export const deleteDepartment = ({ commit }, params) => {
 }
 
 //dashboard
-export const getDepartmentBoard = ({ commit }, params) => {
-  return Api.getDepartmentBoard(params).then(response => {
+export const getBoard = ({ commit }, params) => {
+  return Api.getBoard(params).then(response => {
+    return response;
+  })
+}
+//获取所有公司
+export const getAllCompanyList = ({ commit }, params) => {
+  return Api.getAllCompanyList(params).then(response => {
+    return response;
+  })
+}
+//获取所有公司
+export const getAllCompanyWeekly = ({ commit }, params) => {
+  return Api.getAllCompanyWeekly(params).then(response => {
     return response;
   })
 }

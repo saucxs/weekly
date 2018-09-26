@@ -91,7 +91,7 @@
       <div class="title">所有周报概览</div>
       <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
       <p>
-        <label>公司：</label>
+        <label>公司：<span class="data-style">({{companyList.length}}家)</span></label>
         <el-tag v-for="(item, index) in companyList" :key="index">{{item.company_name}}</el-tag>
       </p>
       <p>
@@ -103,73 +103,76 @@
         <label>已填周报：</label>
         <span class="data-style">{{weeklyTableData.length}}人</span>
       </p>
-      <div class="title">本周已填周报列表</div>
-      <div class="search-group">
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-          <el-col :span="16">
-            <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
-              <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
-            </el-input>
+      <template v-for="(item, index) in weeklyDataList">
+        <div class="title">{{item.company_name || item.company_id}}-本周已填周报列表</div>
+        <div class="search-group">
+          <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+            <el-col :span="16">
+              <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+              </el-input>
+            </el-col>
           </el-col>
-        </el-col>
-      </div>
-      <el-table
-        :data="weeklyTableData"
-        border
-        style="width: 100%">
-        <!--<el-table-column-->
-        <!--label="周报日期"-->
-        <!--width="180">-->
-        <!--<template slot-scope="scope">-->
-        <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
-        <el-table-column
-          prop="username"
-          label="姓名"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="usernum"
-          label="工号"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          label="职务"
-          width="80">
-          <template slot-scope="scope">
-            {{scope.row.role | roleFilter}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="content"
-          label="周报内容">
-        </el-table-column>
-        <el-table-column
-          label="最近一次提交日期"
-          width="160">
-          <template slot-scope="scope">
-            {{scope.row.time | dateTimeFormat}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="60">
-          <template slot-scope="scope">
-            <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
-            <span v-else>--</span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="pagination-box" v-if="weeklyTableData.length>0">
-        <el-pagination
-          background
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          layout="total, prev, pager, next"
-          :total="weeklyListTotal">
-        </el-pagination>
-      </div>
+        </div>
+        <el-table
+          :data="item.children"
+          border
+          style="width: 100%">
+          <!--<el-table-column-->
+          <!--label="周报日期"-->
+          <!--width="180">-->
+          <!--<template slot-scope="scope">-->
+          <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
+          <!--</template>-->
+          <!--</el-table-column>-->
+          <el-table-column
+            prop="username"
+            label="姓名"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="usernum"
+            label="工号"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            label="职务"
+            width="80">
+            <template slot-scope="scope">
+              {{scope.row.role | roleFilter}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="content"
+            label="周报内容">
+          </el-table-column>
+          <el-table-column
+            label="最近一次提交日期"
+            width="160">
+            <template slot-scope="scope">
+              {{scope.row.time | dateTimeFormat}}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="60">
+            <template slot-scope="scope">
+              <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+              <span v-else>--</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pagination-box" v-if="weeklyTableData.length>0">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            layout="total, prev, pager, next"
+            :total="weeklyListTotal">
+          </el-pagination>
+        </div>
+      </template>
+
     </el-row>
     <!--dialog-->
     <el-dialog
@@ -217,7 +220,8 @@
         loadingFlag: false,
         searchContent: '',
         roleMap: [],
-        companyList: []
+        companyList: [],
+        weeklyDataList: []
       }
     },
     created(){
@@ -226,6 +230,10 @@
       this.departmentMemberList();
       /*获取已写周报列表*/
       this.departmrntWeeklyList();
+      if(this.userInfo.role == 1){
+        this.allCompanyList();
+        this.allCompanyWeekly()
+      }
     },
     computed: {
       ...mapGetters([
@@ -238,7 +246,9 @@
         "addWeekly",
         "getDepartmentWeeklyList",
         "getDepartmentMemberList",
-        "getUnDepartmentMemberList"
+        "getUnDepartmentMemberList",
+        "getAllCompanyList",
+        "getAllCompanyWeekly"
       ]),
       formatDateTime(item){
         var date = new Date(parseInt(item));
@@ -368,6 +378,24 @@
       handleClose(){
         this.confirmSubmitVisiable = false;
         this.editWeeklyContentRow = '';
+      },
+      allCompanyList(){
+        this.getAllCompanyList().then(res => {
+          if(res.errno == 0){
+            this.companyList = res.data;
+          }else{
+            this.$message.error(res.errmsg|| '服务器开小差');
+          }
+        })
+      },
+      allCompanyWeekly(){
+        this.getAllCompanyWeekly().then(res => {
+          if(res.errno == 0){
+            // this.companyList = res.data;
+          }else{
+            this.$message.error(res.errmsg|| '服务器开小差');
+          }
+        })
       }
     }
   }

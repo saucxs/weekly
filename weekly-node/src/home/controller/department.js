@@ -111,7 +111,7 @@ module.exports = class extends Base {
     }
   }
   /*部门概览页-部门人数，未写周报人数，已写周报人数，历史周报人数*/
-  async getDepartmentBoardAction() {
+  async getBoardAction() {
      let departmentNumber;
      let alreadyWeeklyNumber;
      let companyNumber;

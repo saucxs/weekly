@@ -89,10 +89,17 @@ export default {
     return axios.post("/home/company/deleteDepartment", params);
   },
   /*daashboard*/
-  getDepartmentBoard: params => {
-    return axios.post("/home/department/getDepartmentBoard", params);
+  getBoard: params => {
+    return axios.post("/home/department/getBoard", params);
+  },
+  /*获取所有公司*/
+  getAllCompanyList: params => {
+    return axios.post("/home/company/getAllCompanyList", params);
+  },
+  /*各个公司的已写周报列表*/
+  getAllCompanyWeekly: params => {
+    return axios.post("/home/company/getAllCompanyWeekly", params);
   }
-
   /**
    * API demo
    *

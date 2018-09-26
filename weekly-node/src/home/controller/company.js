@@ -58,4 +58,39 @@ module.exports = class extends Base {
     }
   }
 
+  /*各个公司的已写周报列表*/
+  async getAllCompanyWeeklyAction() {
+    let list = this.post();
+    let searchContent = list.searchContent;
+    let page = list.page;
+    let pagesize = list.pagesize;
+    if(!page){page = '1' }
+    if(!pagesize){ pagesize = '10' };
+    /*计算一周时间戳*/
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+    let currentDay = new Date().getDate();
+    let currentTimeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime();
+    let currentDayNum = new Date().getDay();
+    if(currentDayNum == 0) currentDayNum = 7;
+    let startWeekNum = currentDayNum - 1;
+    let endWeekNum =  7 - currentDayNum + 1;
+    let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
+    let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
+
+    let weeklyDataList;
+    let companyWeeklyList;
+
+    try {
+      companyWeeklyList = await this.model('week').group('company_id').where({
+        'username|usernum|content': ["like", "%"+searchContent+"%"],
+        time: {'>': startWeekStamp, '<': endWeekStamp},
+      }).order("time DESC").page(page, pagesize).countSelect();
+      console.log(companyWeeklyList,'222222222222222222222222222222222222222222222222222');
+      return this.success(companyWeeklyList);
+    } catch(e) {
+      return this.fail(e);
+    }
+  }
+
 }

@@ -121,7 +121,7 @@
       }
     },
     created(){
-      this.getDepartmentBoard().then(res => {
+      this.getBoard().then(res => {
         if(res.errno == 0){
           if(this.userInfo.role == 2 || this.userInfo.role == 3){
             this.departmentNumber = res.data.departmentNumber;
@@ -146,7 +146,7 @@
     },
     methods: {
       ...mapActions([
-        "getDepartmentBoard",
+        "getBoard",
       ]),
 
 
