@@ -78,16 +78,31 @@ module.exports = class extends Base {
     let startWeekStamp = currentTimeStamp - 1000 * 3600 * 24 * startWeekNum;
     let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
 
-    let weeklyDataList;
+    let companyList;
+    let weeklyDataList = [];
     let companyWeeklyList;
+    let tempData;
 
     try {
-      companyWeeklyList = await this.model('week').group('company_id').where({
-        'username|usernum|content': ["like", "%"+searchContent+"%"],
+      companyList = await this.model('company').select();
+      console.log(companyList,'11111111111111111111111111111111111')
+      companyWeeklyList = await this.model('week').where({
         time: {'>': startWeekStamp, '<': endWeekStamp},
-      }).order("time DESC").page(page, pagesize).countSelect();
+      }).order(['company_id']).page(page, pagesize).countSelect();
       console.log(companyWeeklyList,'222222222222222222222222222222222222222222222222222');
-      return this.success(companyWeeklyList);
+      for(let i=0;i<companyWeeklyList.length;i++){
+        for(let j=0;j<companyList.length;j++){
+          if(companyWeeklyList[i].company_id == companyList[j].company_id){
+            tempData = {
+              company_id: companyWeeklyList[i].company_id,
+              company_name: companyList[j].company_name,
+              children: companyWeeklyList
+            };
+            weeklyDataList.push(tempData);
+          }
+        }
+      }
+      return this.success(companyWeeklyList, weeklyDataList);
     } catch(e) {
       return this.fail(e);
     }

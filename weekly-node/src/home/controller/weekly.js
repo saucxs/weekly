@@ -77,9 +77,10 @@ module.exports = class extends Base {
 
   /*获取部门周报列表*/
   async getDepartmentWeeklyListAction() {
-      let page = this.post('pageNum');
-      let pagesize = this.post('pageSize');
+    let page = this.post('pageNum');
+    let pagesize = this.post('pageSize');
     let searchContent = this.post('searchContent');
+    let company_id = this.post('company_id');
       if(!page){ page = '1' }
       if(!pagesize){ pagesize = '10' }
       /*计算一周时间戳*/
@@ -95,24 +96,46 @@ module.exports = class extends Base {
       let endWeekStamp = currentTimeStamp + 1000 * (3600 * 24 * endWeekNum - 1);
     try {
       // select * from weekly.week_week inner join weekly.week_user on week_user.usernum = week_week.usernum where week_user.comapny_id = 'eastmoney' and week_user.department_id='dataCenter'
-      let departmentWeeklyList;
       if(this.user.role == 2){
-        departmentWeeklyList = await this.model('week').where({
+        let companyWeeklyList = await this.model('week').where({
           'username|usernum|content': ["like", "%"+searchContent+"%"],
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
         }).order("time DESC").page(page, pagesize).countSelect();
-      }else{
-        departmentWeeklyList = await this.model('week').where({
+        return this.success(companyWeeklyList);
+      }else if(this.user.role == 3){
+        let departmentWeeklyList = await this.model('week').where({
           'username|usernum|content': ["like", "%"+searchContent+"%"],
           company_id: this.user.company_id,
           department_id: this.user.department_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
         }).order("time DESC").page(page, pagesize).countSelect();
+        return this.success(departmentWeeklyList);
+      }else if(this.user.role == 1){
+        let company = await this.model('company').select();
+        let tempData = [];
+        let companyWeeklyData;
+        let searchData;
+        console.log(searchContent, '====================================');
+        for(let i=0;i<company.length;i++){
+          if(searchContent[i] == undefined){
+            searchContent[i] = ''
+          }
+          companyWeeklyData = await this.model('week').where({
+            'username|usernum|content': ["like", "%"+searchContent[i]+"%"],
+            company_id: company[i].company_id,
+            time: {'>': startWeekStamp, '<': endWeekStamp},
+          }).order("time DESC").page(page, pagesize).countSelect();
+          tempData.push({
+            company_id: company[i].company_id,
+            company_name: company[i].company_name,
+            children: companyWeeklyData
+          })
+        }
+        return this.success(tempData);
       }
-      return this.success(departmentWeeklyList);
     }catch(e){
       return this.fail('服务器开小差');
     }

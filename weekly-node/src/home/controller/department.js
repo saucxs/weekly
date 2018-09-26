@@ -20,7 +20,7 @@ module.exports = class extends Base {
             company_id: this.user.company_id,
             role: {'>=': this.user.role}
           }).order("role DESC").page(list.page, list.pagesize).countSelect();
-        }else{
+        }else if(this.user.role == 3){
           unWeeklyList = await this.model('user').where({
             usernum: ['not in', usernumList],
             company_id: this.user.company_id,
@@ -40,7 +40,7 @@ module.exports = class extends Base {
             company_id: this.user.company_id,
             role: {'>=': this.user.role}
           }).order("role DESC").page(list.page, list.pagesize).countSelect();
-        }else{
+        }else if(this.user.role == 3){
           departmentMemberList = await this.model('user').where({
             company_id: this.user.company_id,
             department_id: this.user.department_id,

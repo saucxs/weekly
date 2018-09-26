@@ -94,28 +94,19 @@
         <label>公司：<span class="data-style">({{companyList.length}}家)</span></label>
         <el-tag v-for="(item, index) in companyList" :key="index">{{item.company_name}}</el-tag>
       </p>
-      <p>
-        <label>未填写周报：<span class="data-style">({{unWeeklyData.length}}人)</span>
-          <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag>
-        </label>
-      </p>
-      <p>
-        <label>已填周报：</label>
-        <span class="data-style">{{weeklyTableData.length}}人</span>
-      </p>
       <template v-for="(item, index) in weeklyDataList">
         <div class="title">{{item.company_name || item.company_id}}-本周已填周报列表</div>
         <div class="search-group">
           <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
             <el-col :span="16">
-              <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
-                <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+              <el-input placeholder="请输入内容" maxlength="20" v-model="searchContentAdmin[index]" clearable class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click="searchAdmin(item.company_id)">查询</el-button>
               </el-input>
             </el-col>
           </el-col>
         </div>
         <el-table
-          :data="item.children"
+          :data="item.children.data"
           border
           style="width: 100%">
           <!--<el-table-column-->
@@ -162,15 +153,24 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="pagination-box" v-if="weeklyTableData.length>0">
+        <div class="pagination-box" v-if="item.children.data.length>0">
           <el-pagination
             background
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
             layout="total, prev, pager, next"
-            :total="weeklyListTotal">
+            :total="item.children.count">
           </el-pagination>
         </div>
+        <p>
+          <label>未填写周报：<span class="data-style">({{item.children.data.length}}人)</span>
+            <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag>
+          </label>
+        </p>
+        <p>
+          <label>已填周报：</label>
+          <span class="data-style">{{item.children.data.length}}人</span>
+        </p>
       </template>
 
     </el-row>
@@ -218,21 +218,23 @@
         editWeeklyContent: '',
         dialogTitle: '',
         loadingFlag: false,
-        searchContent: '',
+        searchContent: [],
         roleMap: [],
         companyList: [],
-        weeklyDataList: []
+        weeklyDataList: [],
+        searchContentAdmin: []
       }
     },
     created(){
       this.currentWeek = this.weekDay[this.day];
-      /*获取部门人员列表*/
-      this.departmentMemberList();
-      /*获取已写周报列表*/
-      this.departmrntWeeklyList();
       if(this.userInfo.role == 1){
         this.allCompanyList();
         this.allCompanyWeekly()
+      }else{
+        /*获取部门人员列表*/
+        this.departmentMemberList();
+        /*获取已写周报列表*/
+        this.departmrntWeeklyList();
       }
     },
     computed: {
@@ -379,6 +381,7 @@
         this.confirmSubmitVisiable = false;
         this.editWeeklyContentRow = '';
       },
+      /*admin-管理员*/
       allCompanyList(){
         this.getAllCompanyList().then(res => {
           if(res.errno == 0){
@@ -389,13 +392,21 @@
         })
       },
       allCompanyWeekly(){
-        this.getAllCompanyWeekly().then(res => {
+        this.queryAdminWeeklyList(1,10)
+      },
+      queryAdminWeeklyList(currentPage, pageSize){
+        console.log(this.searchContentAdmin, 'searchContentAdminsearchContentAdminsearchContentAdmin')
+        /*获取已写周报列表*/
+        this.getDepartmentWeeklyList({currentPage, pageSize, searchContent: this.searchContentAdmin}).then(res => {
           if(res.errno == 0){
-            // this.companyList = res.data;
+            this.weeklyDataList = res.data;
           }else{
-            this.$message.error(res.errmsg|| '服务器开小差');
+            this.$message.error('服务器出了小差');
           }
         })
+      },
+      searchAdmin(){
+        this.queryAdminWeeklyList(1, 10);
       }
     }
   }

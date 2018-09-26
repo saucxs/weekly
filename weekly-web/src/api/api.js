@@ -96,10 +96,7 @@ export default {
   getAllCompanyList: params => {
     return axios.post("/home/company/getAllCompanyList", params);
   },
-  /*各个公司的已写周报列表*/
-  getAllCompanyWeekly: params => {
-    return axios.post("/home/company/getAllCompanyWeekly", params);
-  }
+
   /**
    * API demo
    *
