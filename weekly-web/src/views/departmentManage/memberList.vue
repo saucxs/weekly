@@ -199,6 +199,15 @@
             label="联系方式"
             width="160">
           </el-table-column>
+          <el-table-column
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="addMemberAdmin('edit',scope.row)" type="text" size="small">编辑</el-button>
+              <el-button v-if="scope.row.usernum !== userInfo.usernum" @click="deleteMember(scope.row)" type="text" size="small">移除</el-button>
+              <el-button v-if="scope.row.usernum == userInfo.usernum" @click="addMemberAdmin('edit',scope.row)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <div class="pagination-box" v-if="memberListAdmin.length>0">
           <el-pagination
@@ -435,6 +444,8 @@
                   company_name: item.company_name
                 }
               })
+            }else{
+              this.companyListOptions = [];
             }
           }else{
             this.$message.error(res.errmsg || '服务器出了小差');
@@ -453,7 +464,7 @@
                     role_name: item.role_name
                   }
                 })
-                this.formUser.role = this.roleListOptions[0].role;
+//                this.formUser.role = this.roleListOptions[0].role;
               }else{
                 this.roleListOptions = [];
               }
@@ -484,26 +495,28 @@
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-        if(this.userInfo.role == 1){
-          this.queryDepartment();
-          this.queryRole();
-        }
-        if(this.userInfo.role == 2){
-          this.queryDepartment();
-          this.queryRole();
-        }
+        this.queryDepartment();
+        this.queryRole();
+//        if(this.userInfo.role == 1){
+//          this.queryDepartment();
+//          this.queryRole();
+//        }
+//        if(this.userInfo.role == 2){
+//
+//        }
       },
       handleClose(){
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
         this.confirmDeleteVisiable = false;
         this.formUser = {};
+        this.roleListOptions = [];
       },
       successConfirm(type){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}
         else if(!this.formUser.usernum){ this.$message.warning('请输入工号');}
-        else if(this.userInfo.role == 2 && !this.formUser.department_id){ this.$message.warning('请选择部门名称');}
-        else if(this.userInfo.role == 2 && !this.formUser.role){ this.$message.warning('请选择角色');}
+        else if((this.userInfo.role == 1 || this.userInfo.role == 2) && !this.formUser.department_id){ this.$message.warning('请选择部门名称');}
+        else if((this.userInfo.role == 1 || this.userInfo.role == 2) && !this.formUser.role){ this.$message.warning('请选择角色');}
         else if(!this.formUser.email){ this.$message.warning('请输入邮箱');}
         else if(this.formUser.email && !(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(this.formUser.email))){ this.$message.warning('请输入正确邮箱');}
         else if(!this.formUser.telephone){ this.$message.warning('请输入手机号');}
@@ -511,12 +524,18 @@
         else{
           this.formUser.department_name = this.departmentListMap[this.formUser.department_id];
           this.formUser.role_name = this.roleListMap[this.formUser.role];
+          this.formUser.company_id = this.companyId;
+          this.formUser.company_name = this.companyMap[this.companyId];
           this.formUser.type = type;
           this.loadingFlag = true;
           this.addUser(this.formUser).then(res => {
             if(res.errno == 0){
               this.$message.success(res.data || '添加人员成功');
-              this.queryMemberList(1, 10);
+              if(this.userInfo.role == 1){
+                this.queryMemberListAdmin(1, 10);
+              }else{
+                this.queryMemberList(1, 10);
+              }
               this.confirmCreateVisiable = false;
               this.formUser = {};
             }else{
@@ -540,11 +559,15 @@
       },
       confirmDelete(){
         this.loadingFlag = true;
-        this.deleteUser({usernum: this.selectedItem.usernum, department_id: this.selectedItem.department_id}).then( res => {
+        this.deleteUser({usernum: this.selectedItem.usernum, company_id: this.companyId, department_id: this.selectedItem.department_id}).then( res => {
           if(res.errno == 0){
             this.$message.success('删除成功');
             this.confirmDeleteVisiable = false;
-            this.queryMemberList(1, 10);
+            if(this.userInfo.role == 1){
+              this.queryMemberListAdmin(1, 10);
+            }else{
+              this.queryMemberList(1, 10);
+            }
           }else{
             this.$message.error(res.errmsg || '服务器出了小差');
           }

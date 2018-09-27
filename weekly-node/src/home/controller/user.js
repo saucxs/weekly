@@ -79,8 +79,8 @@ module.exports = class extends Base {
         }
     }
     async registerAction() {
-        let company_id = this.user.company_id;
-        let company_name  = this.user.company_name;
+        let company_id = this.user.company_id || this.post('company_id');
+        let company_name  = this.user.company_name || this.post('company_name');
         let department_id = this.user.department_id || this.post('department_id');
         let department_name = this.user.department_name || this.post('department_name');
         let {username, usernum, email, telephone, type, id} = this.post();
@@ -120,7 +120,7 @@ module.exports = class extends Base {
 
   async deleteUserAction() {
     let {usernum} = this.post();
-    let company_id = this.user.company_id;
+    let company_id = this.user.company_id || this.post('company_id');
     let department_id = this.user.department_id || this.post('department_id');
     try {
       await this.model('user').where({usernum, company_id, department_id}).delete();
