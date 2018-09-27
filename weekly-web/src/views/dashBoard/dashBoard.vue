@@ -129,7 +129,7 @@
             this.unWeeklyNumber = res.data.unWeeklyNumber;
             this.myWeeklyNumber = res.data.myWeeklyNumber;
           }else if(this.userInfo.role == 1){
-            this.companyNumber = res.data.companyNumber.length - 1;
+            this.companyNumber = res.data.companyNumber;
             this.totalUserNumber = res.data.totalUserNumber - 1;
             this.totalWeeklyNumber = res.data.totalWeeklyNumber;
             this.myWeeklyNumber = res.data.myWeeklyNumber;

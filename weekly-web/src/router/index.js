@@ -21,7 +21,7 @@ const weeklyList = () => import("@/views/weeklyList/index");
 //公司管理-管理部门
 const companyManage = () => import("@/views/companyManagement/index");
 //管理员-管理公司
-const adminCompany = () => import("@/views/admin/index");
+const adminCompany = () => import("@/views/admin/adminCompany");
 
 Vue.use(Router)
 
@@ -65,6 +65,48 @@ export default new Router({
           role: 3
         },
         component: dashBoard
+      }]
+    }, {
+      path: '/admin',
+      name: 'admin',
+      isNest: true,
+      icon: 'el-icon-setting',
+      component: home,
+      meta: {
+        zhName: '管理员管理',
+        key: '5',
+        role: 1
+      },
+      children: [{
+        path: '/adminCompany',
+        name: 'adminCompany',
+        component: adminCompany,
+        meta: {
+          zhName: '管理公司',
+          key: '5-1',
+          role: 2
+        }
+      }]
+    }, {
+      path: '/setting',
+      name: 'setting',
+      isNest: true,
+      icon: 'el-icon-setting',
+      component: home,
+      meta: {
+        zhName: '公司管理',
+        key: '4',
+        role: 2
+      },
+      children: [{
+        path: '/companyManage',
+        name: 'companyManage',
+        component: companyManage,
+        meta: {
+          zhName: '管理部门',
+          key: '4-1',
+          role: 2
+        }
       }]
     }, {
       path: '/departmentManage',
@@ -140,48 +182,6 @@ export default new Router({
           role: 4
         },
         component: weeklyList
-      }]
-    }, {
-      path: '/setting',
-      name: 'setting',
-      isNest: true,
-      icon: 'el-icon-setting',
-      component: home,
-      meta: {
-        zhName: '公司管理',
-        key: '4',
-        role: 2
-      },
-      children: [{
-        path: '/companyManage',
-        name: 'companyManage',
-        component: companyManage,
-        meta: {
-          zhName: '管理部门',
-          key: '4-1',
-          role: 2
-        }
-      }]
-    }, {
-      path: '/admin',
-      name: 'admin',
-      isNest: true,
-      icon: 'el-icon-setting',
-      component: home,
-      meta: {
-        zhName: '管理员管理',
-        key: '5',
-        role: 1
-      },
-      children: [{
-        path: '/adminCompany',
-        name: 'adminCompany',
-        component: adminCompany,
-        meta: {
-          zhName: '管理公司',
-          key: '5-1',
-          role: 2
-        }
       }]
     }
   ]

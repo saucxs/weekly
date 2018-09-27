@@ -4,7 +4,6 @@ module.exports = class extends Base {
         let {usernum, password} = this.post();
         const salt = 'weekly';
         password = think.md5(salt + password);
-        console.log(password,'111111111111111111111111111111111111111111111111');
         try {
             let user = await this.model('user').where({
               usernum,
@@ -24,7 +23,6 @@ module.exports = class extends Base {
     }
     async queryuserAction() {
         try {
-           console.log(this.user, '22222222222222222222222222');
            this.user = {
              company_name: this.user.company_name,
              department_name: this.user.department_name,
@@ -62,7 +60,6 @@ module.exports = class extends Base {
             }).find();
             const salt = 'weekly';
             oldpassword = think.md5(salt + oldpassword);
-            console.log(usernum, user.password, oldpassword, 'dsaaaaaaaaaaaaaaaaaaaaaaa')
             if(user.password && user.password == oldpassword) {
                 // login success
                 const salt = 'weekly';
@@ -89,8 +86,6 @@ module.exports = class extends Base {
         let {username, usernum, email, telephone, type, id} = this.post();
         let role = this.post('role') || 4;
         let role_name = this.post('role_name') || '成员';
-        console.log(usernum,username,telephone,role,role_name,email,'111111111111111111111111111111111111111');
-        console.log(company_id,company_name,department_id,department_name,'22222222222222222222222222222222');
         try {
           if(type == 'add'){
             let userExist = await this.model('user').where({

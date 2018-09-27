@@ -141,12 +141,23 @@
     <el-row v-if="userInfo.role == 1">
       <div class="title">所有人员管理</div>
       <el-row class="search-style">
-        <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
-          <el-col :span="16">
-            <el-input placeholder="请输入内容" maxlength="20" v-model="searchContentAdmin" clearable class="input-with-select">
-              <el-button slot="append" icon="el-icon-search" @click="searchAdmin()">查询</el-button>
-            </el-input>
+        <el-col :xs="16" :sm="16" :md="16" :lg="16" :xl="16">
+          <el-col :span="12">
+            <label>公司:</label>
+            <el-select v-model="companyId" @change="changeCompany()">
+              <el-option
+                v-for="item in companyOptions"
+                :key="item.company_id"
+                :label="item.company_name"
+                :value="item.company_id">
+              </el-option>
+            </el-select>
           </el-col>
+        </el-col>
+        <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+          <div class="button-style">
+            <el-button type="primary" @click="addMemberAdmin('add')">添加成员</el-button>
+          </div>
         </el-col>
       </el-row>
       <div class="member-box">
@@ -212,16 +223,6 @@
               </el-form-item>
               <el-form-item label="工号">
                 <el-input v-model="formUser.usernum" maxlength="13"></el-input>
-              </el-form-item>
-              <el-form-item label="公司名称"  v-if="userInfo.role == 1">
-                <el-select v-model="formUser.company_id" @change="changeCompany()" placeholder="请选择">
-                  <el-option
-                    v-for="item in companyListOptions"
-                    :key="item.company_id"
-                    :label="item.company_name"
-                    :value="item.company_id">
-                  </el-option>
-                </el-select>
               </el-form-item>
               <el-form-item label="部门名称"  v-if="userInfo.role == 1 || userInfo.role == 2">
                 <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
@@ -311,11 +312,15 @@
         memberListTotalAdmin: 0,
         companyListMap: [],
         companyListOptions: [],
+        companyId: '',
+        companyOptions: [],
+        companyMap: []
       }
     },
     created(){
       if(this.userInfo.role == 1){
         this.queryMemberListAdmin(1, 10);
+        this.queryCompanyList();
       }else{
         this.queryMemberList(1, 10);
       }
@@ -336,6 +341,20 @@
         "getAllMemberList",
         "getAllCompanyList"
       ]),
+      queryCompanyList(){
+        this.getAllCompanyList().then(res => {
+          if(res.errno == 0){
+            this.companyOptions = res.data;
+            this.companyId = this.companyOptions[0].company_id;
+            for(let i=0;i<this.companyOptions.length;i++){
+              this.companyMap[this.companyOptions[i].company_id] = this.companyOptions[i].company_name;
+            }
+            this.queryMemberListAdmin(1,10);
+          }else{
+            this.$message.error(res.errmsg || '服务器出了小差');
+          }
+        })
+      },
       handleCurrentChange(currentPage){
         this.queryMemberList(currentPage,10)
       },
@@ -346,7 +365,7 @@
         this.queryRole();
       },
       changeCompany(){
-        this.queryRoleAdmin();
+        this.queryMemberListAdmin(1,10);
       },
       queryMemberList(pageNum, pageSize){
         this.getDepartmentMemberList({pageNum, pageSize,searchContent: this.searchContent}).then( res => {
@@ -359,7 +378,7 @@
         })
       },
       queryMemberListAdmin(pageNum, pageSize){
-        this.getAllMemberList({pageNum, pageSize,searchContent: this.searchContentAdmin}).then( res => {
+        this.getAllMemberList({pageNum, pageSize, company_id: this.companyId}).then( res => {
           if(res.errno == 0){
             this.memberListAdmin = res.data.data;
             this.memberListTotalAdmin = res.data.count;
@@ -369,8 +388,8 @@
         })
       },
       queryDepartment(){
-        if(this.formUser.company_id){
-          this.getAllDepartmentList({company_id: this.formUser.company_id}).then( res => {
+        if(this.companyId){
+          this.getAllDepartmentList({company_id: this.companyId}).then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
                 this.departmentListOptions = res.data.map(item => {
@@ -380,6 +399,8 @@
                     department_name: item.department_name
                   }
                 })
+              }else{
+                this.departmentListOptions = [];
               }
             }else{
               this.$message.error(res.errmsg || '服务器出了小差');
@@ -422,7 +443,7 @@
       },
       queryRole(){
         if(this.formUser.department_id){
-          this.getRole({department_id: this.formUser.department_id}).then( res => {
+          this.getRole({company_id: this.companyId, department_id: this.formUser.department_id}).then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
                 this.roleListOptions = res.data.map(item => {
@@ -433,26 +454,8 @@
                   }
                 })
                 this.formUser.role = this.roleListOptions[0].role;
-              }
-            }else{
-              this.$message.error(res.errmsg || '服务器出了小差');
-            }
-          })
-        }
-      },
-      queryRole(){
-        if(this.formUser.company_id){
-          this.getRole({company_id: this.formUser.company_id}).then( res => {
-            if(res.errno == 0){
-              if(res.data.length>0){
-                this.roleListOptions = res.data.map(item => {
-                  this.roleListMap[item.role] = item.role_name;
-                  return {
-                    role: item.role,
-                    role_name: item.role_name
-                  }
-                })
-                this.formUser.role = this.roleListOptions[0].role;
+              }else{
+                this.roleListOptions = [];
               }
             }else{
               this.$message.error(res.errmsg || '服务器出了小差');
@@ -482,7 +485,6 @@
           this.formUser = item;
         }
         if(this.userInfo.role == 1){
-          this.queryCompany();
           this.queryDepartment();
           this.queryRole();
         }

@@ -17,7 +17,7 @@
       </p>
       <p>
         <label>已填周报：</label>
-        <span class="data-style">{{weeklyTableData.length}}人</span>
+        <span class="data-style">{{companyWeeklyListNumber}}人</span>
       </p>
       <div class="title">本周已填周报列表</div>
       <div class="search-group">
@@ -33,13 +33,6 @@
         :data="weeklyTableData"
         border
         style="width: 100%">
-        <!--<el-table-column-->
-        <!--label="周报日期"-->
-        <!--width="180">-->
-        <!--<template slot-scope="scope">-->
-        <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
         <el-table-column
           prop="username"
           label="姓名"
@@ -123,13 +116,6 @@
             :data="item.children.data"
             border
             style="width: 100%">
-            <!--<el-table-column-->
-            <!--label="周报日期"-->
-            <!--width="180">-->
-            <!--<template slot-scope="scope">-->
-            <!--<span>{{scope.row.startDate | dateFormat}}</span>&#45;&#45;<span>{{scope.row.endDate | dateFormat}}</span>-->
-            <!--</template>-->
-            <!--</el-table-column>-->
             <el-table-column
               prop="username"
               label="姓名"
@@ -225,11 +211,12 @@
         editWeeklyContent: '',
         dialogTitle: '',
         loadingFlag: false,
-        searchContent: [],
+        searchContent: '',
         roleMap: [],
         companyList: [],
         weeklyDataList: [],
-        searchContentAdmin: []
+        searchContentAdmin: [],
+        companyWeeklyListNumber: 0
       }
     },
     created(){
@@ -241,7 +228,9 @@
         /*获取部门人员列表*/
         this.departmentMemberList();
         /*获取已写周报列表*/
-        this.departmrntWeeklyList();
+        this.departmentWeeklyList();
+        /*获取已填周报人数，未填周报人列表*/
+        this.countWeeklyList();
       }
     },
     computed: {
@@ -254,7 +243,7 @@
         "getCurrentWeekly",
         "addWeekly",
         "getDepartmentWeeklyList",
-        "getDepartmentMemberList",
+        "getDepartmentMemberListNoPage",
         "getUnDepartmentMemberList",
         "getAllCompanyList",
         "getAllCompanyWeekly"
@@ -296,7 +285,7 @@
       search(){
         this.queryDepartmentWeeklyList(1, 10);
       },
-      departmrntWeeklyList(){
+      departmentWeeklyList(){
         this.queryDepartmentWeeklyList(1,10)
       },
       queryDepartmentWeeklyList(currentPage, pageSize){
@@ -305,31 +294,31 @@
           if(res.errno == 0){
             this.weeklyTableData = res.data.data;
             this.weeklyListTotal = res.data.count;
-            var usernumList = this.weeklyTableData.map( item => {
-              return {
-                usernum: item.usernum
-              }
-            })
-            /*获取未写周报人员列表*/
-            var params = {
-              usernumList: usernumList
-            }
-            this.getUnDepartmentMemberList(params).then(res => {
-              if(res.errno == 0){
-                this.unWeeklyData = res.data.data;
-              }else{
-                this.$message.warning('服务器出了小差');
-              }
-            })
+            // var usernumList = this.weeklyTableData.map( item => {
+            //   return {
+            //     usernum: item.usernum
+            //   }
+            // })
+            // /*获取未写周报人员列表*/
+            // var params = {
+            //   usernumList: usernumList
+            // }
+            // this.getUnDepartmentMemberList(params).then(res => {
+            //   if(res.errno == 0){
+            //     this.unWeeklyData = res.data.data;
+            //   }else{
+            //     this.$message.warning('服务器出了小差');
+            //   }
+            // })
           }else{
             this.$message.error('服务器出了小差');
           }
         })
       },
       departmentMemberList(){
-        this.getDepartmentMemberList().then(res => {
+        this.getDepartmentMemberListNoPage().then(res => {
           if(res.errno == 0){
-            this.departmentMember = res.data.data.map( item => {
+            this.departmentMember = res.data.map( item => {
               return {
                 username: item.username,
                 usernum: item.usernum
@@ -337,6 +326,16 @@
             });
           }else{
             this.$message.error(res.errmsg|| '服务器开小差');
+          }
+        })
+      },
+      countWeeklyList(){
+        this.getUnDepartmentMemberList().then(res => {
+          if (res.errno == 0) {
+            this.unWeeklyData = res.data.unWeeklyList;
+            this.companyWeeklyListNumber = res.data.companyWeeklyList.length;
+          } else {
+            this.$message.warning('服务器出了小差');
           }
         })
       },
@@ -374,7 +373,11 @@
               this.$message.success(res.errmsg|| '提交成功');
               this.confirmSubmitVisiable = false;
               this.editWeeklyContentRow = '';
-              this.departmrntWeeklyList();
+              if(this.userInfo.role == 2 || this.userInfo.role == 3){
+                this.departmrntWeeklyList();
+              }else if(this.userInfo.role == 1){
+                this.allCompanyWeekly()
+              }
             }else{
               this.$message.error(res.errmsg|| '服务器开小差');
             }
@@ -402,7 +405,6 @@
         this.queryAdminWeeklyList(1,10)
       },
       queryAdminWeeklyList(currentPage, pageSize){
-        console.log(this.searchContentAdmin, 'searchContentAdminsearchContentAdminsearchContentAdmin')
         /*获取已写周报列表*/
         this.getDepartmentWeeklyList({currentPage, pageSize, searchContent: this.searchContentAdmin}).then(res => {
           if(res.errno == 0){
