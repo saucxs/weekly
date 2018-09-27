@@ -76,7 +76,7 @@ export default {
     return axios.post("/home/user/deleteUser", params);
   },
   getAllDepartmentList: params => {
-    return axios.get("/home/department/getAllDepartmentList", params);
+    return axios.post("/home/department/getAllDepartmentList", params);
   },
   getRole: params => {
     return axios.post("/home/role/getRole", params);
@@ -87,7 +87,19 @@ export default {
   },
   deleteDepartment: params => {
     return axios.post("/home/company/deleteDepartment", params);
-  }
+  },
+  /*daashboard*/
+  getBoard: params => {
+    return axios.post("/home/department/getBoard", params);
+  },
+  /*获取所有公司*/
+  getAllCompanyList: params => {
+    return axios.post("/home/company/getAllCompanyList", params);
+  },
+  /*获取所有的人*/
+  getAllMemberList: params => {
+    return axios.post("/home/company/getAllMemberList", params);
+  },
 
   /**
    * API demo

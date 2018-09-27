@@ -87,7 +87,7 @@
              position: absolute;
              left: -12px;
              content: "";
-             width: 2px;
+             width: 4px;
              height: 20px;
              margin-top: 2px;
              background-color: #3a79ff;

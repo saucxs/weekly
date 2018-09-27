@@ -106,3 +106,22 @@ export const deleteDepartment = ({ commit }, params) => {
     return response;
   })
 }
+
+//dashboard
+export const getBoard = ({ commit }, params) => {
+  return Api.getBoard(params).then(response => {
+    return response;
+  })
+}
+//获取所有公司
+export const getAllCompanyList = ({ commit }, params) => {
+  return Api.getAllCompanyList(params).then(response => {
+    return response;
+  })
+}
+//获取所有人
+export const getAllMemberList = ({ commit }, params) => {
+  return Api.getAllMemberList(params).then(response => {
+    return response;
+  })
+}

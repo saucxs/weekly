@@ -1,9 +1,20 @@
 <template>
-  <div class="member-list">
+  <div class="member-list" v-if="userInfo.role == 2">
     <div class="title">部门管理</div>
-    <div class="button-style">
-      <el-button type="primary" @click="addDepartmentDialog()">添加部门</el-button>
-    </div>
+    <el-row>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+        <el-col :span="16">
+          <el-input placeholder="请输入内容" maxlength="20" v-model="searchContent" clearable class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="search()">查询</el-button>
+          </el-input>
+        </el-col>
+      </el-col>
+      <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+        <div class="button-style">
+          <el-button type="primary" @click="addDepartmentDialog()">添加部门</el-button>
+        </div>
+      </el-col>
+    </el-row>
     <div class="member-box">
       <el-table
         :data="departmentList"
@@ -99,7 +110,8 @@
         dialogBody: '',
         departmentListMap: [],
         roleListOptions: [],
-        roleListMap: []
+        roleListMap: [],
+        searchContent: ''
       }
     },
     created(){
@@ -117,8 +129,11 @@
         "getAllDepartmentList",
         "getRole"
       ]),
+      search(){
+        this.queryDepartmentList()
+      },
       queryDepartmentList(){
-        this.getAllDepartmentList().then( res => {
+        this.getAllDepartmentList({searchContent: this.searchContent}).then( res => {
           if(res.errno == 0){
             this.departmentList = res.data;
           }else{
@@ -139,6 +154,7 @@
         this.confirmCreateVisiable = false;
         this.loadingFlag = false;
         this.confirmDeleteVisiable = false;
+        this.formUser = {};
       },
       successConfirm(type){
         if(!this.formUser.department_id){ this.$message.warning('请输入部门id');}

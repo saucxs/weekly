@@ -1,15 +1,17 @@
 <template>
-  <div class="view-weekly">
-    <div class="title"><span v-if="userInfo.role == 2">公司</span><span v-else>部门</span>周报概览</div>
-    <p>今天：<span>{{currentDate}}</span>，<span>{{currentWeek}}</span></p>
+  <div class="view-weekly" v-if="userInfo.role == 2 || userInfo.role == 3">
+    <div class="title">历史-<span v-if="userInfo.role == 2">公司</span><span v-else>部门</span>周报概览</div>
     <p>公司<span v-if="userInfo.department_name">--部门</span>：<span>{{userInfo.company_name}}<span v-if="userInfo.department_name">--{{userInfo.department_name}}</span></span></p>
     <p>
       <label>
         <span v-if="userInfo.role == 2">公司人员({{departmentMember.length}}人)：</span>
-        <span v-else>部门人员({{departmentMember.length}}人)：</span><span v-for="(item, index) in departmentMember">{{item.username}}({{item.usernum}})，</span></label>
+        <span v-else>部门人员({{departmentMember.length}}人)：</span>
+        <el-tag v-for="(item, index) in departmentMember" :key="index">{{item.username}}({{item.usernum}})</el-tag>
+      </label>
     </p>
     <p>
-      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人</span>)：<span v-for="(item, index) in unWeeklyData">{{item.username}}({{item.usernum}})，</span></label>
+      <label>未填写周报(<span class="data-style">{{unWeeklyData.length}}人：</span>)
+        <el-tag v-for="(item, index) in unWeeklyData" :key="index">{{item.username}}({{item.usernum}})</el-tag></label>
     </p>
     <p><label>已填周报(<span class="data-style">{{weeklyTableData.length}}人</span>)如下所示：</label></p>
     <el-table
@@ -44,6 +46,14 @@
           {{scope.row.time | dateTimeFormat}}
         </template>
       </el-table-column>
+      <el-table-column
+        label="操作"
+        width="100">
+        <template slot-scope="scope">
+          <el-button v-if="new Date().getTime()>= scope.row.startDate && new Date().getTime()<=scope.row.endDate" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+          <span v-else>--</span>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination-box" v-if="weeklyTableData.length>0">
       <el-pagination
@@ -54,6 +64,26 @@
         :total="weeklyListTotal">
       </el-pagination>
     </div>
+    <!--dialog-->
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="confirmSubmitVisiable"
+      :before-close="handleClose"
+      width="600px"
+      center>
+      <p>周报日期：<span>{{editWeeklyDate}}</span></p>
+      <el-input
+        type="textarea"
+        maxlength="500"
+        :autosize="{ minRows: 4, maxRows: 6}"
+        placeholder="请输入内容"
+        v-model="editWeeklyContent">
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="handleClose()">取 消</el-button>
+          <el-button type="primary" :loading="loadingFlag" @click="successConfirm()">确 定</el-button>
+        </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -72,7 +102,12 @@
         departmentMember: [],
         unWeeklyData: [],
         weeklyListTotal: 0,
-        currentPage: 1
+        currentPage: 1,
+        confirmSubmitVisiable: false,
+        editWeeklyDate: '',
+        editWeeklyContent: '',
+        dialogTitle: '',
+        loadingFlag: false
       }
     },
     created(){
@@ -109,6 +144,22 @@
         var second=date.getSeconds();
         second=second < 10 ? ('0' + second) : second;
         return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+      },
+      dateFormatSpe(item){
+        if(!item) return '--';
+        var date = new Date(parseInt(item));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h=h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        var second=date.getSeconds();
+        second=second < 10 ? ('0' + second) : second;
+        return y + '.' + m + '.' + d;
       },
       handleCurrentChange(currentPage) {
         this.queryDepartmentWeeklyList(currentPage,10)
@@ -170,6 +221,41 @@
             this.$message.error(res.errmsg|| '服务器开小差');
           }
         })
+      },
+      editClick(row){
+        console.log(row,'row')
+        this.editWeeklyContentRow = row;
+        this.confirmSubmitVisiable = true;
+        this.dialogTitle = '修改周报'
+        this.editWeeklyContent = this.editWeeklyContentRow.content;
+        this.editWeeklyDate = this.dateFormatSpe(this.editWeeklyContentRow.startDate) + '--' + this.dateFormatSpe(this.editWeeklyContentRow.endDate);
+      },
+      successConfirm(){
+        var params = {
+          content: this.editWeeklyContent,
+          date: this.currentDate,
+          id: this.editWeeklyContentRow.id
+        }
+        if(this.editWeeklyContent){
+          this.loadingFlag = true;
+          this.addWeekly(params).then(res => {
+            if(res.errno == 0){
+              this.$message.success(res.errmsg|| '提交成功');
+              this.confirmSubmitVisiable = false;
+              this.editWeeklyContentRow = '';
+              this.departmrntWeeklyList();
+            }else{
+              this.$message.error(res.errmsg|| '服务器开小差');
+            }
+            this.loadingFlag = false;
+          })
+        }else{
+          this.$message.warning( '输入周报才能提交');
+        }
+      },
+      handleClose(){
+        this.confirmSubmitVisiable = false;
+        this.editWeeklyContentRow = '';
       }
     }
   }

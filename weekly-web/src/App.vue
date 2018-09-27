@@ -52,15 +52,21 @@
   .el-dialog .el-dialog__body{
     padding-bottom: 0px !important;
   }
+  .el-dialog .el-dialog__footer{
+    padding: 10px 20px !important;
+  }
   /*header*/
   .el-dropdown-menu__item{
       width: 120px !important;
     }
+  .el-tag{
+    margin: 5px;
+  }
   /*menu*/
   .el-menu-item {
     padding-bottom: 8px;
-    height: 42px;
-    line-height: 42px;
+    height: 50px;
+    line-height: 50px;
   }
   .el-submenu .el-menu-item{
     min-width: 146px !important;
@@ -80,11 +86,11 @@
   }
   .el-menu .is-active:before {
     position: absolute;
-    top: 0px;
     bottom: 0px;
     left: 0;
     display: block;
     width: 4px;
+    height: 50px;
     background-color: #3a79ff;
     transition: all .3s cubic-bezier(.645,.045,.355,1);
     content: "";

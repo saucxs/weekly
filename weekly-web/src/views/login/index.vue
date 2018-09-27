@@ -12,7 +12,7 @@
         <div class="content_box_form">
           <h1>登&nbsp;&nbsp;录</h1>
           <p class="form_content" >
-            <input minlength="6" maxlength="30" type="text" name="userNumber" placeholder="工号" v-model="usernum" />
+            <input minlength="6" maxlength="30" type="text" name="userNumber" placeholder="工号" @keyup.enter="submit" v-model="usernum" />
           </p>
           <p class="form_content" >
             <input minlength="6" maxlength="16" type="password" placeholder="密码" @keyup.enter="submit"  v-model="password" />
@@ -60,7 +60,7 @@
           this.login(param).then(res => {
             if(res.errno == 0 ){
               this.$message.success(res.errmsg|| '登陆成功');
-              if(res.data.role == '2' || res.data.role == '3'){
+              if(res.data.role == '1' || res.data.role == '2' || res.data.role == '3'){
                 this.$router.push({ path: '/weeklyView' });
               }else if(res.data.role == '4'){
                 this.$router.push({ path: '/writeWeekly' });
@@ -87,16 +87,16 @@
     height: 70px;
     line-height: 70px;
     background: #efefef;
-    & .box-wrapper{
+  & .box-wrapper{
       width: 1190px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      & .icon-style{
-        font-size: 26px;
-        color: #5579ee;
-      }
+  & .icon-style{
+      font-size: 26px;
+      color: #5579ee;
     }
+  }
   }
 
   .login_icon {

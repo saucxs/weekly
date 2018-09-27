@@ -10,6 +10,7 @@ module.exports = class extends Base {
       return this.fail(e);
     }
   }
+
   /*公司新增部门*/
   async addDepartmentAction() {
     let {department_id, department_name, type, id} = this.post();
@@ -56,6 +57,25 @@ module.exports = class extends Base {
     } catch(e) {
       return this.fail(`删除失败${e}`)
     }
+  }
+
+  /*获取所有的人*/
+  async getAllMemberListAction(){
+      let page = this.post('pageNum');
+      let pagesize = this.post('pageSize');
+      let searchContent = this.post('searchContent');
+      if(!page){ page = '1' }
+      if(!pagesize){ pagesize = '10' }
+      let allMemberList;
+      try {
+          allMemberList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone')
+              .where({
+                  'username|usernum|company_name|department_name': ["like", "%"+searchContent+"%"],
+              }).order("company_id asc, department_id asc, role asc").page(page, pagesize).countSelect();
+          return this.success(allMemberList);
+      } catch(e) {
+          return this.fail(e);
+      }
   }
 
 }

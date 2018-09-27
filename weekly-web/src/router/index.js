@@ -6,15 +6,22 @@ const login = () => import("@/views/login/index")
 
 // 布局
 const home = () => import("@/views/home");
+//首页
+const dashBoard = () => import("@/views/dashBoard/dashBoard");
 
 // 周报管理
-const weeklyView = () => import("@/views/weeklyManage/index");
-const memberList = () => import("@/views/weeklyManage/memberList");
-const departmentManage = () => import("@/views/setting/departmentManage")
+const weeklyView = () => import("@/views/departmentManage/weeklyView");
+const memberList = () => import("@/views/departmentManage/memberList");
+
 // 写当前周
 const writeWeekly = () => import("@/views/writeWeekly/index");
 //历史周报
 const weeklyList = () => import("@/views/weeklyList/index");
+
+//公司管理-管理部门
+const companyManage = () => import("@/views/companyManagement/index");
+//管理员-管理公司
+const adminCompany = () => import("@/views/admin/index");
 
 Vue.use(Router)
 
@@ -38,13 +45,35 @@ export default new Router({
       },
       component: home
     }, {
-      path: '/weeklyManage',
-      name: 'weeklyManage',
+      path: '/index',
+      name: 'index',
+      component: home,
+      isNest: false,
+      redirect: '/dashBoard',
+      meta: {
+        zhName: '概览',
+        key: '0',
+        role: 3
+      },
+      children: [{
+        path: '/dashBoard',
+        name: 'dashBoard',
+        icon: 'el-icon-view',
+        meta: {
+          zhName: '概览',
+          key: '0-1',
+          role: 3
+        },
+        component: dashBoard
+      }]
+    }, {
+      path: '/departmentManage',
+      name: 'departmentManage',
       isNest: true,
       icon: 'el-icon-menu',
       component: home,
       meta: {
-        zhName: '周报管理',
+        zhName: '部门管理',
         key: '1',
         role: 3
       },
@@ -53,7 +82,7 @@ export default new Router({
         name: 'weeklyView',
         component: weeklyView,
         meta: {
-          zhName: '周报概览',
+          zhName: '周报管理',
           key: '1-1',
           role: 3
         }
@@ -119,17 +148,38 @@ export default new Router({
       icon: 'el-icon-setting',
       component: home,
       meta: {
-        zhName: '设置',
+        zhName: '公司管理',
         key: '4',
         role: 2
       },
       children: [{
-        path: '/departmentManage',
-        name: 'departmentManage',
-        component: departmentManage,
+        path: '/companyManage',
+        name: 'companyManage',
+        component: companyManage,
         meta: {
-          zhName: '部门管理',
+          zhName: '管理部门',
           key: '4-1',
+          role: 2
+        }
+      }]
+    }, {
+      path: '/admin',
+      name: 'admin',
+      isNest: true,
+      icon: 'el-icon-setting',
+      component: home,
+      meta: {
+        zhName: '管理员管理',
+        key: '5',
+        role: 1
+      },
+      children: [{
+        path: '/adminCompany',
+        name: 'adminCompany',
+        component: adminCompany,
+        meta: {
+          zhName: '管理公司',
+          key: '5-1',
           role: 2
         }
       }]
