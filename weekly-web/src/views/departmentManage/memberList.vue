@@ -406,7 +406,6 @@
           this.getAllDepartmentList({company_id: this.companyId}).then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
-                this.confirmCreateVisiable = true;
                 this.departmentListOptions = res.data.map(item => {
                   this.departmentListMap[item.department_id] = item.department_name;
                   return {
@@ -500,6 +499,7 @@
 //        }
       },
       addMemberAdmin(type,item){
+        this.confirmCreateVisiable = true;
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
           if(this.userInfo.role == 1){
@@ -521,6 +521,7 @@
         this.confirmDeleteVisiable = false;
         this.formUser = {};
         this.roleListOptions = [];
+        this.departmentListOptions = [];
       },
       successConfirm(type){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}
