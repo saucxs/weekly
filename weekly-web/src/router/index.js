@@ -28,7 +28,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/login',
+      path: '/weekly/login',
       name: 'login',
       meta: {
         zhName: '登陆',
@@ -38,7 +38,7 @@ export default new Router({
     }, {
       path: '/',
       name: 'home',
-      redirect: '/writeWeekly',
+      redirect: '/weekly/writeWeekly',
       meta: {
         zhName: '主页',
         key: '1'
@@ -49,14 +49,14 @@ export default new Router({
       name: 'index',
       component: home,
       isNest: false,
-      redirect: '/dashBoard',
+      redirect: '/weekly/dashBoard',
       meta: {
         zhName: '概览',
         key: '0',
         role: 3
       },
       children: [{
-        path: '/dashBoard',
+        path: '/weekly/dashBoard',
         name: 'dashBoard',
         icon: 'el-icon-view',
         meta: {
@@ -67,7 +67,7 @@ export default new Router({
         component: dashBoard
       }]
     }, {
-      path: '/admin',
+      path: '/weekly/admin',
       name: 'admin',
       isNest: true,
       icon: 'el-icon-setting',
@@ -78,7 +78,7 @@ export default new Router({
         role: 1
       },
       children: [{
-        path: '/adminCompany',
+        path: '/weekly/adminCompany',
         name: 'adminCompany',
         component: adminCompany,
         meta: {
@@ -88,7 +88,7 @@ export default new Router({
         }
       }]
     }, {
-      path: '/setting',
+      path: '/weekly/setting',
       name: 'setting',
       isNest: true,
       icon: 'el-icon-setting',
@@ -99,7 +99,7 @@ export default new Router({
         role: 2
       },
       children: [{
-        path: '/companyManage',
+        path: '/weekly/companyManage',
         name: 'companyManage',
         component: companyManage,
         meta: {
@@ -109,7 +109,7 @@ export default new Router({
         }
       }]
     }, {
-      path: '/departmentManage',
+      path: '/weekly/departmentManage',
       name: 'departmentManage',
       isNest: true,
       icon: 'el-icon-menu',
@@ -120,7 +120,7 @@ export default new Router({
         role: 3
       },
       children: [{
-        path: '/weeklyView',
+        path: '/weekly/weeklyView',
         name: 'weeklyView',
         component: weeklyView,
         meta: {
@@ -129,7 +129,7 @@ export default new Router({
           role: 3
         }
       }, {
-        path: '/memberList',
+        path: '/weekly/memberList',
         name: 'memberList',
         component: memberList,
         meta: {
@@ -143,14 +143,14 @@ export default new Router({
       name: 'write',
       component: home,
       isNest: false,
-      redirect: '/writeWeekly',
+      redirect: '/weekly/writeWeekly',
       meta: {
         zhName: '写周报',
         key: '2',
         role: 4
       },
       children: [{
-        path: '/writeWeekly',
+        path: '/weekly/writeWeekly',
         name: 'writeWeekly',
         icon: 'el-icon-edit',
         meta: {
@@ -165,14 +165,14 @@ export default new Router({
       name: 'list',
       component: home,
       isNest: false,
-      redirect: '/weeklyList',
+      redirect: '/weekly/weeklyList',
       meta: {
         zhName: '周报列表',
         key: '3',
         role: 4
       },
       children: [{
-        path: '/weeklyList',
+        path: '/weekly/weeklyList',
         name: 'weeklyList',
         isNest: false,
         icon: 'el-icon-search',

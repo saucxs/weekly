@@ -90,7 +90,7 @@
                 <el-input v-if="dialogTitle == '添加人员信息'"  v-model="formUser.usernum" maxlength="13"></el-input>
                 <el-input v-if="dialogTitle == '修改人员信息'" :disabled="true" v-model="formUser.usernum" maxlength="13"></el-input>
               </el-form-item>
-              <el-form-item label="部门名称"   v-if="dialogTitle == '添加人员信息'">
+              <el-form-item label="部门名称"   v-if="dialogTitle == '添加人员信息' && userInfo.role !== 3">
                 <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
                   <el-option
                     v-for="item in departmentListOptions"
@@ -100,7 +100,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="部门职务"   v-if="dialogTitle == '添加人员信息'">
+              <el-form-item label="部门职务"   v-if="dialogTitle == '添加人员信息' && userInfo.role !== 3">
                 <el-select v-model="formUser.role" placeholder="请选择">
                   <el-option
                     v-for="item in roleListOptions"
@@ -485,26 +485,32 @@
         this.confirmCreateVisiable = true;
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
+          if(this.userInfo.role !== 3){
+            this.queryDepartment();
+            this.queryRole();
+          }
         }else if(type == 'edit'){
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-        if(this.userInfo.role == 2){
-          this.queryDepartment();
-          this.queryRole();
-        }
+
+//        if(this.userInfo.role == 2){
+//          this.queryDepartment();
+//          this.queryRole();
+//        }
       },
       addMemberAdmin(type,item){
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
+          if(this.userInfo.role == 1){
+            this.queryDepartment();
+            this.queryRole();
+          }
         }else if(type == 'edit'){
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-       if(this.userInfo.role == 1){
-         this.queryDepartment();
-         this.queryRole();
-       }
+
 //        if(this.userInfo.role == 2){
 //
 //        }

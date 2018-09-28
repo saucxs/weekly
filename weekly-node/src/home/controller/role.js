@@ -35,8 +35,6 @@ module.exports = class extends Base {
           let companyLeaderExist = await this.model('user').where({
             company_id, role: 2
           }).select();
-          console.log(companyLeaderExist, '3333333333333333333333333333333333');
-          console.log(think.isEmpty(companyLeaderExist), '4444444444444444444444444');
           /*role 2-总监，3-部门经理，4-组员*/
           if(!think.isEmpty(companyLeaderExist)) {
             //总监不为空

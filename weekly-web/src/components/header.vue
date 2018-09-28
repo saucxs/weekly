@@ -87,7 +87,7 @@
        signOut() {
          this.logout().then(res => {
            if(res.errno == 0){
-             this.$router.push({ path: '/login' });
+             this.$router.push({ path: '/weekly/login' });
              this.$store.commit("USER_INFO", {});
            }else{
              this.$message.error(res.errmsg|| '服务器开小差');

@@ -215,7 +215,12 @@
       }
     },
     created(){
-      this.queryCompanyList()
+      if(this.userInfo.role == 1){
+        this.queryCompanyList()
+      }else if(this.userInfo.role == 2){
+        this.queryDepartmentList();
+      }
+
     },
     computed: {
       ...mapGetters([

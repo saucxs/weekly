@@ -26,11 +26,9 @@ module.exports = class extends Base {
                 role: {'>=': 2 }
               }).select();
               if(companyWeeklyList.length>0){
-                console.log(companyWeeklyList,'11111111111111111111111111111111111111')
                 for(let i = 0; i < companyWeeklyList.length; i++) {
                   usernumList[i] = companyWeeklyList[i].usernum;
                 }
-                console.log(usernumList, '00000000000000000000000000000000000000000')
                 if(usernumList.length>0){
                   unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
                     usernum: ['not in', usernumList],
@@ -196,7 +194,6 @@ module.exports = class extends Base {
     async getAllDepartmentListAction() {
         if(this.user.role == 1){
           let company_id = this.post('company_id');
-          let searchContent = this.post('searchContent')
           try {
             let department = await this.model('department').where({
               company_id: company_id,
@@ -205,9 +202,9 @@ module.exports = class extends Base {
           } catch(e) {
             return this.fail(e);
           }
-        }else if(this.user.role == 2){
+        }else{
           let company_id = this.user.company_id;
-          // let searchContent = this.post('searchContent')
+          // let searchContent = this.post('searchContent');
           try {
             let department = await this.model('department').where({
               company_id: company_id,

@@ -61,9 +61,9 @@
             if(res.errno == 0 ){
               this.$message.success(res.errmsg|| '登陆成功');
               if(res.data.role == '1' || res.data.role == '2' || res.data.role == '3'){
-                this.$router.push({ path: '/weeklyView' });
+                this.$router.push({ path: '/weekly/weeklyView' });
               }else if(res.data.role == '4'){
-                this.$router.push({ path: '/writeWeekly' });
+                this.$router.push({ path: '/weekly/writeWeekly' });
               }else if(res.data.role == '1'){
 
               }
