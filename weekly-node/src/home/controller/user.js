@@ -124,6 +124,7 @@ module.exports = class extends Base {
     let department_id = this.user.department_id || this.post('department_id');
     try {
       await this.model('user').where({usernum, company_id, department_id}).delete();
+      await this.model('week').where({usernum, company_id, department_id}).delete();
       return this.success("删除成功");
     } catch(e) {
       return this.fail(`删除失败${e}`)

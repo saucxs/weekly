@@ -60,7 +60,8 @@
         <div>
           <el-form label-position="right" label-width="80px" :model="formUser">
             <el-form-item label="部门ID">
-              <el-input v-model="formUser.department_id" maxlength="20"></el-input>
+              <el-input v-if="dialogTitle == '添加部门'" v-model="formUser.department_id" maxlength="20"></el-input>
+              <el-input v-if="dialogTitle == '修改部门'" :disabled="true" v-model="formUser.department_id" maxlength="20"></el-input>
             </el-form-item>
             <el-form-item label="部门名称">
               <el-input v-model="formUser.department_name" maxlength="20"></el-input>
@@ -153,7 +154,8 @@
         <div>
           <el-form label-position="right" label-width="80px" :model="formUser">
             <el-form-item label="部门ID">
-              <el-input v-model="formUser.department_id" maxlength="20"></el-input>
+              <el-input v-model="formUser.department_id" maxlength="20" v-if="dialogTitle == '添加部门'"></el-input>
+              <el-input v-model="formUser.department_id" maxlength="20" v-if="dialogTitle == '修改部门'" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="部门名称">
               <el-input v-model="formUser.department_name" maxlength="20"></el-input>

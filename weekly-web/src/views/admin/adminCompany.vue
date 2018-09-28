@@ -38,7 +38,8 @@
        <div>
         <el-form label-position="right" label-width="80px" :model="formUser">
           <el-form-item label="公司ID">
-            <el-input v-model="formUser.company_id" maxlength="20"></el-input>
+            <el-input v-model="formUser.company_id" maxlength="20" v-if="dialogTitle == '添加公司'"></el-input>
+            <el-input v-model="formUser.company_id" maxlength="20" v-if="dialogTitle == '修改公司'" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="公司名称">
             <el-input v-model="formUser.company_name" maxlength="20"></el-input>

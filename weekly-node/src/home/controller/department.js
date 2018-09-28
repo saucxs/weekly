@@ -5,7 +5,7 @@ module.exports = class extends Base {
     async getUnDepartmentMemberListAction() {
         let companyWeeklyList;
         let usernumList = [];
-        let unWeeklyList;
+        let unWeeklyList = [];
       /*计算一周时间戳*/
       let currentYear = new Date().getFullYear();
       let currentMonth = new Date().getMonth();
@@ -22,22 +22,35 @@ module.exports = class extends Base {
               /*公司已填周报人数*/
               companyWeeklyList = await this.model('week').where({
                 company_id: this.user.company_id,
-                time: {'>': startWeekStamp, '<': endWeekStamp}
+                time: {'>': startWeekStamp, '<': endWeekStamp},
+                role: {'>=': 2 }
               }).select();
-
-              for(let i = 0; i < companyWeeklyList.length; i++) {
-                usernumList[i] = companyWeeklyList[i].usernum;
+              if(companyWeeklyList.length>0){
+                console.log(companyWeeklyList,'11111111111111111111111111111111111111')
+                for(let i = 0; i < companyWeeklyList.length; i++) {
+                  usernumList[i] = companyWeeklyList[i].usernum;
+                }
+                console.log(usernumList, '00000000000000000000000000000000000000000')
+                if(usernumList.length>0){
+                  unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
+                    usernum: ['not in', usernumList],
+                    company_id: this.user.company_id,
+                    role: {'>=': 2 }
+                  }).order("role DESC").select();
+                }
+              }else{
+                unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
+                  company_id: this.user.company_id,
+                  role: {'>=': 2 }
+                }).order("role DESC").select();
               }
-              unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
-                usernum: ['not in', usernumList],
-                company_id: this.user.company_id
-              }).order("role DESC").select();
             }else if(this.user.role == 3){
               /*公司已填周报人数*/
               companyWeeklyList = await this.model('week').where({
                 company_id: this.user.company_id,
                 department_id: this.user.department_id,
-                time: {'>': startWeekStamp, '<': endWeekStamp}
+                time: {'>': startWeekStamp, '<': endWeekStamp},
+                role: {'>=': 3 }
               }).select();
               if(companyWeeklyList.length>0){
                 for(let i = 0; i < companyWeeklyList.length; i++) {
@@ -46,12 +59,14 @@ module.exports = class extends Base {
                 unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
                   usernum: ['not in', usernumList],
                   company_id: this.user.company_id,
-                  department_id: this.user.department_id
+                  department_id: this.user.department_id,
+                  role: {'>=': 3 }
                 }).order("role DESC").select();
               }else{
                 unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
                   company_id: this.user.company_id,
-                  department_id: this.user.department_id
+                  department_id: this.user.department_id,
+                  role: {'>=': 3 }
                 }).order("role DESC").select();
               }
 
@@ -191,12 +206,12 @@ module.exports = class extends Base {
             return this.fail(e);
           }
         }else if(this.user.role == 2){
-          let company_id = this.user.company_id || this.post('company_id');
-          let searchContent = this.post('searchContent')
+          let company_id = this.user.company_id;
+          // let searchContent = this.post('searchContent')
           try {
             let department = await this.model('department').where({
               company_id: company_id,
-              'company_id|company_name|department_id|department_name': ["like", "%"+searchContent+"%"],
+              // 'company_id|company_name|department_id|department_name': ["like", "%"+searchContent+"%"],
             }).select();
             return this.success(department);
           } catch(e) {

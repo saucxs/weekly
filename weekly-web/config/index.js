@@ -11,7 +11,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: [{
       context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
-      target: "http://127.0.0.1:8362",
+      '/weekly':{
+        target: "http://127.0.0.1:8362",
+      }
     }],
 
     // Various Dev Server settings

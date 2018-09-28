@@ -87,9 +87,10 @@
                 <el-input v-model="formUser.username" maxlength="10"></el-input>
               </el-form-item>
               <el-form-item label="工号">
-                <el-input v-model="formUser.usernum" maxlength="13"></el-input>
+                <el-input v-if="dialogTitle == '添加人员信息'"  v-model="formUser.usernum" maxlength="13"></el-input>
+                <el-input v-if="dialogTitle == '修改人员信息'" :disabled="true" v-model="formUser.usernum" maxlength="13"></el-input>
               </el-form-item>
-              <el-form-item label="部门名称"  v-if="userInfo.role == 2">
+              <el-form-item label="部门名称"   v-if="dialogTitle == '添加人员信息'">
                 <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
                   <el-option
                     v-for="item in departmentListOptions"
@@ -99,7 +100,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="部门职务"  v-if="userInfo.role == 2">
+              <el-form-item label="部门职务"   v-if="dialogTitle == '添加人员信息'">
                 <el-select v-model="formUser.role" placeholder="请选择">
                   <el-option
                     v-for="item in roleListOptions"
@@ -213,7 +214,7 @@
           <el-pagination
             background
             @current-change="handleCurrentChangeAdmin"
-            :current-page.sync="currentPage"
+            :current-page.sync="currentPageAdmin"
             layout="total, prev, pager, next"
             :total="memberListTotalAdmin">
           </el-pagination>
@@ -231,9 +232,10 @@
                 <el-input v-model="formUser.username" maxlength="10"></el-input>
               </el-form-item>
               <el-form-item label="工号">
-                <el-input v-model="formUser.usernum" maxlength="13"></el-input>
+                <el-input  v-if="dialogTitle == '添加人员信息'" v-model="formUser.usernum" maxlength="13"></el-input>
+                <el-input  v-if="dialogTitle == '修改人员信息'" :disabled="true" v-model="formUser.usernum" maxlength="13"></el-input>
               </el-form-item>
-              <el-form-item label="部门名称"  v-if="userInfo.role == 1 || userInfo.role == 2">
+              <el-form-item label="部门名称" v-if="dialogTitle == '添加人员信息'">
                 <el-select v-model="formUser.department_id" @change="changeDepartment()" placeholder="请选择">
                   <el-option
                     v-for="item in departmentListOptions"
@@ -243,7 +245,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="部门职务"  v-if="userInfo.role == 1 || userInfo.role == 2">
+              <el-form-item label="部门职务" v-if="dialogTitle == '添加人员信息'">
                 <el-select v-model="formUser.role" placeholder="请选择">
                   <el-option
                     v-for="item in roleListOptions"
@@ -318,6 +320,7 @@
         searchContent: '',
         searchContentAdmin: '',
         memberListAdmin: [],
+        currentPageAdmin: 1,
         memberListTotalAdmin: 0,
         companyListMap: [],
         companyListOptions: [],
@@ -381,6 +384,7 @@
           if(res.errno == 0){
             this.memberList = res.data.data;
             this.memberListTotal = res.data.count;
+            this.currentPage = pageNum
           }else{
             this.$message.error(res.errmsg || '服务器出了小差');
           }
@@ -391,6 +395,7 @@
           if(res.errno == 0){
             this.memberListAdmin = res.data.data;
             this.memberListTotalAdmin = res.data.count;
+            this.currentPageAdmin = pageNum
           }else{
             this.$message.error(res.errmsg || '服务器出了小差');
           }
@@ -401,6 +406,7 @@
           this.getAllDepartmentList({company_id: this.companyId}).then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
+                this.confirmCreateVisiable = true;
                 this.departmentListOptions = res.data.map(item => {
                   this.departmentListMap[item.department_id] = item.department_name;
                   return {
@@ -410,6 +416,7 @@
                 })
               }else{
                 this.departmentListOptions = [];
+                this.$message.warning('请先添加部门');
               }
             }else{
               this.$message.error(res.errmsg || '服务器出了小差');
@@ -488,19 +495,16 @@
         }
       },
       addMemberAdmin(type,item){
-        this.confirmCreateVisiable = true;
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
         }else if(type == 'edit'){
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-        this.queryDepartment();
-        this.queryRole();
-//        if(this.userInfo.role == 1){
-//          this.queryDepartment();
-//          this.queryRole();
-//        }
+       if(this.userInfo.role == 1){
+         this.queryDepartment();
+         this.queryRole();
+       }
 //        if(this.userInfo.role == 2){
 //
 //        }
@@ -532,9 +536,9 @@
             if(res.errno == 0){
               this.$message.success(res.data || '添加人员成功');
               if(this.userInfo.role == 1){
-                this.queryMemberListAdmin(1, 10);
+                this.queryMemberListAdmin(this.currentPageAdmin, 10);
               }else{
-                this.queryMemberList(1, 10);
+                this.queryMemberList(this.currentPage, 10);
               }
               this.confirmCreateVisiable = false;
               this.formUser = {};

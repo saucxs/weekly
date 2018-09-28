@@ -107,7 +107,7 @@ module.exports = class extends Base {
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-        }).order("role asc, time DESC").page(page, pagesize).countSelect();
+        }).order("department_id asc, role asc, time DESC").page(page, pagesize).countSelect();
         return this.success(companyWeeklyList);
       }else if(this.user.role == 3){
         let departmentWeeklyList = await this.model('week').where({
@@ -131,7 +131,7 @@ module.exports = class extends Base {
             'username|usernum|content': ["like", "%"+searchContent[i]+"%"],
             company_id: company[i].company_id,
             time: {'>': startWeekStamp, '<': endWeekStamp},
-          }).order("role asc, time DESC").page(page, pagesize).countSelect();
+          }).order("role asc, company_id asc, department_id asc, time DESC").page(page, pagesize).countSelect();
             /*公司人数*/
             companyNumber = await this.model('user').where({
                 company_id: company[i].company_id
