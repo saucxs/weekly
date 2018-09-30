@@ -11,10 +11,10 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: [{
       context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
-      // target: "http://127.0.0.1:8362",
-      '/weekly_node':{
-        target: "http://127.0.0.1:8362",
-      }
+      target: "http://127.0.0.1:8362",
+      // '/weekly_node':{
+      //   target: "http://127.0.0.1:8362",
+      // }
     }],
 
     // Various Dev Server settings
@@ -55,7 +55,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/weekly/',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

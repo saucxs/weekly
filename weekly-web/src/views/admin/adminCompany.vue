@@ -123,7 +123,11 @@
         confirmCreateVisiable: false,
         formUser: {
           company_id: '',
-          company_name: ''
+          company_name: '',
+          usernum: '',
+          username: '',
+          telephone: '',
+          email: ''
         },
         confirmDeleteVisiable: false,
         dialogBody: '',
@@ -161,11 +165,11 @@
       editCompanyDialog(item){
         this.confirmCreateVisiable = true;
         this.dialogTitle = '修改公司';
-        console.log(item,'item');
+//        console.log(item,'item');
         this.formUser = item;
       },
       successConfirm(type){
-        console.log(type);
+//        console.log(type);
         if(!this.formUser.company_id){ this.$message.warning('请输入公司id');}
         else if(!this.formUser.company_name){ this.$message.warning('请输入公司名称');}
         else if(!this.formUser.usernum){ this.$message.warning('请输入负责人id');}
