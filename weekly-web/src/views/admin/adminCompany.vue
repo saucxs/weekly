@@ -12,15 +12,45 @@
         <el-table-column
           prop="company_id"
           label="公司ID"
-          width="200">
+          width="140">
         </el-table-column>
         <el-table-column
           prop="company_name"
           label="公司名">
         </el-table-column>
         <el-table-column
-          label="操作"
+          prop="usernum"
+          label="负责人ID"
           width="100">
+        </el-table-column>
+        <el-table-column
+          prop="username"
+          label="负责人姓名"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="telephone"
+          label="手机号"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="create_time"
+          label="创建时间"
+          width="160">
+        </el-table-column>
+        <el-table-column
+          prop="update_time"
+          label="更新时间"
+          width="160">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="90">
           <template slot-scope="scope">
             <el-button @click="editCompanyDialog(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteCompanyDialog(scope.row)" type="text" size="small">移除</el-button>
@@ -43,6 +73,19 @@
           </el-form-item>
           <el-form-item label="公司名称">
             <el-input v-model="formUser.company_name" maxlength="20"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人ID">
+            <el-input v-model="formUser.usernum" maxlength="20" v-if="dialogTitle == '添加公司'"></el-input>
+            <el-input v-model="formUser.usernum" maxlength="20" v-if="dialogTitle == '修改公司'" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人姓名">
+            <el-input v-model="formUser.username" maxlength="20"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input v-model="formUser.telephone" maxlength="11"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input v-model="formUser.email" maxlength="60"></el-input>
           </el-form-item>
         </el-form>
         </div>
@@ -125,6 +168,12 @@
         console.log(type);
         if(!this.formUser.company_id){ this.$message.warning('请输入公司id');}
         else if(!this.formUser.company_name){ this.$message.warning('请输入公司名称');}
+        else if(!this.formUser.usernum){ this.$message.warning('请输入负责人id');}
+        else if(!this.formUser.username){ this.$message.warning('请输入负责人姓名');}
+        else if(!this.formUser.telephone){ this.$message.warning('请输入手机号');}
+        else if(this.formUser.telephone && !(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.formUser.telephone))){ this.$message.warning('请输入正确手机号');}
+        else if(!this.formUser.email){ this.$message.warning('请输入邮箱');}
+        else if(this.formUser.email && !(/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(this.formUser.email))){ this.$message.warning('请输入正确邮箱');}
         else{
           this.formUser.type = type;
           this.addUpdateCompany(this.formUser).then(res => {

@@ -26,10 +26,20 @@ const adminCompany = () => import("@/views/admin/adminCompany");
 Vue.use(Router)
 
 export default new Router({
+  base: '/weekly/',
   routes: [
     {
       path: '/weekly/login',
       name: 'login',
+      meta: {
+        zhName: '登陆',
+        key: '0'
+      },
+      component: login
+    }, {
+      path: '/login',
+      name: 'login',
+      redirect: '/weekly/login',
       meta: {
         zhName: '登陆',
         key: '0'
@@ -45,7 +55,7 @@ export default new Router({
       },
       component: home
     }, {
-      path: '/index',
+      path: '/dashBoard',
       name: 'index',
       component: home,
       isNest: false,
@@ -139,7 +149,7 @@ export default new Router({
         }
       }]
     }, {
-      path: '/write',
+      path: '/writeWeekly',
       name: 'write',
       component: home,
       isNest: false,
@@ -161,7 +171,7 @@ export default new Router({
         component: writeWeekly
       }]
     }, {
-      path: '/list',
+      path: '/weeklyList',
       name: 'list',
       component: home,
       isNest: false,

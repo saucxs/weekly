@@ -245,7 +245,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="部门职务" v-if="dialogTitle == '添加人员信息'">
+              <el-form-item label="公司职务" v-if="dialogTitle == '添加人员信息'">
                 <el-select v-model="formUser.role" placeholder="请选择">
                   <el-option
                     v-for="item in roleListOptions"
@@ -326,7 +326,8 @@
         companyListOptions: [],
         companyId: '',
         companyOptions: [],
-        companyMap: []
+        companyMap: [],
+        companyAdmin: false
       }
     },
     created(){
@@ -336,7 +337,6 @@
       }else{
         this.queryMemberList(1, 10);
       }
-
     },
     computed: {
       ...mapGetters([
@@ -406,6 +406,7 @@
           this.getAllDepartmentList({company_id: this.companyId}).then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
+                this.confirmCreateVisiable = true;
                 this.departmentListOptions = res.data.map(item => {
                   this.departmentListMap[item.department_id] = item.department_name;
                   return {
@@ -425,6 +426,7 @@
           this.getAllDepartmentList().then( res => {
             if(res.errno == 0){
               if(res.data.length>0){
+                this.confirmCreateVisiable = true;
                 this.departmentListOptions = res.data.map(item => {
                   this.departmentListMap[item.department_id] = item.department_name;
                   return {
@@ -432,6 +434,9 @@
                     department_name: item.department_name
                   }
                 })
+              }else{
+                this.departmentListOptions = [];
+                this.$message.warning('请先添加部门');
               }
             }else{
               this.$message.error(res.errmsg || '服务器出了小差');
@@ -481,7 +486,6 @@
         }
       },
       addMember(type,item){
-        this.confirmCreateVisiable = true;
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
           if(this.userInfo.role !== 3){
@@ -489,17 +493,12 @@
             this.queryRole();
           }
         }else if(type == 'edit'){
+          this.confirmCreateVisiable = true;
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-
-//        if(this.userInfo.role == 2){
-//          this.queryDepartment();
-//          this.queryRole();
-//        }
       },
       addMemberAdmin(type,item){
-        this.confirmCreateVisiable = true;
         if(type == 'add'){
           this.dialogTitle = '添加人员信息';
           if(this.userInfo.role == 1){
@@ -507,13 +506,10 @@
             this.queryRole();
           }
         }else if(type == 'edit'){
+          this.confirmCreateVisiable = true;
           this.dialogTitle = '修改人员信息';
           this.formUser = item;
         }
-
-//        if(this.userInfo.role == 2){
-//
-//        }
       },
       handleClose(){
         this.confirmCreateVisiable = false;
@@ -522,6 +518,12 @@
         this.formUser = {};
         this.roleListOptions = [];
         this.departmentListOptions = [];
+        if(this.userInfo.role == 1){
+          this.queryMemberListAdmin(1, 10);
+          this.queryCompanyList();
+        }else{
+          this.queryMemberList(1, 10);
+        }
       },
       successConfirm(type){
         if(!this.formUser.username){ this.$message.warning('请输入姓名');}

@@ -3,7 +3,7 @@ const Base = require('./base');
 module.exports = class extends Base {
   /*获取部门role*/
   async getRoleAction() {
-    let {company_id, department_id} = this.post();
+    let {company_id, department_id, noLeader} = this.post();
     try {
       if(this.user.role == 2){
         if(department_id){
@@ -31,7 +31,7 @@ module.exports = class extends Base {
           return this.success(role);
         }
       }else if(this.user.role == 1){
-        if(department_id){
+        // if(department_id){
           let companyLeaderExist = await this.model('user').where({
             company_id, role: 2
           }).select();
@@ -63,7 +63,7 @@ module.exports = class extends Base {
             }).select();
             return this.success(role);
           }
-        }
+        // }
       }
     } catch(e) {
       return this.fail(e);

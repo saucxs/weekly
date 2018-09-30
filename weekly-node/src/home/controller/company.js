@@ -17,25 +17,36 @@ module.exports = class extends Base {
   /*新增公司*/
   async addUpdateCompanyAction() {
     try{
-      let {id,create_time, type, company_id, company_name} = this.post();
+      let {id,create_time, type, company_id, company_name, usernum, username, telephone, email} = this.post();
       if(this.user.role == 1){
         if(type == 'add'){
-          let companyExistId = await this.model('department').where({
+          let companyExistId = await this.model('company').where({
             company_id
           }).select();
           if(!think.isEmpty(companyExistId)) {
             return this.fail("公司ID已经存在");
           }
-          let companyExistName = await this.model('department').where({
+          let companyExistName = await this.model('company').where({
             company_name
           }).select();
           if(!think.isEmpty(companyExistName)) {
             return this.fail("公司名称已经存在");
           }
+          let companyExistLeaderId = await this.model('user').where({
+            usernum
+          }).select();
+          if(!think.isEmpty(companyExistLeaderId)) {
+            return this.fail("负责人ID已经存在");
+          }
           let dateTime = new Date();
           let create_time = dateTime.getFullYear() + '-' +  Number(dateTime.getMonth() + 1 )  + '-' + dateTime.getDate() + ' '+ dateTime.getHours() + ':' + dateTime.getMinutes() + ':' + dateTime.getSeconds();
           await this.model('company').add({
-            company_id, company_name, create_time
+            company_id, company_name, usernum, username, telephone, email, create_time
+          });
+          const salt = 'weekly';
+          let password = think.md5(salt + '123456');
+          await this.model('user').add({
+            usernum, username, telephone, role: 2, role_name: '总监', password, email, company_id, company_name
           });
           await this.model('role').addMany([{
             company_id, role: 2, role_name: '总监'
@@ -55,6 +66,8 @@ module.exports = class extends Base {
           })
           return this.success("修改成功");
         }
+      }else{
+        return this.fail('你没有权限');
       }
     }catch(e){
       return this.fail(e);
@@ -67,6 +80,7 @@ module.exports = class extends Base {
     try {
       if(this.user.role == 1){
         await this.model('company').where({id, company_id, company_name}).delete();
+        await this.model('department').where({company_id}).delete();
         await this.model('role').where({company_id}).delete();
         await this.model('user').where({company_id}).delete();
         await this.model('week').where({company_id}).delete();

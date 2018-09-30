@@ -87,7 +87,7 @@ module.exports = class extends Base {
         let role = this.post('role') || 4;
         let role_name = this.post('role_name') || '成员';
         try {
-          if(type == 'add'){
+          if(type == 'add' || type == 'companyAdminAdd'){
             let userExist = await this.model('user').where({
               usernum
             }).select();
@@ -100,7 +100,7 @@ module.exports = class extends Base {
               usernum, username, telephone, role, role_name, password, email, company_id, company_name, department_id, department_name
             });
             return this.success("添加成功");
-          }else if(type == 'edit'){
+          }else if(type == 'edit' || type == 'companyAdminEdit'){
             if(id){
               await this.model('user').where({
                 id
@@ -112,7 +112,6 @@ module.exports = class extends Base {
               return this.fail("缺少参数id");
             }
           }
-
         } catch(e) {
             return this.fail("添加失败", e);
         }
