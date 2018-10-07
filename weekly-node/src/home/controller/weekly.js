@@ -131,8 +131,8 @@ module.exports = class extends Base {
             'username|usernum|content': ["like", "%"+searchContent[i]+"%"],
             company_id: company[i].company_id,
             time: {'>': startWeekStamp, '<': endWeekStamp},
-          }).order("role asc, company_id asc, department_id asc, time DESC").page(page, pagesize).countSelect();
-            /*公司人数*/
+          }).order("role asc, company_id asc, time DESC").page(page, pagesize).countSelect();
+          /*公司人数*/
             companyNumber = await this.model('user').where({
                 company_id: company[i].company_id
             }).count('usernum');
@@ -141,14 +141,23 @@ module.exports = class extends Base {
                 company_id: company[i].company_id,
                 time: {'>': startWeekStamp, '<': endWeekStamp}
             }).select();
-
-            for(let i = 0; i < companyWeeklyList.length; i++) {
-                usernumList[i] = companyWeeklyList[i].usernum;
+            if(companyWeeklyList.length>0){
+                for(let i = 0; i < companyWeeklyList.length; i++) {
+                    usernumList[i] = companyWeeklyList[i].usernum;
+                }
+            }else{
+                companyWeeklyList = []
             }
-            unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
-                usernum: ['not in', usernumList],
-                company_id: company[i].company_id
-            }).select();
+            if(usernumList.length > 0){
+                unWeeklyList = await this.model('user').where({
+                    usernum: ['not in', usernumList],
+                    company_id: company[i].company_id
+                }).select();
+            }else{
+                unWeeklyList = await this.model('user').where({
+                    company_id: company[i].company_id
+                }).select();
+            }
           tempData.push({
             companyNumber: companyNumber,
             companyWeeklyList: companyWeeklyList,

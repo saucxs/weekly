@@ -17,7 +17,7 @@ module.exports = class extends Base {
   /*新增公司*/
   async addUpdateCompanyAction() {
     try{
-      let {id, type, company_id, company_name, usernum, username, telephone, email} = this.post();
+      let {id,create_time, type, company_id, company_name, usernum, username, telephone, email} = this.post();
       if(this.user.role == 1){
         if(type == 'add'){
           let companyExistId = await this.model('company').where({

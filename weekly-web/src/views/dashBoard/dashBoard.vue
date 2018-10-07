@@ -4,7 +4,7 @@
         <div class="title">首页</div>
         <el-row :gutter="40" class="panel-group">
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+            <div class="card-panel" @click="handleSetData('depNum')">
               <div class="card-panel-icon-wrapper icon-people">
                 <i class="el-icon-edit"></i>
               </div>
@@ -15,7 +15,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('messages')">
+            <div class="card-panel" @click="handleSetData('unWeekly')">
               <div class="card-panel-icon-wrapper icon-message">
                 <i class="el-icon-edit"></i>
               </div>
@@ -26,7 +26,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('purchases')">
+            <div class="card-panel" @click="handleSetData('weekly')">
               <div class="card-panel-icon-wrapper icon-money">
                 <i class="el-icon-edit"></i>
               </div>
@@ -37,7 +37,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+            <div class="card-panel" @click="handleSetData('hisWeekly')">
               <div class="card-panel-icon-wrapper icon-shopping">
                 <i class="el-icon-edit"></i>
               </div>
@@ -53,7 +53,7 @@
         <div class="title">首页-公司列表</div>
         <el-row :gutter="40" class="panel-group">
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+            <div class="card-panel" @click="handleSetDataAdmin('companyNum')">
               <div class="card-panel-icon-wrapper icon-people">
                 <i class="el-icon-edit"></i>
               </div>
@@ -64,7 +64,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('messages')">
+            <div class="card-panel" @click="handleSetDataAdmin('totalNum')">
               <div class="card-panel-icon-wrapper icon-message">
                 <i class="el-icon-edit"></i>
               </div>
@@ -75,7 +75,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('purchases')">
+            <div class="card-panel" @click="handleSetDataAdmin('totalWeekly')">
               <div class="card-panel-icon-wrapper icon-money">
                 <i class="el-icon-edit"></i>
               </div>
@@ -86,7 +86,7 @@
             </div>
           </el-col>
           <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
-            <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+            <div class="card-panel" @click="handleSetDataAdmin('hisWeekly')">
               <div class="card-panel-icon-wrapper icon-shopping">
                 <i class="el-icon-edit"></i>
               </div>
@@ -148,7 +148,44 @@
       ...mapActions([
         "getBoard",
       ]),
-
+      handleSetData(type){
+        if(type == 'depNum'){
+          this.$router.push({
+            path: `/weekly/memberList`,
+          })
+        }else if(type == 'unWeekly'){
+          this.$router.push({
+            path: `/weekly/weeklyView`,
+          })
+        }else if(type == 'weekly'){
+          this.$router.push({
+            path: `/weekly/weeklyView`,
+          })
+        }else if(type == 'hisWeekly'){
+          this.$router.push({
+            path: `/weekly/weeklyList`,
+          })
+        }
+      },
+      handleSetDataAdmin(type){
+        if(type == 'companyNum'){
+          this.$router.push({
+            path: `/weekly/adminCompany`,
+          })
+        }else if(type == 'totalNum'){
+          this.$router.push({
+            path: `/weekly/memberList`,
+          })
+        }else if(type == 'totalWeekly'){
+          this.$router.push({
+            path: `/weekly/weeklyView`,
+          })
+        }else if(type == 'hisWeekly'){
+          this.$router.push({
+            path: `/weekly/weeklyList`,
+          })
+        }
+      }
 
     }
   }
@@ -159,7 +196,6 @@
     & i{
         font-size: 46px;
       }
-    margin-top: 18px;
     & .card-panel-col{
       margin-bottom: 32px;
       }

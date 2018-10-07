@@ -491,6 +491,8 @@
           if(this.userInfo.role !== 3){
             this.queryDepartment();
             this.queryRole();
+          }else{
+            this.confirmCreateVisiable = true;
           }
         }else if(type == 'edit'){
           this.confirmCreateVisiable = true;

@@ -90,7 +90,7 @@
     left: 0;
     display: block;
     width: 4px;
-    height: 56px;
+    height: 50px;
     background-color: #3a79ff;
     transition: all .3s cubic-bezier(.645,.045,.355,1);
     content: "";
