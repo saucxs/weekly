@@ -84,6 +84,28 @@
   .el-menu .is-active a{
     color: #fff !important;
   }
+  .el-menu-item .is-active:before{
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    display: block;
+    width: 4px;
+    height: 56px;
+    background-color: #3a79ff;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+    content: "";
+  }
+  .el-menu-item .is-active:after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-right: 3px solid #3a79ff;
+    transform: scaleY(.0001);
+    opacity: 0;
+    transition: transform .15s cubic-bezier(.215,.61,.355,1),opacity .15s cubic-bezier(.215,.61,.355,1);
+  }
   .el-menu .is-active:before {
     position: absolute;
     bottom: 0px;

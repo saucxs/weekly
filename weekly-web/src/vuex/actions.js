@@ -143,3 +143,9 @@ export const deleteCompany = ({ commit }, params) => {
     return response;
   })
 }
+//登入和登出日志
+export const getLoginLog = ({ commit }, params) => {
+  return Api.getLoginLog(params).then(response => {
+    return response;
+  })
+}

@@ -14,6 +14,10 @@ module.exports = {
       target: "http://127.0.0.1:8362",
       // '/weekly_node':{
       //   target: "http://127.0.0.1:8362",
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': '/'
+      //   }
       // }
     }],
 
@@ -56,6 +60,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    // assetsPublicPath: '/weekly_node/',
 
     /**
      * Source Maps

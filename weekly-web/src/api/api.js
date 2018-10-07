@@ -109,8 +109,12 @@ export default {
   },
   /*删除公司*/
   deleteCompany: params => {
-  return axios.post("/home/company/deleteCompany", params);
-},
+    return axios.post("/home/company/deleteCompany", params);
+  },
+  /*登入和登出日志*/
+  getLoginLog: params => {
+    return axios.post("/home/log/getLoginLog", params);
+  },
   /**
    * API demo
    *

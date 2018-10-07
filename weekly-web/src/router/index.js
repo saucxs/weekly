@@ -22,6 +22,7 @@ const weeklyList = () => import("@/views/weeklyList/index");
 const companyManage = () => import("@/views/companyManagement/index");
 //管理员-管理公司
 const adminCompany = () => import("@/views/admin/adminCompany");
+const adminLog = () => import("@/views/admin/adminLog");
 
 Vue.use(Router)
 
@@ -95,6 +96,15 @@ export default new Router({
           zhName: '管理公司',
           key: '5-1',
           role: 2
+        }
+      }, {
+        path: '/admin/adminLog',
+        name: 'adminLog',
+        component: adminLog,
+        meta: {
+          zhName: '管理日志',
+          key: '5-2',
+          role: 1
         }
       }]
     }, {
