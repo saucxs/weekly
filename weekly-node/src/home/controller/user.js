@@ -2,21 +2,28 @@ const Base = require('./base');
 module.exports = class extends Base {
     async loginAction() {
         let {usernum, password} = this.post();
+        let passwordSpe = password;
         const salt = 'weekly';
         password = think.md5(salt + password);
+        //记录登录的记录
+        const login_ip = this.ctx.ip;
+        let dateTime = new Date();
+        let login_time = think.datetime(dateTime);
+        await this.model('log').add({
+            flag: 1, usernum, login_time, password: password, login_ip
+        });
         try {
             let user = await this.model('user').where({
               usernum,
             }).find();
             if(user.password && user.password == password) {
                 // login success
-                await this.session('userInfo',user);
+                await this.session('userInfo', user);
                 return this.success(user);
             } else {
                 return this.fail("用户名或密码错误")
             }
-        }
-        catch(e) {
+        }catch(e) {
             console.log(e);
             return this.fail("登录失败")
         }
@@ -41,6 +48,12 @@ module.exports = class extends Base {
     }
     async logoutAction() {
         try {
+            //记录登出的记录
+            let dateTime = new Date();
+            let logout_time = think.datetime(dateTime);
+            await this.model('log').add({
+                flag: 0, usernum: this.user.usernum, username: this.user.username, logout_time, password: this.user.password
+            });
             await this.session(null);
             return this.success("登出成功");
         } catch(e) {
@@ -96,16 +109,20 @@ module.exports = class extends Base {
             }
             const salt = 'weekly';
             let password = think.md5(salt + '123456');
-            await this.model('user').add({
-              usernum, username, telephone, role, role_name, password, email, company_id, company_name, department_id, department_name
+              let dateTime = new Date();
+              let create_time = dateTime.getFullYear() + '-' +  Number(dateTime.getMonth() + 1 )  + '-' + dateTime.getDate() + ' '+ dateTime.getHours() + ':' + dateTime.getMinutes() + ':' + dateTime.getSeconds();
+              await this.model('user').add({
+              usernum, username, telephone, role, role_name, password, email, company_id, company_name, department_id, department_name, create_time
             });
             return this.success("添加成功");
           }else if(type == 'edit' || type == 'companyAdminEdit'){
             if(id){
-              await this.model('user').where({
+                let dateTime = new Date();
+                let update_time = dateTime.getFullYear() + '-' +  Number(dateTime.getMonth() + 1 )  + '-' + dateTime.getDate() + ' '+ dateTime.getHours() + ':' + dateTime.getMinutes() + ':' + dateTime.getSeconds();
+                await this.model('user').where({
                 id
               }).update({
-                usernum, username, telephone, role, role_name,email, company_id, company_name, department_id, department_name
+                usernum, username, telephone, role, role_name,email, company_id, company_name, department_id, department_name, update_time
               });
               return this.success("修改成功");
             }else{
