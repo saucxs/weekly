@@ -12,7 +12,7 @@ module.exports = class extends Base {
           if(this.user.role == 1){
               let logList = await this.model('log').where({
                   'usernum': ["like", "%"+searchContent+"%"],
-              }).order("id asc").page(page, pagesize).countSelect();
+              }).order("id desc").page(page, pagesize).countSelect();
               return this.success(logList);
           }else{
               return this.fail('你没有权限');

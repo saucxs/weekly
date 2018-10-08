@@ -9,7 +9,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: [{
+    proxyTable: {
       // context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
       // target: "http://127.0.0.1:8362",
       '/weekly_node':{
@@ -19,7 +19,7 @@ module.exports = {
         //   '^/weekly_node': '/weekly_node'
         // }
       }
-    }],
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

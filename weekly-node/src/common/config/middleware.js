@@ -22,16 +22,16 @@ module.exports = [
         enable: !think.isCli,
         options: {
             debug: isDev,
-            contentType(ctx) {
-                // All request url starts of /api or
-                // request header contains `X-Requested-With: XMLHttpRequest` will output json error
-              console.log(ctx.request.path,'22222222222222222222222222222')
-                const APIRequest = /^\/weekly_node/.test(ctx.request.path);
-                console.log(APIRequest, '333333333333333333333333')
-                const AJAXRequest = ctx.is('X-Requested-With', 'XMLHttpRequest');
-
-                return APIRequest || AJAXRequest ? 'json' : 'html';
-            },
+            // contentType(ctx) {
+            //     // All request url starts of /api or
+            //     // request header contains `X-Requested-With: XMLHttpRequest` will output json error
+            //   console.log(ctx.request.path,'22222222222222222222222222222')
+            //     const APIRequest = /^\/weekly_node/.test(ctx.request.path);
+            //     console.log(APIRequest, '333333333333333333333333')
+            //     const AJAXRequest = ctx.is('X-Requested-With', 'XMLHttpRequest');
+            //
+            //     return APIRequest || AJAXRequest ? 'json' : 'html';
+            // },
         }
     },
     {

@@ -27,6 +27,7 @@ const adminLog = () => import("@/views/admin/adminLog");
 Vue.use(Router)
 
 export default new Router({
+  // base: '/weekly/',
   mode: 'history',
   routes: [
     {
