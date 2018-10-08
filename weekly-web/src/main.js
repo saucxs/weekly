@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
       }
     });
   } else {
-   next();
+    next({path: to.path})
   }
 });
 

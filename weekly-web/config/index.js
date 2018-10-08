@@ -10,15 +10,15 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: [{
-      context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
-      target: "http://127.0.0.1:8362",
-      // '/weekly_node':{
-      //   target: "http://127.0.0.1:8362",
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '^/api': '/'
-      //   }
-      // }
+      // context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
+      // target: "http://127.0.0.1:8362",
+      '/weekly_node':{
+        target: "http://127.0.0.1:8362",
+        // changeOrigin: true,
+        // pathRewrite: {                //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
+        //   '^/weekly_node': '/weekly_node'
+        // }
+      }
     }],
 
     // Various Dev Server settings
@@ -54,13 +54,13 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../dist/index_index.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    // assetsPublicPath: '/weekly_node/',
+    // assetsPublicPath: '/',
+    assetsPublicPath: '/weekly/',
 
     /**
      * Source Maps

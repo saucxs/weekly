@@ -1,5 +1,5 @@
 module.exports = {
-    home: {
-        match: /^.+/
-    }
+  home: {
+    match: /^.+/
+  }
 }

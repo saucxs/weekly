@@ -5,12 +5,12 @@ let serveUrl;
 switch(process.env.BUILD_ENV){
     //sit
     case "sit":
-      serveUrl = 'http://127.0.0.1'
+      serveUrl = 'http://127.0.0.1/weekly_node'
         break
 
     //开发环境
     default:
-      serveUrl = 'http://127.0.0.1'
+      serveUrl = 'http://127.0.0.1/weekly_node'
 }
 
 // get请求配置
