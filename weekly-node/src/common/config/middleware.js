@@ -41,7 +41,7 @@ module.exports = [
     {
         handle: 'router',
         options: {
-          prefix: ['/weekly_node/']
+          // prefix: ['/weekly_node/']
         }
     },
     'logic',

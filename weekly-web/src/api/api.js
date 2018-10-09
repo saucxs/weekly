@@ -14,6 +14,7 @@ import {
 Vue.prototype.axios = axios;
 const service = axios.create({
   baseURL: '/weekly_node',
+  // baseURL: '/',
   timeout: 10000
 })
 
