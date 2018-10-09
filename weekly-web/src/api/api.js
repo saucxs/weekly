@@ -20,7 +20,7 @@ const service = axios.create({
 // 开发环境调试用户信息
 service.interceptors.request.use(config => {
     if (process.env.NODE_ENV === 'development') {
-      config.headers["username"] = "189090909";
+      config.headers["username"] = "test";
     }
     return config;
 });
