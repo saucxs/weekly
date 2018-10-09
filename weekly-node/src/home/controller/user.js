@@ -29,7 +29,6 @@ module.exports = class extends Base {
         }
     }
     async queryuserAction() {
-      console.log('aaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbb')
         try {
            this.user = {
              company_name: this.user.company_name,
