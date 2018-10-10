@@ -32,13 +32,15 @@ router.beforeEach((to, from, next) => {
   if (key) {
     store.dispatch("getUserInfo", {}).then(response => {
       if(JSON.stringify(response.data) === '{}'){
+        console.log(to.path, '11111111111')
         if (to.path !== '/weekly/login') {
           return next('/weekly/login');
         }
         next();
       }else{
+        console.log(to.path, '22222222')
         if (to.path == '/weekly/login') {
-         if(response.data.role == 2 || response.data.role == 3){
+         if(response.data.role == 1 || response.data.role == 2 || response.data.role == 3){
            return next('/weekly/weeklyView');
          }else if(response.data.role == 4){
            return next('/weekly/writeWeekly');
