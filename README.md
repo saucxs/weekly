@@ -36,17 +36,21 @@
 
 + 2018.09.18
    - 完成基本版本的功能
-+ 下一版
++ 2018.10.10
     - 管理员权限优化
     - 优化权限管理
 
 ### 三、系统截图
 #### 3.1 登录页
 ![image](./shot_pic_1.png)
-#### 3.1 部门经理页面
+#### 3.2 成员页面
+![image](./shot_pic_staff.png)
+#### 3.3 部门经理页面
 ![image](./shot_pic_2_manger.png)
-#### 3.1 总监页面
+#### 3.4 总监页面
 ![image](./shot_pic_2_big_manger.png)
+#### 3.5 管理员页面
+![image](./shot_pic_admin.png)
 
 ### 四、本地运行程序
 1、首先你的环境是nodejs，不会安装配置参考：[nodejs环境搭建](http://www.mwcxs.top/page/440.html)
