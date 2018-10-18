@@ -12,16 +12,21 @@ import {
 
 // 继承vue的原型方法
 Vue.prototype.axios = axios;
+const service = axios.create({
+  baseURL: '/weekly_node',
+  // baseURL: '/',
+  timeout: 10000
+})
 
 // 开发环境调试用户信息
-axios.interceptors.request.use(config => {
+service.interceptors.request.use(config => {
     if (process.env.NODE_ENV === 'development') {
-      config.headers["username"] = "189090909";
+      config.headers["username"] = "test";
     }
     return config;
 });
 
-axios.interceptors.response.use(
+service.interceptors.response.use(
   response => {
     let data = response.data;
     if (!data.data) {
@@ -40,67 +45,81 @@ axios.interceptors.response.use(
 export default {
   // API请求example
   getUserInfo: params => {
-    return axios.post("/home/user/queryuser", params);
+    return service.post("/home/user/queryuser", params);
   },
   login: params => {
-    return axios.post("/home/user/login", params);
+    return service.post("/home/user/login", params);
   },
   logout: params => {
-    return axios.post("/home/user/logout", params);
+    return service.post("/home/user/logout", params);
   },
   changePassword: params => {
-    return axios.post("/home/user/changepass", params);
+    return service.post("/home/user/changepass", params);
   },
   addWeekly: params => {
-    return axios.post("/home/weekly/addWeekly", params);
+    return service.post("/home/weekly/addWeekly", params);
   },
   getCurrentWeekly: params => {
-    return axios.post("/home/weekly/getCurrentWeekly", params);
+    return service.post("/home/weekly/getCurrentWeekly", params);
   },
   getWeeklyList: params => {
-    return axios.get("/home/weekly/getWeeklyList", params);
+    return service.get("/home/weekly/getWeeklyList", params);
   },
   getDepartmentWeeklyList: params => {
-    return axios.post("/home/weekly/getDepartmentWeeklyList", params);
+    return service.post("/home/weekly/getDepartmentWeeklyList", params);
   },
   getDepartmentMemberList: params => {
-    return axios.post("/home/department/getDepartmentMemberList", params);
+    return service.post("/home/department/getDepartmentMemberList", params);
+  },
+  getDepartmentMemberListNoPage: params => {
+    return service.post("/home/department/getDepartmentMemberListNoPage", params);
   },
   getUnDepartmentMemberList: params => {
-    return axios.post("/home/department/getUnDepartmentMemberList", params);
+    return service.post("/home/department/getUnDepartmentMemberList", params);
   },
   addUser: params => {
-    return axios.post("/home/user/register", params);
+    return service.post("/home/user/register", params);
   },
   deleteUser: params => {
-    return axios.post("/home/user/deleteUser", params);
+    return service.post("/home/user/deleteUser", params);
   },
   getAllDepartmentList: params => {
-    return axios.post("/home/department/getAllDepartmentList", params);
+    return service.post("/home/department/getAllDepartmentList", params);
   },
   getRole: params => {
-    return axios.post("/home/role/getRole", params);
+    return service.post("/home/role/getRole", params);
   },
   /*设置*/
   addDepartment: params => {
-    return axios.post("/home/company/addDepartment", params);
+    return service.post("/home/company/addDepartment", params);
   },
   deleteDepartment: params => {
-    return axios.post("/home/company/deleteDepartment", params);
+    return service.post("/home/company/deleteDepartment", params);
   },
   /*daashboard*/
   getBoard: params => {
-    return axios.post("/home/department/getBoard", params);
+    return service.post("/home/department/getBoard", params);
   },
   /*获取所有公司*/
   getAllCompanyList: params => {
-    return axios.post("/home/company/getAllCompanyList", params);
+    return service.post("/home/company/getAllCompanyList", params);
   },
   /*获取所有的人*/
   getAllMemberList: params => {
-    return axios.post("/home/company/getAllMemberList", params);
+    return service.post("/home/company/getAllMemberList", params);
   },
-
+  /*新增公司*/
+  addUpdateCompany: params => {
+    return service.post("/home/company/addUpdateCompany", params);
+  },
+  /*删除公司*/
+  deleteCompany: params => {
+    return service.post("/home/company/deleteCompany", params);
+  },
+  /*登入和登出日志*/
+  getLoginLog: params => {
+    return service.post("/home/log/getLoginLog", params);
+  },
   /**
    * API demo
    *

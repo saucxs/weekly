@@ -32,16 +32,18 @@ router.beforeEach((to, from, next) => {
   if (key) {
     store.dispatch("getUserInfo", {}).then(response => {
       if(JSON.stringify(response.data) === '{}'){
-        if (to.path !== '/login') {
-          return next('/login');
+        console.log(to.path, '11111111111')
+        if (to.path !== '/weekly/login') {
+          return next('/weekly/login');
         }
         next();
       }else{
-        if (to.path == '/login') {
-         if(response.data.role == 2 || response.data.role == 3){
-           return next('/weeklyView');
+        console.log(to.path, '22222222')
+        if (to.path == '/weekly/login') {
+         if(response.data.role == 1 || response.data.role == 2 || response.data.role == 3){
+           return next('/weekly/weeklyView');
          }else if(response.data.role == 4){
-           return next('/writeWeekly');
+           return next('/weekly/writeWeekly');
          }
         }
         store.commit("USER_INFO", response.data);
@@ -49,7 +51,7 @@ router.beforeEach((to, from, next) => {
       }
     });
   } else {
-   next();
+    next({path: to.path})
   }
 });
 

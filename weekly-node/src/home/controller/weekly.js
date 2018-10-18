@@ -75,7 +75,7 @@ module.exports = class extends Base {
         }
     }
 
-  /*获取公司-部门周报列表*/
+  /*获取公司-部门周报列表  部门总监，部门经理*/
   async getDepartmentWeeklyListAction() {
     let page = this.post('pageNum');
     let pagesize = this.post('pageSize');
@@ -107,7 +107,7 @@ module.exports = class extends Base {
           company_id: this.user.company_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-        }).order("time DESC").page(page, pagesize).countSelect();
+        }).order("department_id asc, role asc, time DESC").page(page, pagesize).countSelect();
         return this.success(companyWeeklyList);
       }else if(this.user.role == 3){
         let departmentWeeklyList = await this.model('week').where({
@@ -116,13 +116,12 @@ module.exports = class extends Base {
           department_id: this.user.department_id,
           time: {'>': startWeekStamp, '<': endWeekStamp},
           role: {'>=': this.user.role}
-        }).order("time DESC").page(page, pagesize).countSelect();
+        }).order("role asc, time DESC").page(page, pagesize).countSelect();
         return this.success(departmentWeeklyList);
       }else if(this.user.role == 1){
         let company = await this.model('company').select();
         let tempData = [];
         let companyWeeklyData;
-        console.log(searchContent, '====================================');
         for(let i=0;i<company.length;i++){
           if(searchContent[i] == undefined){
             searchContent[i] = ''
@@ -132,8 +131,8 @@ module.exports = class extends Base {
             'username|usernum|content': ["like", "%"+searchContent[i]+"%"],
             company_id: company[i].company_id,
             time: {'>': startWeekStamp, '<': endWeekStamp},
-          }).order("time DESC").page(page, pagesize).countSelect();
-            /*公司人数*/
+          }).order("role asc, company_id asc, time DESC").page(page, pagesize).countSelect();
+          /*公司人数*/
             companyNumber = await this.model('user').where({
                 company_id: company[i].company_id
             }).count('usernum');
@@ -142,16 +141,23 @@ module.exports = class extends Base {
                 company_id: company[i].company_id,
                 time: {'>': startWeekStamp, '<': endWeekStamp}
             }).select();
-
-            for(let i = 0; i < companyWeeklyList.length; i++) {
-                usernumList[i] = companyWeeklyList[i].usernum;
+            if(companyWeeklyList.length>0){
+                for(let i = 0; i < companyWeeklyList.length; i++) {
+                    usernumList[i] = companyWeeklyList[i].usernum;
+                }
+            }else{
+                companyWeeklyList = []
             }
-            console.log(usernumList, '============================================================')
-            unWeeklyList = await this.model('user').field('id, company_id, company_name, department_id, department_name, email, role, role_name, username, usernum,telephone').where({
-                usernum: ['not in', usernumList],
-                company_id: company[i].company_id
-            }).select();
-            console.log(unWeeklyList,'----------------------------------------------------')
+            if(usernumList.length > 0){
+                unWeeklyList = await this.model('user').where({
+                    usernum: ['not in', usernumList],
+                    company_id: company[i].company_id
+                }).select();
+            }else{
+                unWeeklyList = await this.model('user').where({
+                    company_id: company[i].company_id
+                }).select();
+            }
           tempData.push({
             companyNumber: companyNumber,
             companyWeeklyList: companyWeeklyList,

@@ -56,9 +56,15 @@ export const getDepartmentWeeklyList = ({ commit }, params) => {
   })
 }
 
-//获取部门人员列表
+//获取部门人员列表-分页-搜索
 export const getDepartmentMemberList = ({ commit }, params) => {
   return Api.getDepartmentMemberList(params).then(response => {
+    return response;
+  })
+}
+//获取部门人员列表-无分页-无搜索
+export const getDepartmentMemberListNoPage = ({ commit }, params) => {
+  return Api.getDepartmentMemberListNoPage(params).then(response => {
     return response;
   })
 }
@@ -122,6 +128,24 @@ export const getAllCompanyList = ({ commit }, params) => {
 //获取所有人
 export const getAllMemberList = ({ commit }, params) => {
   return Api.getAllMemberList(params).then(response => {
+    return response;
+  })
+}
+//新增公司
+export const addUpdateCompany = ({ commit }, params) => {
+  return Api.addUpdateCompany(params).then(response => {
+    return response;
+  })
+}
+//删除公司
+export const deleteCompany = ({ commit }, params) => {
+  return Api.deleteCompany(params).then(response => {
+    return response;
+  })
+}
+//登入和登出日志
+export const getLoginLog = ({ commit }, params) => {
+  return Api.getLoginLog(params).then(response => {
     return response;
   })
 }

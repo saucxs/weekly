@@ -3,7 +3,7 @@
     <div class="header-box">
       <el-row type="flex" justify="center">
         <el-col :span="12">
-          <a class="header-logo" href="/">
+          <a class="header-logo" href="/weekly/writeWeekly">
             <i class="el-icon-edit-outline icon-white-style"></i>
             <h1>&nbsp;|&nbsp;{{systemName}}</h1>
           </a>
@@ -87,7 +87,7 @@
        signOut() {
          this.logout().then(res => {
            if(res.errno == 0){
-             this.$router.push({ path: '/login' });
+             this.$router.push({ path: '/weekly/login' });
              this.$store.commit("USER_INFO", {});
            }else{
              this.$message.error(res.errmsg|| '服务器开小差');

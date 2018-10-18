@@ -9,10 +9,18 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: [{
-      context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
-      target: "http://127.0.0.1:8362",
-    }],
+    proxyTable: {
+      // context: ["**" ,"!**.{html,js,css,jpeg,jpg,svg}"],
+      // target: "http://127.0.0.1:8362",
+      '/weekly_node':{
+        // target: "http://172.31.231.193:8362",
+        target: "http://127.0.0.1:8362",
+        // changeOrigin: true,
+        // pathRewrite: {                //需要rewrite重写的, 如果在服务器端做了处理则可以不要这段
+        //   '^/weekly_node': '/weekly_node'
+        // }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -52,7 +60,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // assetsPublicPath: '/',
+    assetsPublicPath: '/weekly/',
 
     /**
      * Source Maps
