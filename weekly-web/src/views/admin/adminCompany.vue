@@ -66,7 +66,7 @@
         width="600px"
         center>
        <div>
-        <el-form label-position="right" label-width="80px" :model="formUser">
+        <el-form label-position="right" label-width="100px" :model="formUser">
           <el-form-item label="公司ID">
             <el-input v-model="formUser.company_id" maxlength="20" v-if="dialogTitle == '添加公司'"></el-input>
             <el-input v-model="formUser.company_id" maxlength="20" v-if="dialogTitle == '修改公司'" :disabled="true"></el-input>

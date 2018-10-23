@@ -4,10 +4,10 @@ import {
 
 const state = {
   systemName: '周报系统',
-  userInfo:{
+  userInfo: {
 
   }
-};
+}
 
 const mutations = {
   [USER_INFO](state,newData){
