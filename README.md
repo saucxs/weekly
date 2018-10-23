@@ -61,7 +61,7 @@
 ![image](./shot_pic_admin.png)
 
 ### 四、本地运行程序
-1、首先你的环境是nodejs，不会安装配置参考：[nodejs环境搭建](http://www.mwcxs.top/page/440.html)
+1、首先你的环境是nodejs，不会安装配置参考：[nodejs安装和环境配置（Windows）](http://www.mwcxs.top/page/420.html)
 
 2、clone下来项目
 ````
@@ -73,7 +73,7 @@ npm install
 ````
 4、安装redis（可以考虑安装RedisDesktopManager）
 
-参考：[安装window下的redis，redis可视化管理工具（Redis Desktop Manager）安装，基础使用，实例化项目](http://www.mwcxs.top/page/441.html)
+参考：[安装window下的redis，redis可视化管理工具（Redis Desktop Manager）安装，基础使用，实例化项目](http://www.mwcxs.top/page/421.html)
 
 5、安装mysql，这个就不赘述
 

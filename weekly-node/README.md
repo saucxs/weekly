@@ -55,7 +55,7 @@ weekly-node是基于vue+nodejs的周报企业管理系统，使用的vuex状态�
 ![image](./shot_pic_admin.png)
 
 ### 四、前端本地运行程序
-1、首先你的环境是nodejs，不会安装配置参考：[nodejs环境配置](http://www.mwcxs.top/page/440.html)
+1、首先你的环境是nodejs，不会安装配置参考：[nodejs安装和环境配置（Windows）](http://www.mwcxs.top/page/420.html)
 
 2、clone下来项目
 ````
