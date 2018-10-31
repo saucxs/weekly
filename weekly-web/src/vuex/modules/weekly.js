@@ -8,7 +8,7 @@ const state = {
   currentWeekly: '',
   weeklyList: [],
   departmentWeeklyList: []
-};
+}
 
 const mutations = {
   [CURRENT_WEEKLY](state, newData){

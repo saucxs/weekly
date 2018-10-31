@@ -8,7 +8,7 @@
 周报系统主要是node+vue+redis+mysql+es6，一个企业管理系统，企业员工汇报每周工作情况，以及完成情况，各级负责人可以查看和提醒相应未写周报人员。
 ，后端完全使用`nodeJS`，数据库使用`mysql`，基于`nodejs的thinkjs框架搭建的`，如果喜欢`nodeJS`写的后端，支持大前端，支持全栈开发，请请`star`并`fork`项目。
 
-> + 系统演示地址为：[周报线上地址](http://120.27.109.67:8089)。
+> + 系统演示地址为：[周报线上地址](http://weekly.mwcxs.top)。
 > + （公司负责人）账号：testadmin，密码：123456
 > + （部门经理）账号：test，密码：123456
 > + （成员）账号：teststaff，密码：123456
@@ -61,7 +61,7 @@
 ![image](./shot_pic_admin.png)
 
 ### 四、本地运行程序
-1、首先你的环境是nodejs，不会安装配置参考：[nodejs环境搭建](http://www.mwcxs.top/page/440.html)
+1、首先你的环境是nodejs，不会安装配置参考：[nodejs安装和环境配置（Windows）](http://www.mwcxs.top/page/420.html)
 
 2、clone下来项目
 ````
@@ -73,7 +73,7 @@ npm install
 ````
 4、安装redis（可以考虑安装RedisDesktopManager）
 
-参考：[安装window下的redis，redis可视化管理工具（Redis Desktop Manager）安装，基础使用，实例化项目](http://www.mwcxs.top/page/441.html)
+参考：[安装window下的redis，redis可视化管理工具（Redis Desktop Manager）安装，基础使用，实例化项目](http://www.mwcxs.top/page/421.html)
 
 5、安装mysql，这个就不赘述
 
