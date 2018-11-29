@@ -5,8 +5,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/saucxs/weekly.svg?style=popout)](https://github.com/saucxs/weekly/network)
 [![GitHub issues](https://img.shields.io/github/issues/saucxs/weekly.svg?style=popout)](https://github.com/saucxs/weekly/issues)
 
-周报系统主要是node+vue+redis+mysql+es6，一个企业管理系统，企业员工汇报每周工作情况，以及完成情况，各级负责人可以查看和提醒相应未写周报人员。
-，后端完全使用`nodeJS`，数据库使用`mysql`，基于`nodejs的thinkjs框架搭建的`，如果喜欢`nodeJS`写的后端，支持大前端，支持全栈开发，请请`star`并`fork`项目。
+周报系统的技术栈主要是node+vue+redis+mysql+es6，一个企业管理系统，企业员工汇报每周工作情况，以及完成情况，各级负责人可以查看和提醒相应未写周报人员，后端完全使用`nodeJS`，数据库使用`mysql`，基于`nodejs的thinkjs框架搭建的`，如果喜欢`nodeJS`写的后端，支持大前端，支持全栈开发，请请`star`并`fork`项目。
 
 > + 系统演示地址为：[周报线上地址](http://weekly.mwcxs.top)。
 > + （公司负责人）账号：testadmin，密码：123456
