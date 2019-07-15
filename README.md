@@ -19,6 +19,7 @@
 > + 2.自己可以新建账号来测试，玩耍 
 > + 3.每一个公司（组织机构）都是独立，每一个部门是独立，互不干扰 
 > + 4.如果有商务要求，可以对接我，邮箱:saucxs@163.com，新建自己公司（组织机构）统一管理。
+> + 5、**数据库文件，其实没有数据库，你可以看sql语句，你就知道表中需要的字段，可以参考https://github.com/saucxs/structure-admin 里的数据库表weekly_user，地址在structure-admin-node/src/common/mysql/structure_admin.sql**
 
 ### 功能点：
 > + 1、所有人周报提交修改；
